@@ -319,37 +319,6 @@ const aiMessages = document.querySelector('[data-ai-messages]');
 const aiQuickButtons = document.querySelectorAll('[data-ai-quick]');
 const aiUpload = document.querySelector('[data-ai-upload]');
 const aiUploadStatus = document.querySelector('[data-ai-upload-status]');
-const aiApiKeyInput = document.querySelector('[data-ai-api-key]');
-const aiApiStatus = document.querySelector('[data-ai-api-status]');
-const AI_KEY_STORAGE = 'sportmetrics_gemini_api_key';
-
-const setAiApiStatus = (text, isError = false) => {
-  if (!aiApiStatus) {
-    return;
-  }
-  aiApiStatus.textContent = text;
-  aiApiStatus.style.color = isError ? '#a43f3f' : '#3e5f8c';
-};
-
-if (aiApiKeyInput) {
-  const savedKey = window.localStorage.getItem(AI_KEY_STORAGE) || '';
-  if (savedKey) {
-    aiApiKeyInput.value = savedKey;
-    setAiApiStatus('API-status: gekoppeld (lokaal opgeslagen in je browser).');
-  }
-
-  aiApiKeyInput.addEventListener('input', () => {
-    const value = aiApiKeyInput.value.trim();
-    if (value) {
-      window.localStorage.setItem(AI_KEY_STORAGE, value);
-      setAiApiStatus('API-status: gekoppeld (lokaal opgeslagen in je browser).');
-      return;
-    }
-
-    window.localStorage.removeItem(AI_KEY_STORAGE);
-    setAiApiStatus('API-status: nog niet gekoppeld.');
-  });
-}
 
 if (aiForm && aiInput && aiMessages) {
   const aiHistory = [];
@@ -362,13 +331,6 @@ if (aiForm && aiInput && aiMessages) {
     aiMessages.appendChild(node);
     aiMessages.scrollTop = aiMessages.scrollHeight;
     return node;
-  };
-
-  const getApiKey = () => {
-    if (!aiApiKeyInput) {
-      return '';
-    }
-    return aiApiKeyInput.value.trim();
   };
 
   const getDemoAnswer = (question) => {
@@ -390,64 +352,28 @@ if (aiForm && aiInput && aiMessages) {
       return 'Voor een basisweek: 2-3 rustige zone-2 sessies, 1 kwaliteitssessie rond VT2/VO2, en 1 rustdag. Pas dit aan op je beschikbare uren en herstel.';
     }
 
-    return 'Goede vraag. Zodra we je API koppelen, geef ik hier volledige context-antwoorden op basis van je rapport en trainingsdoel.';
+    return 'Goede vraag. De live AI-koppeling lijkt tijdelijk niet bereikbaar; dit is een fallback-antwoord.';
   };
 
-  const callGemini = async (question) => {
-    const apiKey = getApiKey();
-    if (!apiKey) {
-      return '';
-    }
-
-    const conversationSnippet = aiHistory
-      .slice(-6)
-      .map((item) => `${item.role === 'user' ? 'Gebruiker' : 'Assistent'}: ${item.text}`)
-      .join('\n');
-
-    const reportContext = uploadedReportName
-      ? `Er is een rapport geupload met bestandsnaam: ${uploadedReportName}.`
-      : 'Er is nog geen rapport geupload.';
-
-    const prompt = [
-      'Je bent een sportfysioloog van Sportmetrics.',
-      'Geef praktische, korte antwoorden in het Nederlands met direct toepasbare tips.',
-      'Geen medisch advies geven.',
-      reportContext,
-      conversationSnippet ? `Context uit dit gesprek:\n${conversationSnippet}` : '',
-      `Nieuwe vraag: ${question}`,
-    ]
-      .filter(Boolean)
-      .join('\n\n');
-
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              role: 'user',
-              parts: [{ text: prompt }],
-            },
-          ],
-          generationConfig: {
-            temperature: 0.5,
-            maxOutputTokens: 700,
-          },
-        }),
+  const callBackendAi = async (question) => {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+      body: JSON.stringify({
+        question,
+        reportName: uploadedReportName,
+        history: aiHistory.slice(-6),
+      }),
+    });
 
     if (!response.ok) {
-      throw new Error(`AI API fout (${response.status})`);
+      throw new Error(`AI backend fout (${response.status})`);
     }
 
     const data = await response.json();
-    const text = data?.candidates?.[0]?.content?.parts?.map((part) => part.text).join('\n').trim();
-    return text || '';
+    return data?.answer ? String(data.answer).trim() : '';
   };
 
   aiForm.addEventListener('submit', (event) => {
@@ -466,14 +392,9 @@ if (aiForm && aiInput && aiMessages) {
       let answer = '';
 
       try {
-        if (getApiKey()) {
-          answer = await callGemini(question);
-          if (answer) {
-            setAiApiStatus('API-status: gekoppeld en actief.');
-          }
-        }
+        answer = await callBackendAi(question);
       } catch (error) {
-        setAiApiStatus('API-status: sleutel ongeldig of request mislukt. Demo-modus actief.', true);
+        console.error(error);
       }
 
       if (!answer) {

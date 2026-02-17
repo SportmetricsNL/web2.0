@@ -54,36 +54,9 @@
       </section>
 
       <section class="section">
-        <div class="container ai-shell">
-          <article class="card">
-            <h2>Gebruik</h2>
-            <div class="grid" style="gap: 10px">
-              <article class="soft-panel">
-                <h3>1. Upload rapport (optioneel)</h3>
-                <p>Voeg je test-PDF toe om context mee te geven in de chat.</p>
-              </article>
-              <article class="soft-panel">
-                <h3>2. Stel je vraag</h3>
-                <p>Bijvoorbeeld: "Wat betekent mijn VT1 voor mijn duurtraining?"</p>
-              </article>
-              <article class="soft-panel">
-                <h3>3. Pas toe</h3>
-                <p>Gebruik de output als startpunt met je coach of in je eigen weekplanning.</p>
-              </article>
-            </div>
-            <p class="small-note" style="margin-top: 10px">
-              Let op: geen medisch advies. Voor klachten of medische vragen altijd eerst een arts raadplegen.
-            </p>
-          </article>
-
-          <article class="card ai-chat-wrap">
+        <div class="container">
+          <article class="card ai-chat-wrap ai-chat-full">
             <h2>AI Chat</h2>
-            <div class="form-field">
-              <label for="ai-api-key">Gemini API key</label>
-              <input id="ai-api-key" type="password" autocomplete="off" data-ai-api-key placeholder="Plak je API key" />
-              <p class="ai-upload-note" data-ai-api-status>API-status: nog niet gekoppeld.</p>
-            </div>
-
             <p class="ai-upload-note" data-ai-upload-status>Nog geen rapport geüpload.</p>
             <input type="file" accept=".pdf" data-ai-upload />
 
@@ -106,7 +79,7 @@
             </form>
 
             <p class="small-note">
-              Je API key wordt alleen lokaal in je browser opgeslagen en niet in de websitecode of Git-repo.
+              Deze chat gebruikt de beveiligde backend-koppeling van Sportmetrics. Geen medisch advies.
             </p>
           </article>
         </div>

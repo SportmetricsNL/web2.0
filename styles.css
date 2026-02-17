@@ -730,6 +730,11 @@ h3 {
   gap: 10px;
 }
 
+.ai-chat-full {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
 .ai-chat-feed {
   border: 1px solid #c4d8fb;
   border-radius: 14px;
