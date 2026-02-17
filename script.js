@@ -468,6 +468,296 @@ if (
   updateCpModel();
 }
 
+const vt1ThresholdSlider = document.querySelector('[data-vt1-threshold-slider]');
+const vt1PowerSlider = document.querySelector('[data-vt1-power-slider]');
+const vt1DurationSlider = document.querySelector('[data-vt1-duration-slider]');
+
+const vt1ThresholdValue = document.querySelector('[data-vt1-threshold-value]');
+const vt1PowerValue = document.querySelector('[data-vt1-power-value]');
+const vt1DurationValue = document.querySelector('[data-vt1-duration-value]');
+
+const vt1DeltaFill = document.querySelector('[data-vt1-delta-fill]');
+const vt1DeltaValue = document.querySelector('[data-vt1-delta-value]');
+const vt1DriftFill = document.querySelector('[data-vt1-drift-fill]');
+const vt1DriftValue = document.querySelector('[data-vt1-drift-value]');
+const vt1QualityFill = document.querySelector('[data-vt1-quality-fill]');
+const vt1QualityValue = document.querySelector('[data-vt1-quality-value]');
+const vt1RecoveryFill = document.querySelector('[data-vt1-recovery-fill]');
+const vt1RecoveryValue = document.querySelector('[data-vt1-recovery-value]');
+const vt1TteFill = document.querySelector('[data-vt1-tte-fill]');
+const vt1TteValue = document.querySelector('[data-vt1-tte-value]');
+
+const vt1ZoneStatus = document.querySelector('[data-vt1-zone-status]');
+const vt1CaseText = document.querySelector('[data-vt1-case-text]');
+const vt1Bands = document.querySelectorAll('[data-vt1-band]');
+const vt1Blocks = document.querySelectorAll('[data-vt1-block]');
+const vt1StripStatus = document.querySelector('[data-vt1-strip-status]');
+
+if (
+  vt1ThresholdSlider &&
+  vt1PowerSlider &&
+  vt1DurationSlider &&
+  vt1ThresholdValue &&
+  vt1PowerValue &&
+  vt1DurationValue &&
+  vt1DeltaFill &&
+  vt1DeltaValue &&
+  vt1DriftFill &&
+  vt1DriftValue &&
+  vt1QualityFill &&
+  vt1QualityValue &&
+  vt1RecoveryFill &&
+  vt1RecoveryValue &&
+  vt1TteFill &&
+  vt1TteValue
+) {
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+  const setVt1Band = (band) => {
+    vt1Bands.forEach((node) => {
+      node.classList.toggle('active', node.dataset.vt1Band === band);
+    });
+  };
+
+  const setVt1Strip = (delta) => {
+    if (!vt1Blocks.length) {
+      return;
+    }
+
+    const overloadBlocks = clamp(Math.round((delta + 30) / 12), 0, vt1Blocks.length);
+    vt1Blocks.forEach((node, index) => {
+      node.classList.toggle('work', index < overloadBlocks);
+    });
+
+    if (!vt1StripStatus) {
+      return;
+    }
+
+    if (delta <= -20) {
+      vt1StripStatus.textContent = 'Onder VT1: lage kosten en hoge stapelbaarheid.';
+      return;
+    }
+
+    if (delta <= 10) {
+      vt1StripStatus.textContent = 'Rond VT1: stabiele duurprikkel met lage-matige kosten.';
+      return;
+    }
+
+    if (delta <= 35) {
+      vt1StripStatus.textContent = 'Boven VT1: drift en herstelkosten nemen duidelijk toe.';
+      return;
+    }
+
+    vt1StripStatus.textContent = 'Ver boven VT1: zwaar duurwerk, beperkt inzetbaar in volumeweken.';
+  };
+
+  const updateVt1Model = () => {
+    const vt1 = Number(vt1ThresholdSlider.value);
+    const power = Number(vt1PowerSlider.value);
+    const durationMin = Number(vt1DurationSlider.value);
+    const delta = power - vt1;
+
+    const drift = clamp(34 + delta * 1.3 + durationMin * 0.22, 5, 100);
+    const quality = clamp(
+      95 - Math.max(0, delta) * 1.5 - Math.max(0, durationMin - 120) * 0.24 - Math.max(0, -delta) * 0.35,
+      8,
+      100,
+    );
+    const recoveryCost = clamp(18 + Math.max(0, delta) * 1.65 + durationMin * 0.2, 4, 100);
+    const sustainableMinutes = delta > 0 ? clamp(180 / (delta / 12 + 1), 20, 180) : 180;
+
+    vt1ThresholdValue.textContent = `${Math.round(vt1)} W`;
+    vt1PowerValue.textContent = `${Math.round(power)} W`;
+    vt1DurationValue.textContent = `${Math.round(durationMin)} min`;
+
+    vt1DeltaValue.textContent = `${delta >= 0 ? '+' : ''}${Math.round(delta)} W`;
+    vt1DriftValue.textContent = `${Math.round(drift)}%`;
+    vt1QualityValue.textContent = `${Math.round(quality)}%`;
+    vt1RecoveryValue.textContent = `${Math.round(recoveryCost)}%`;
+    vt1TteValue.textContent = delta > 0 ? `${Math.round(sustainableMinutes)} min` : 'lang volhoudbaar';
+
+    vt1DeltaFill.style.width = `${clamp((Math.abs(delta) / 90) * 100, delta === 0 ? 2 : 8, 100)}%`;
+    vt1DriftFill.style.width = `${drift}%`;
+    vt1QualityFill.style.width = `${quality}%`;
+    vt1RecoveryFill.style.width = `${recoveryCost}%`;
+    vt1TteFill.style.width = `${clamp((sustainableMinutes / 180) * 100, 8, 100)}%`;
+
+    let band = 'rond';
+    let zoneText = 'Rond VT1: dit ligt in een goed zone-2 bereik voor stapelbare duurtraining.';
+
+    if (delta <= -20) {
+      band = 'onder';
+      zoneText = 'Onder VT1: rustige duur met lage kosten, goed voor herstel en extra volume.';
+    } else if (delta <= 10) {
+      band = 'rond';
+      zoneText = 'Rond VT1: dit ligt in een goed zone-2 bereik voor stapelbare duurtraining.';
+    } else if (delta <= 35) {
+      band = 'boven';
+      zoneText = 'Boven VT1: meer tempo-prikkel, maar hogere drift en meer herstel nodig.';
+    } else {
+      band = 'ver';
+      zoneText = 'Ver boven VT1: dit is zwaar duurwerk en beperkt inzetbaar binnen een normale volumeweek.';
+    }
+
+    if (vt1ZoneStatus) {
+      vt1ZoneStatus.textContent = zoneText;
+    }
+
+    if (vt1CaseText) {
+      if (delta > 0) {
+        vt1CaseText.textContent = `VT1 = ${Math.round(vt1)} W, gekozen vermogen = ${Math.round(power)} W (${Math.round(
+          delta,
+        )} W erboven), duur = ${Math.round(durationMin)} min. Verwacht oplopende drift; overweeg duurblokken rond ${Math.round(
+          vt1 - 5,
+        )}-${Math.round(vt1 + 10)} W voor betere stapelbaarheid.`;
+      } else {
+        vt1CaseText.textContent = `VT1 = ${Math.round(vt1)} W, gekozen vermogen = ${Math.round(power)} W (${Math.abs(
+          Math.round(delta),
+        )} W eronder), duur = ${Math.round(durationMin)} min. Dit is doorgaans goed vol te houden met beperkte herstelkosten.`;
+      }
+    }
+
+    setVt1Band(band);
+    setVt1Strip(delta);
+  };
+
+  [vt1ThresholdSlider, vt1PowerSlider, vt1DurationSlider].forEach((slider) => {
+    slider.addEventListener('input', updateVt1Model);
+  });
+
+  updateVt1Model();
+}
+
+const vt2ThresholdSlider = document.querySelector('[data-vt2-threshold-slider]');
+const vt2PowerSlider = document.querySelector('[data-vt2-power-slider]');
+const vt2WorkSlider = document.querySelector('[data-vt2-work-slider]');
+const vt2RestSlider = document.querySelector('[data-vt2-rest-slider]');
+
+const vt2ThresholdValue = document.querySelector('[data-vt2-threshold-value]');
+const vt2PowerValue = document.querySelector('[data-vt2-power-value]');
+const vt2WorkValue = document.querySelector('[data-vt2-work-value]');
+const vt2RestValue = document.querySelector('[data-vt2-rest-value]');
+
+const vt2DeltaFill = document.querySelector('[data-vt2-delta-fill]');
+const vt2DeltaValue = document.querySelector('[data-vt2-delta-value]');
+const vt2PressureFill = document.querySelector('[data-vt2-pressure-fill]');
+const vt2PressureValue = document.querySelector('[data-vt2-pressure-value]');
+const vt2RepeatFill = document.querySelector('[data-vt2-repeat-fill]');
+const vt2RepeatValue = document.querySelector('[data-vt2-repeat-value]');
+const vt2DoseFill = document.querySelector('[data-vt2-dose-fill]');
+const vt2DoseValue = document.querySelector('[data-vt2-dose-value]');
+
+const vt2ZoneStatus = document.querySelector('[data-vt2-zone-status]');
+const vt2CaseText = document.querySelector('[data-vt2-case-text]');
+const vt2Bands = document.querySelectorAll('[data-vt2-band]');
+const vt2Blocks = document.querySelectorAll('[data-vt2-block]');
+const vt2StripStatus = document.querySelector('[data-vt2-strip-status]');
+
+if (
+  vt2ThresholdSlider &&
+  vt2PowerSlider &&
+  vt2WorkSlider &&
+  vt2RestSlider &&
+  vt2ThresholdValue &&
+  vt2PowerValue &&
+  vt2WorkValue &&
+  vt2RestValue &&
+  vt2DeltaFill &&
+  vt2DeltaValue &&
+  vt2PressureFill &&
+  vt2PressureValue &&
+  vt2RepeatFill &&
+  vt2RepeatValue &&
+  vt2DoseFill &&
+  vt2DoseValue
+) {
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+  const setVt2Band = (band) => {
+    vt2Bands.forEach((node) => {
+      node.classList.toggle('active', node.dataset.vt2Band === band);
+    });
+  };
+
+  const setVt2Blocks = (repeats) => {
+    if (!vt2Blocks.length) {
+      return;
+    }
+
+    vt2Blocks.forEach((node, index) => {
+      node.classList.toggle('work', index < repeats);
+    });
+  };
+
+  const updateVt2Model = () => {
+    const vt2 = Number(vt2ThresholdSlider.value);
+    const power = Number(vt2PowerSlider.value);
+    const workSec = Number(vt2WorkSlider.value);
+    const restSec = Number(vt2RestSlider.value);
+
+    const delta = power - vt2;
+    const pressure = clamp(38 + delta * 1.45 + workSec * 0.06, 5, 100);
+    const repeatability = clamp(96 - Math.max(0, delta) * 1.25 - workSec * 0.055 + restSec * 0.085, 5, 100);
+    const repeats = clamp(Math.round(repeatability / 15), 2, 8);
+
+    vt2ThresholdValue.textContent = `${Math.round(vt2)} W`;
+    vt2PowerValue.textContent = `${Math.round(power)} W`;
+    vt2WorkValue.textContent = `${Math.round(workSec)} s`;
+    vt2RestValue.textContent = `${Math.round(restSec)} s`;
+
+    vt2DeltaValue.textContent = `${delta >= 0 ? '+' : ''}${Math.round(delta)} W`;
+    vt2PressureValue.textContent = `${Math.round(pressure)}%`;
+    vt2RepeatValue.textContent = `${Math.round(repeatability)}%`;
+    vt2DoseValue.textContent = `${repeats}x`;
+
+    vt2DeltaFill.style.width = `${clamp((Math.abs(delta) / 120) * 100, delta === 0 ? 2 : 8, 100)}%`;
+    vt2PressureFill.style.width = `${pressure}%`;
+    vt2RepeatFill.style.width = `${repeatability}%`;
+    vt2DoseFill.style.width = `${clamp((repeats / 8) * 100, 8, 100)}%`;
+
+    let band = 'rond';
+    let status = 'Rond VT2: geschikt voor thresholdblokken met bewaakte herstelkwaliteit.';
+
+    if (delta <= -20) {
+      band = 'onder';
+      status = 'Onder VT2: vooral tempo/duurprikkel, relatief goed herhaalbaar.';
+    } else if (delta <= 15) {
+      band = 'rond';
+      status = 'Rond VT2: geschikt voor thresholdblokken met bewaakte herstelkwaliteit.';
+    } else if (delta <= 45) {
+      band = 'boven';
+      status = 'Boven VT2: sterke prikkel, maar kwaliteit en rust moeten strak bewaakt worden.';
+    } else {
+      band = 'ver';
+      status = 'Ver boven VT2: zeer zwaar werk, lage herhaalbaarheid en hoge herstelkosten.';
+    }
+
+    if (vt2ZoneStatus) {
+      vt2ZoneStatus.textContent = status;
+    }
+
+    if (vt2StripStatus) {
+      vt2StripStatus.textContent = `Aanbevolen setgrootte: ${repeats} werkherhalingen bij deze instelling.`;
+    }
+
+    if (vt2CaseText) {
+      const totalWorkMin = Math.round((repeats * workSec) / 60);
+      vt2CaseText.textContent = `VT2 = ${Math.round(vt2)} W, intervalvermogen = ${Math.round(power)} W, werk/herstel = ${Math.round(
+        workSec,
+      )}/${Math.round(restSec)} s. Verwachte set: ${repeats} herhalingen, totale werktijd circa ${totalWorkMin} min.`;
+    }
+
+    setVt2Band(band);
+    setVt2Blocks(repeats);
+  };
+
+  [vt2ThresholdSlider, vt2PowerSlider, vt2WorkSlider, vt2RestSlider].forEach((slider) => {
+    slider.addEventListener('input', updateVt2Model);
+  });
+
+  updateVt2Model();
+}
+
 const aiForm = document.querySelector('[data-ai-form]');
 const aiInput = document.querySelector('[data-ai-input]');
 const aiMessages = document.querySelector('[data-ai-messages]');

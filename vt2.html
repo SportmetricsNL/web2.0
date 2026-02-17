@@ -6,7 +6,7 @@
     <title>Sportmetrics | VT2</title>
     <meta
       name="description"
-      content="Volledige uitwerking van VT2: tweede ventilatoire overgang, non-steady-state en toepassing in thresholdtraining."
+      content="Volledige uitwerking van VT2 met slider-model: tweede ventilatoire overgang, zwaar domein en praktische intervaldosering."
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -14,7 +14,7 @@
     <header class="site-header">
       <div class="container nav-wrap">
         <a class="brand" href="index.html" aria-label="Sportmetrics home">
-          <img class="brand-logo" src="assets/sportmetrics-logo.svg" alt="VO2 Sportmetrics logo" />
+          <img class="brand-logo" src="assets/sportmetrics-logo-transparent.png" alt="VO2 Sportmetrics logo" />
         </a>
         <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="main-nav">
           Menu
@@ -32,72 +32,142 @@
     </header>
 
     <main>
-      <section class="page-hero">
-        <div class="container hero-layout">
-          <article class="hero-main">
+      <section class="page-hero" id="vt2">
+        <div class="container">
+          <article class="card vo2-panel">
             <span class="eyebrow">VT2</span>
-            <h1>VT2: de tweede drempel is een shift naar non-steady state</h1>
-            <p>
-              VT2 markeert het punt waarop inspanning voor de meeste sporters niet meer lang stabiel blijft. Ademdruk en
-              vermoeidheidsopbouw nemen snel toe: de overgang naar echt zwaar werk.
+            <h1>VT2: jouw grens naar echt zwaar werk</h1>
+            <p class="vo2-lead">
+              VT2 is de tweede ventilatoire overgang: vanaf hier kom je in non-steady-state gedrag met snel oplopende
+              ademdruk en hogere herstelkosten. Belangrijk anker voor threshold, klimmen en race-pacing.
             </p>
-            <div class="hero-actions">
+            <div class="grid three" style="margin-top: 16px">
+              <article class="card">
+                <h3 class="vo2-grid-title">Tweede overgang</h3>
+                <p>VE versnelt opnieuw ten opzichte van VO2 en vermogen.</p>
+              </article>
+              <article class="card">
+                <h3 class="vo2-grid-title">Non-steady domein</h3>
+                <p>Boven VT2 stijgt interne stress snel.</p>
+              </article>
+              <article class="card">
+                <h3 class="vo2-grid-title">Pacing-anker</h3>
+                <p>Helpt intervaldosering en wedstrijdtempo sturen.</p>
+              </article>
+            </div>
+            <div class="back-link-row">
               <a class="button button-secondary button-sm" href="kernbegrippen.html">Terug naar kernbegrippen</a>
             </div>
           </article>
-          <aside class="hero-side">
-            <h2>VT2 in het kort</h2>
-            <ul>
-              <li>Tweede ventilatoire overgang</li>
-              <li>Shift naar non-steady-state</li>
-              <li>Anker voor threshold- en wedstrijdwerk</li>
-            </ul>
-          </aside>
         </div>
       </section>
 
       <section class="section">
         <div class="container">
           <article class="card">
-            <h2>Wat VT2 precies is</h2>
-            <div class="grid three">
-              <article class="soft-panel">
-                <h3>Tweede overgang</h3>
-                <p>VE versnelt opnieuw ten opzichte van VO2 en wattage.</p>
-              </article>
-              <article class="soft-panel">
-                <h3>Ademhaling limiteert pacing</h3>
-                <p>Regulatie wordt steeds zwaarder en langer steady werken wordt moeilijk.</p>
-              </article>
-              <article class="soft-panel">
-                <h3>Praktisch</h3>
-                <p>Je komt in een domein met hogere drift en hogere herstelkosten.</p>
-              </article>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="container">
-          <article class="card">
-            <h2>VT2 is een gebied, geen exact punt</h2>
+            <h2>VT2-model (intervaldosering)</h2>
             <p>
-              VT2 schuift met vermoeidheid, warmte, voeding, protocol en meetruis. Daarom behandelen we het als
-              ankergebied.
+              Gebruik de sliders om te zien hoe de balans verschuift tussen kwaliteit, druk en herhaalbaarheid van je
+              VT2-blokken.
             </p>
-            <div class="grid three" style="margin-top: 12px">
+
+            <div class="cp-model-box" style="margin-top: 14px">
+              <div class="cp-control">
+                <label for="vt2-threshold-slider">Jouw VT2 (W) <span class="cp-value-pill" data-vt2-threshold-value>300 W</span></label>
+                <input id="vt2-threshold-slider" type="range" min="180" max="430" step="1" value="300" data-vt2-threshold-slider />
+                <div class="cp-band-row">
+                  <span class="cp-band" data-vt2-band="onder">Onder VT2</span>
+                  <span class="cp-band" data-vt2-band="rond">Rond VT2</span>
+                  <span class="cp-band" data-vt2-band="boven">Boven VT2</span>
+                  <span class="cp-band" data-vt2-band="ver">Ver boven VT2</span>
+                </div>
+              </div>
+
+              <div class="cp-control">
+                <label for="vt2-power-slider">Intervalvermogen (W) <span class="cp-value-pill" data-vt2-power-value>325 W</span></label>
+                <input id="vt2-power-slider" type="range" min="160" max="520" step="1" value="325" data-vt2-power-slider />
+              </div>
+
+              <div class="cp-control">
+                <label for="vt2-work-slider">Werkduur per herhaling (s) <span class="cp-value-pill" data-vt2-work-value>360 s</span></label>
+                <input id="vt2-work-slider" type="range" min="60" max="900" step="10" value="360" data-vt2-work-slider />
+              </div>
+
+              <div class="cp-control">
+                <label for="vt2-rest-slider">Herstel per herhaling (s) <span class="cp-value-pill" data-vt2-rest-value>240 s</span></label>
+                <input id="vt2-rest-slider" type="range" min="30" max="900" step="10" value="240" data-vt2-rest-slider />
+              </div>
+
+              <div class="progress-rows cp-progress-rows">
+                <div class="progress-row cp-progress-row">
+                  <span>Delta t.o.v. VT2</span>
+                  <div class="progress-track">
+                    <div class="progress-fill vt2-delta" data-vt2-delta-fill></div>
+                  </div>
+                  <strong data-vt2-delta-value>+25 W</strong>
+                </div>
+                <div class="progress-row cp-progress-row">
+                  <span>Metabole druk</span>
+                  <div class="progress-track">
+                    <div class="progress-fill vt2-pressure" data-vt2-pressure-fill></div>
+                  </div>
+                  <strong data-vt2-pressure-value>68%</strong>
+                </div>
+                <div class="progress-row cp-progress-row">
+                  <span>Herhaalbaarheid</span>
+                  <div class="progress-track">
+                    <div class="progress-fill vt2-repeat" data-vt2-repeat-fill></div>
+                  </div>
+                  <strong data-vt2-repeat-value>72%</strong>
+                </div>
+                <div class="progress-row cp-progress-row">
+                  <span>Aanbevolen herhalingen</span>
+                  <div class="progress-track">
+                    <div class="progress-fill vt2-dose" data-vt2-dose-fill></div>
+                  </div>
+                  <strong data-vt2-dose-value>5x</strong>
+                </div>
+              </div>
+
+              <article class="soft-panel" style="margin-top: 12px">
+                <p data-vt2-zone-status>Rond VT2: geschikt voor thresholdblokken met bewaakte herstelkwaliteit.</p>
+              </article>
+            </div>
+
+            <article class="soft-panel cp-strip-panel" style="margin-top: 14px">
+              <p class="cp-strip-legend" data-vt2-strip-status>Aanbevolen werkherhalingen op basis van huidige instelling.</p>
+              <div class="cp-strip vt2-strip">
+                <div class="cp-strip-block" data-vt2-block></div>
+                <div class="cp-strip-block" data-vt2-block></div>
+                <div class="cp-strip-block" data-vt2-block></div>
+                <div class="cp-strip-block" data-vt2-block></div>
+                <div class="cp-strip-block" data-vt2-block></div>
+                <div class="cp-strip-block" data-vt2-block></div>
+                <div class="cp-strip-block" data-vt2-block></div>
+                <div class="cp-strip-block" data-vt2-block></div>
+                <div class="cp-strip-cp-line">VT2</div>
+              </div>
+            </article>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <article class="card">
+            <h2>Hoe wij VT2 meten</h2>
+            <div class="grid three">
               <article class="soft-panel">
-                <h3>Vermoeidheid</h3>
-                <p>Bij accumulatie van vermoeidheid daalt je duurzaam houdbare belasting sneller.</p>
+                <h3>Ademrespons</h3>
+                <p>We bepalen VT2 op basis van ventilatoire markers en niet op hartslag alleen.</p>
               </article>
               <article class="soft-panel">
-                <h3>Omstandigheden</h3>
-                <p>Warmte en hydratatie beïnvloeden hoe snel ventilatoire druk en drift oplopen.</p>
+                <h3>Ramp + context</h3>
+                <p>Oplopende belasting maakt de overgang zichtbaar; interpretatie gebeurt in samenhang met testverloop.</p>
               </article>
               <article class="soft-panel">
-                <h3>Meetcontext</h3>
-                <p>Ramp-protocol en dagvorm bepalen hoe scherp de overgang zichtbaar wordt.</p>
+                <h3>Trainingsvertaling</h3>
+                <p>VT2 wordt gekoppeld aan intervalzones, blokduur en herstelstrategie.</p>
               </article>
             </div>
           </article>
@@ -107,46 +177,57 @@
       <section class="section">
         <div class="container">
           <article class="card">
-            <h2>Waar VT2 voor dient</h2>
-            <div class="grid three">
-              <article class="soft-panel">
-                <h3>Thresholdblokken</h3>
-                <p>Duurzaam hard, maar niet maximaal. Grote prestatiewinst, hogere herstelkosten.</p>
-              </article>
-              <article class="soft-panel">
-                <h3>Pacing</h3>
-                <p>Net onder/omheen VT2 voor lange inspanningen en tijdritten.</p>
-              </article>
-              <article class="soft-panel">
-                <h3>Begrenzen</h3>
-                <p>Voorkom onbewust teveel "duur" werk in dit zware domein.</p>
-              </article>
-            </div>
-            <p style="margin-top: 12px">
-              VT2 is geen tempo dat je dagelijks kunt stapelen alsof het rustige duur is.
-            </p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="container">
-          <article class="card">
-            <h2>VT2 versus FTP en CP</h2>
-            <div class="grid three">
-              <article class="soft-panel">
-                <h3>FTP</h3>
-                <p>Performance-schatting met foutmarges, afhankelijk van motivatie, pacing en protocol.</p>
-              </article>
+            <h2>Wat de variabelen betekenen</h2>
+            <div class="cp-vars-grid">
               <article class="soft-panel">
                 <h3>VT2</h3>
-                <p>Fysiologisch anker: shift naar non-steady state zichtbaar in ademrespons en VO2.</p>
+                <ul>
+                  <li>Tweede ventilatoire overgang.</li>
+                  <li>Shift naar non-steady-state gedrag.</li>
+                  <li>Sterk anker voor threshold en racewerk.</li>
+                </ul>
               </article>
               <article class="soft-panel">
-                <h3>CP</h3>
-                <p>Power-duration model; sterk voor het grensgebied van beperkte capaciteit.</p>
+                <h3>Vermogen (P)</h3>
+                <ul>
+                  <li>P rond VT2 = thresholdprikkel.</li>
+                  <li>P boven VT2 = zwaardere druk en snellere vermoeidheid.</li>
+                  <li>Dosering bepaalt kwaliteit van herhalingen.</li>
+                </ul>
+              </article>
+              <article class="soft-panel">
+                <h3>Werk/herstel verhouding</h3>
+                <ul>
+                  <li>Korte rust verlaagt herhaalbaarheid.</li>
+                  <li>Voldoende rust bewaakt kwaliteit en techniek.</li>
+                </ul>
+              </article>
+              <article class="soft-panel">
+                <h3>Herhaalbaarheid</h3>
+                <ul>
+                  <li>Praktische maat voor hoeveel kwalitatieve reps haalbaar zijn.</li>
+                  <li>Stuurt je setgrootte en weekbelasting.</li>
+                </ul>
               </article>
             </div>
+            <p style="margin-top: 10px">
+              VT2 is een gebied dat verschuift met dagvorm, warmte en vermoeidheid. Daarom gebruiken we ranges en
+              trainingscontext.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <article class="card">
+            <h2>Casus: klimblok van 6 minuten</h2>
+            <p data-vt2-case-text>
+              VT2 = 300 W, intervalvermogen = 325 W, werk/herstel = 360/240 s. Richt je op 5 kwalitatieve herhalingen.
+            </p>
+            <article class="soft-panel" style="margin-top: 12px">
+              <p>Doel: hoog genoeg prikkelen, maar met voldoende kwaliteit om adaptatie te stapelen.</p>
+            </article>
           </article>
         </div>
       </section>
@@ -156,10 +237,10 @@
           <article class="card">
             <h2>Samenvatting</h2>
             <ul class="summary-list">
-              <li>VT2 is de tweede ventilatoire overgang: VE versnelt opnieuw bij hogere belasting.</li>
-              <li>Het markeert een shift naar non-steady state, waar drift snel toeneemt.</li>
-              <li>VT2 is een gebied dat schuift met dagvorm en omstandigheden.</li>
-              <li>Ademrespons + wattage plaatsen VT2 scherper dan HR alleen (HR-lag).</li>
+              <li>VT2 markeert de overgang naar zwaar werk en snellere drift.</li>
+              <li>Rond VT2 train je threshold; boven VT2 stijgen herstelkosten snel.</li>
+              <li>Werk/herstel en herhaalbaarheid bepalen trainingskwaliteit.</li>
+              <li>Gebruik VT2 samen met VT1 en CP voor complete dosering.</li>
             </ul>
             <div class="detail-links">
               <a class="button button-secondary button-sm" href="critical-power.html">Volgende: Critical Power</a>

@@ -6,7 +6,7 @@
     <title>Sportmetrics | VT1</title>
     <meta
       name="description"
-      content="Volledige uitwerking van VT1: eerste ventilatoire overgang en praktische vertaling naar duurtraining en zone 2."
+      content="Volledige uitwerking van VT1 met slider-model: eerste ventilatoire overgang, zone-2 anker en praktische dosering voor duurtraining."
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -14,7 +14,7 @@
     <header class="site-header">
       <div class="container nav-wrap">
         <a class="brand" href="index.html" aria-label="Sportmetrics home">
-          <img class="brand-logo" src="assets/sportmetrics-logo.svg" alt="VO2 Sportmetrics logo" />
+          <img class="brand-logo" src="assets/sportmetrics-logo-transparent.png" alt="VO2 Sportmetrics logo" />
         </a>
         <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="main-nav">
           Menu
@@ -32,48 +32,121 @@
     </header>
 
     <main>
-      <section class="page-hero">
-        <div class="container hero-layout">
-          <article class="hero-main">
+      <section class="page-hero" id="vt1">
+        <div class="container">
+          <article class="card vo2-panel">
             <span class="eyebrow">VT1</span>
-            <h1>VT1: de eerste drempel is een shift in ademregulatie</h1>
-            <p>
-              VT1 markeert het moment waarop je ademhaling disproportioneel begint toe te nemen ten opzichte van de
-              belasting. Geen schakelaar, maar een duidelijke overgang in hoe je lichaam de interne balans stabiel houdt.
+            <h1>VT1: jouw anker voor duurzame zone-2 training</h1>
+            <p class="vo2-lead">
+              VT1 is de eerste ventilatoire overgang: je ademhaling gaat relatief sneller stijgen ten opzichte van
+              belasting. Geen harde schakelaar, wel een belangrijk regulatiepunt voor duurtraining.
             </p>
-            <div class="hero-actions">
+            <div class="grid three" style="margin-top: 16px">
+              <article class="card">
+                <h3 class="vo2-grid-title">Eerste overgang</h3>
+                <p>VE stijgt relatief sneller dan VO2 en vermogen.</p>
+              </article>
+              <article class="card">
+                <h3 class="vo2-grid-title">Zone-2 anker</h3>
+                <p>VT1 helpt je duurblokken goed doseren.</p>
+              </article>
+              <article class="card">
+                <h3 class="vo2-grid-title">Stapelbaar</h3>
+                <p>Rond VT1 bouw je volume met beheersbare herstelkosten.</p>
+              </article>
+            </div>
+            <div class="back-link-row">
               <a class="button button-secondary button-sm" href="kernbegrippen.html">Terug naar kernbegrippen</a>
             </div>
           </article>
-          <aside class="hero-side">
-            <h2>VT1 in het kort</h2>
-            <ul>
-              <li>Eerste ventilatoire overgang</li>
-              <li>Belangrijk anker voor zone 2</li>
-              <li>Cruciaal voor duurzaam volume</li>
-            </ul>
-          </aside>
         </div>
       </section>
 
       <section class="section">
         <div class="container">
           <article class="card">
-            <h2>Wat VT1 precies is</h2>
-            <div class="grid three">
-              <article class="soft-panel">
-                <h3>Ventilatoire overgang</h3>
-                <p>VE (ventilatie) gaat relatief sneller stijgen dan VO2 en het vermogen.</p>
-              </article>
-              <article class="soft-panel">
-                <h3>Regulatiepunt</h3>
-                <p>Ademhaling en circulatie moeten merkbaar harder werken, terwijl je nog duurzaam kunt werken.</p>
-              </article>
-              <article class="soft-panel">
-                <h3>Geen vetzone</h3>
-                <p>VT1 is geen vetverbrandingsschakelaar, maar een shift in regulatie.</p>
+            <h2>VT1-model (constante duurbelasting)</h2>
+            <p>Gebruik de sliders om te zien hoe belasting en herstelkosten verschuiven rond je VT1-anker.</p>
+
+            <div class="cp-model-box" style="margin-top: 14px">
+              <div class="cp-control">
+                <label for="vt1-threshold-slider">Jouw VT1 (W) <span class="cp-value-pill" data-vt1-threshold-value>230 W</span></label>
+                <input id="vt1-threshold-slider" type="range" min="140" max="340" step="1" value="230" data-vt1-threshold-slider />
+                <div class="cp-band-row">
+                  <span class="cp-band" data-vt1-band="onder">Onder VT1</span>
+                  <span class="cp-band" data-vt1-band="rond">Rond VT1</span>
+                  <span class="cp-band" data-vt1-band="boven">Boven VT1</span>
+                  <span class="cp-band" data-vt1-band="ver">Ver boven VT1</span>
+                </div>
+              </div>
+
+              <div class="cp-control">
+                <label for="vt1-power-slider">Gekozen duurvermogen (W) <span class="cp-value-pill" data-vt1-power-value>220 W</span></label>
+                <input id="vt1-power-slider" type="range" min="100" max="420" step="1" value="220" data-vt1-power-slider />
+              </div>
+
+              <div class="cp-control">
+                <label for="vt1-duration-slider">Duur blok (min) <span class="cp-value-pill" data-vt1-duration-value>120 min</span></label>
+                <input id="vt1-duration-slider" type="range" min="20" max="300" step="5" value="120" data-vt1-duration-slider />
+              </div>
+
+              <div class="progress-rows cp-progress-rows">
+                <div class="progress-row cp-progress-row">
+                  <span>Delta t.o.v. VT1</span>
+                  <div class="progress-track">
+                    <div class="progress-fill vt1-delta" data-vt1-delta-fill></div>
+                  </div>
+                  <strong data-vt1-delta-value>-10 W</strong>
+                </div>
+                <div class="progress-row cp-progress-row">
+                  <span>Verwachte ventilatoire drift</span>
+                  <div class="progress-track">
+                    <div class="progress-fill vt1-drift" data-vt1-drift-fill></div>
+                  </div>
+                  <strong data-vt1-drift-value>42%</strong>
+                </div>
+                <div class="progress-row cp-progress-row">
+                  <span>Duurkwaliteit</span>
+                  <div class="progress-track">
+                    <div class="progress-fill vt1-quality" data-vt1-quality-fill></div>
+                  </div>
+                  <strong data-vt1-quality-value>82%</strong>
+                </div>
+                <div class="progress-row cp-progress-row">
+                  <span>Herstelkosten</span>
+                  <div class="progress-track">
+                    <div class="progress-fill vt1-recovery" data-vt1-recovery-fill></div>
+                  </div>
+                  <strong data-vt1-recovery-value>38%</strong>
+                </div>
+                <div class="progress-row cp-progress-row">
+                  <span>Duurzaam volhoudbaar (indicatie)</span>
+                  <div class="progress-track">
+                    <div class="progress-fill vt1-tte" data-vt1-tte-fill></div>
+                  </div>
+                  <strong data-vt1-tte-value>lang volhoudbaar</strong>
+                </div>
+              </div>
+
+              <article class="soft-panel" style="margin-top: 12px">
+                <p data-vt1-zone-status>Rond VT1: dit ligt in een goed zone-2 bereik voor stapelbare duurtraining.</p>
               </article>
             </div>
+
+            <article class="soft-panel cp-strip-panel" style="margin-top: 14px">
+              <p class="cp-strip-legend" data-vt1-strip-status>Rond VT1: stabiele duurprikkel met lage-matige kosten.</p>
+              <div class="cp-strip vt1-strip">
+                <div class="cp-strip-block" data-vt1-block></div>
+                <div class="cp-strip-block" data-vt1-block></div>
+                <div class="cp-strip-block" data-vt1-block></div>
+                <div class="cp-strip-block" data-vt1-block></div>
+                <div class="cp-strip-block" data-vt1-block></div>
+                <div class="cp-strip-block" data-vt1-block></div>
+                <div class="cp-strip-block" data-vt1-block></div>
+                <div class="cp-strip-block" data-vt1-block></div>
+                <div class="cp-strip-cp-line">VT1</div>
+              </div>
+            </article>
           </article>
         </div>
       </section>
@@ -81,23 +154,19 @@
       <section class="section">
         <div class="container">
           <article class="card">
-            <h2>VT1 is een gebied, geen exact punt</h2>
-            <p>
-              VT1 verschuift met dagvorm, protocol, cadans, voeding en warmte. Daarom rapporteren we VT1 als ankergebied
-              in plaats van een exact wattpunt.
-            </p>
-            <div class="grid three" style="margin-top: 12px">
+            <h2>Hoe wij VT1 meten</h2>
+            <div class="grid three">
               <article class="soft-panel">
-                <h3>Dagvorm</h3>
-                <p>Slaap, stress en herstelstatus beïnvloeden je regulatie en verschuiven het anker licht.</p>
-              </article>
-              <article class="soft-panel">
-                <h3>Omstandigheden</h3>
-                <p>Warmte, voeding en hydratatie veranderen de interne kosten bij hetzelfde vermogen.</p>
+                <h3>Ademgas eerst</h3>
+                <p>We kijken naar ventilatoire patronen (VE, VO2, ademfrequentie) en niet alleen naar hartslag.</p>
               </article>
               <article class="soft-panel">
                 <h3>Protocol</h3>
-                <p>Testopzet en stapduur bepalen hoe scherp je overgang zichtbaar wordt.</p>
+                <p>Stapsgewijze opbouw op de trainer om de overgang helder en reproduceerbaar zichtbaar te maken.</p>
+              </article>
+              <article class="soft-panel">
+                <h3>Vertaling</h3>
+                <p>We koppelen VT1 direct aan wattage-zones die je in je trainingsweek kunt gebruiken.</p>
               </article>
             </div>
           </article>
@@ -107,25 +176,58 @@
       <section class="section">
         <div class="container">
           <article class="card">
-            <h2>Waarom VT1 zo belangrijk is</h2>
-            <div class="grid three">
+            <h2>Wat de variabelen betekenen</h2>
+            <div class="cp-vars-grid">
               <article class="soft-panel">
-                <h3>Duurvolume en consistentie</h3>
-                <p>VT1 is vaak de hoogste intensiteit die je lang kunt stapelen met lage herstelkosten.</p>
+                <h3>VT1</h3>
+                <ul>
+                  <li>Eerste ventilatoire overgang.</li>
+                  <li>Anker voor duurzame, stapelbare intensiteit.</li>
+                  <li>Niet exact punt, maar praktisch gebied.</li>
+                </ul>
               </article>
               <article class="soft-panel">
-                <h3>Efficientie</h3>
-                <p>Meer aerobe efficiency: minder ventilatoire druk bij hetzelfde vermogen.</p>
+                <h3>Vermogen (P)</h3>
+                <ul>
+                  <li>Gekozen wattage tijdens duurblok.</li>
+                  <li>P rond VT1 = vaak stabiele duurprikkel.</li>
+                  <li>P boven VT1 = hogere drift en kosten.</li>
+                </ul>
               </article>
               <article class="soft-panel">
-                <h3>Pacing</h3>
-                <p>Boven VT1 starten geeft sneller drift en onnodige kosten.</p>
+                <h3>Drift</h3>
+                <ul>
+                  <li>Toenemende interne belasting bij gelijk vermogen.</li>
+                  <li>Versnelt vaak boven VT1, zeker bij lange duur.</li>
+                </ul>
+              </article>
+              <article class="soft-panel">
+                <h3>Herstelkosten</h3>
+                <ul>
+                  <li>Hoeveel herstel je nodig hebt na de sessie.</li>
+                  <li>Bepalend voor je weekbelasting en consistentie.</li>
+                </ul>
               </article>
             </div>
-            <p style="margin-top: 12px">
-              VT1 valt vaak in wat veel modellen "zone 2" noemen. VT1 is het fysiologische anker om die zone te
-              kalibreren.
+            <p style="margin-top: 10px">
+              Belangrijk: VT1 verschuift met dagvorm, warmte, voeding en protocol. Gebruik daarom ranges en context, niet
+              alleen een vast getal.
             </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <article class="card">
+            <h2>Casus: lange duur van 2 uur</h2>
+            <p data-vt1-case-text>
+              VT1 = 230 W, gekozen vermogen = 220 W, duur = 120 min. Dit ligt rond VT1 en is goed stapelbaar met
+              gecontroleerde drift.
+            </p>
+            <article class="soft-panel" style="margin-top: 12px">
+              <p>Doel: zoveel mogelijk kwalitatieve duurminuten maken zonder onnodig hoge herstelkosten.</p>
+            </article>
           </article>
         </div>
       </section>
@@ -135,10 +237,10 @@
           <article class="card">
             <h2>Samenvatting</h2>
             <ul class="summary-list">
-              <li>VT1 is de eerste ventilatoire overgang: VE versnelt relatief ten opzichte van VO2 en watt.</li>
-              <li>Het is geen vetverbrandingsschakelaar maar een regulatiepunt met meer drift.</li>
-              <li>VT1 is een gebied dat schuift met dagvorm en omstandigheden.</li>
-              <li>In de ramp-test koppel je VT1 scherp aan vermogen via ademrespons; HR kan vertragen.</li>
+              <li>VT1 is je eerste ventilatoire overgang en een sterk zone-2 anker.</li>
+              <li>Rond VT1 kun je volume stapelen met relatief lage herstelkosten.</li>
+              <li>Boven VT1 nemen drift en kosten sneller toe, vooral bij lange blokken.</li>
+              <li>Gebruik VT1 in combinatie met VT2 en CP voor volledige dosering.</li>
             </ul>
             <div class="detail-links">
               <a class="button button-secondary button-sm" href="vt2.html">Volgende: VT2</a>
@@ -159,7 +261,7 @@
           <h3>Verder lezen</h3>
           <p><a href="vo2max.html">VO2max</a></p>
           <p><a href="vt2.html">VT2</a></p>
-          <p><a href="energiesystemen.html">Energiesystemen</a></p>
+          <p><a href="critical-power.html">Critical Power</a></p>
         </section>
         <section>
           <h3>Contact</h3>

@@ -69,8 +69,8 @@ body {
 .brand-logo {
   display: block;
   width: auto;
-  height: 72px;
-  max-width: none;
+  height: 64px;
+  max-width: 220px;
   object-fit: contain;
 }
 
@@ -801,6 +801,52 @@ h3 {
 
 .progress-fill.cp-maxpower {
   background: linear-gradient(145deg, #2f7f94 0%, #1f667b 100%);
+}
+
+.progress-fill.vt1-delta {
+  background: linear-gradient(145deg, #2f6cf6 0%, #1f55d1 100%);
+}
+
+.progress-fill.vt1-drift {
+  background: linear-gradient(145deg, #2f7f94 0%, #1f667b 100%);
+}
+
+.progress-fill.vt1-quality {
+  background: linear-gradient(145deg, #1f8d86 0%, #11606a 100%);
+}
+
+.progress-fill.vt1-recovery {
+  background: linear-gradient(145deg, #f39d2b 0%, #da7d0a 100%);
+}
+
+.progress-fill.vt1-tte {
+  background: linear-gradient(145deg, #1f8d86 0%, #11606a 100%);
+}
+
+.progress-fill.vt2-delta {
+  background: linear-gradient(145deg, #2f6cf6 0%, #1f55d1 100%);
+}
+
+.progress-fill.vt2-pressure {
+  background: linear-gradient(145deg, #ee5a5a 0%, #c02d5e 100%);
+}
+
+.progress-fill.vt2-repeat {
+  background: linear-gradient(145deg, #2f7f94 0%, #1f667b 100%);
+}
+
+.progress-fill.vt2-dose {
+  background: linear-gradient(145deg, #1f8d86 0%, #11606a 100%);
+}
+
+.vt1-strip .cp-strip-block.work {
+  background: #23737d;
+  border-color: #1a5d69;
+}
+
+.vt2-strip .cp-strip-block.work {
+  background: #2e6488;
+  border-color: #214c69;
 }
 
 .cp-strip-panel {
