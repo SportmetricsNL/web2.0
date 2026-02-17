@@ -358,6 +358,21 @@ h3 {
   color: #20466f;
 }
 
+.map-frame {
+  margin-top: 12px;
+  border: 1px solid #bfd5f8;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #e8f2ff;
+}
+
+.map-frame iframe {
+  display: block;
+  width: 100%;
+  min-height: 220px;
+  border: 0;
+}
+
 .links-inline {
   display: flex;
   flex-wrap: wrap;
@@ -703,6 +718,66 @@ h3 {
   margin: 10px 0 0;
 }
 
+.ai-shell {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 14px;
+}
+
+.ai-chat-wrap {
+  display: grid;
+  gap: 10px;
+}
+
+.ai-chat-feed {
+  border: 1px solid #c4d8fb;
+  border-radius: 14px;
+  background: #f5faff;
+  min-height: 320px;
+  max-height: 420px;
+  overflow: auto;
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.ai-msg {
+  max-width: 88%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  line-height: 1.5;
+}
+
+.ai-msg.user {
+  margin-left: auto;
+  background: linear-gradient(145deg, #2868f3 0%, #1f53c6 100%);
+  color: #fff;
+}
+
+.ai-msg.assistant {
+  margin-right: auto;
+  background: #eaf2ff;
+  border: 1px solid #c6d9fc;
+  color: #1d3f6b;
+}
+
+.ai-chat-form {
+  display: grid;
+  gap: 10px;
+}
+
+.ai-chat-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ai-upload-note {
+  margin: 0;
+  color: #3e5f8c;
+  font-size: 0.9rem;
+}
+
 .form-grid {
   display: grid;
   gap: 12px;
@@ -863,5 +938,9 @@ textarea {
 
   .brand-logo {
     height: 50px;
+  }
+
+  .ai-shell {
+    grid-template-columns: 1fr;
   }
 }

@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sportmetrics | AI Tool</title>
+    <meta
+      name="description"
+      content="Chat met de Sportmetrics AI tool. Upload je rapport en krijg praktische uitleg over training, zones en testresultaten."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="brand" href="index.html" aria-label="Sportmetrics home">
+          <img class="brand-logo" src="assets/sportmetrics-logo.svg" alt="VO2 Sportmetrics logo" />
+        </a>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="main-nav">
+          Menu
+        </button>
+        <nav id="main-nav" class="main-nav" data-main-nav>
+          <a href="index.html">Home</a>
+          <a href="aanbod.html">Aanbod</a>
+          <a href="methode.html">Methode</a>
+          <a href="kernbegrippen.html">Kernbegrippen</a>
+          <a class="active" href="ai-tool.html">AI Tool</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <a class="button button-primary button-sm desktop-book" href="contact.html">Boek test</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container hero-layout">
+          <article class="hero-main">
+            <span class="eyebrow">Sportfysioloog AI</span>
+            <h1>Jouw wieler- en hardloopexpert in chatvorm</h1>
+            <p>
+              Stel vragen, upload je rapport en ontvang praktische uitleg op basis van trainingsleer. Deze versie is nu
+              frontend-klaar; API-koppeling zetten we later live zodra jij de sleutel geeft.
+            </p>
+          </article>
+          <aside class="hero-side">
+            <h2>Wat deze tool straks doet</h2>
+            <ul>
+              <li>Rapporten samenvatten in heldere taal</li>
+              <li>VT1/VT2/VO2max vertalen naar trainingskeuzes</li>
+              <li>Praktische weekadviezen voorstellen</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container ai-shell">
+          <article class="card">
+            <h2>Gebruik</h2>
+            <div class="grid" style="gap: 10px">
+              <article class="soft-panel">
+                <h3>1. Upload rapport (optioneel)</h3>
+                <p>Voeg je test-PDF toe om context mee te geven in de chat.</p>
+              </article>
+              <article class="soft-panel">
+                <h3>2. Stel je vraag</h3>
+                <p>Bijvoorbeeld: "Wat betekent mijn VT1 voor mijn duurtraining?"</p>
+              </article>
+              <article class="soft-panel">
+                <h3>3. Pas toe</h3>
+                <p>Gebruik de output als startpunt met je coach of in je eigen weekplanning.</p>
+              </article>
+            </div>
+            <p class="small-note" style="margin-top: 10px">
+              Let op: geen medisch advies. Voor klachten of medische vragen altijd eerst een arts raadplegen.
+            </p>
+          </article>
+
+          <article class="card ai-chat-wrap">
+            <h2>AI Chat (demo)</h2>
+            <p class="ai-upload-note" data-ai-upload-status>Nog geen rapport geüpload.</p>
+            <input type="file" accept=".pdf" data-ai-upload />
+
+            <div class="ai-chat-actions">
+              <button class="button button-secondary button-sm" type="button" data-ai-quick="Leg VO2max eenvoudig uit">VO2max uitleg</button>
+              <button class="button button-secondary button-sm" type="button" data-ai-quick="Hoe gebruik ik VT1 in zone 2 training?">VT1 toepassen</button>
+              <button class="button button-secondary button-sm" type="button" data-ai-quick="Maak een voorbeeldweek met 6 uur trainen">Voorbeeldweek 6u</button>
+            </div>
+
+            <div class="ai-chat-feed" data-ai-messages>
+              <div class="ai-msg assistant">
+                Hoi! Ik ben de Sportmetrics AI tool. Stel je vraag over training, testresultaten of zones.
+              </div>
+            </div>
+
+            <form class="ai-chat-form" data-ai-form>
+              <label for="ai-input">Jouw vraag</label>
+              <textarea id="ai-input" data-ai-input placeholder="Bijv. hoe vertaal ik mijn VT2 naar intervaltraining?" required></textarea>
+              <button class="button button-primary" type="submit">Verstuur</button>
+            </form>
+
+            <p class="small-note">
+              API-status: nog niet gekoppeld. Deze chat toont nu een slimme demo-respons op basis van jouw vraag.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <section>
+          <h3>Sportmetrics</h3>
+          <p>Kennisbank, tests en straks AI-ondersteuning in één flow.</p>
+        </section>
+        <section>
+          <h3>Snel naar</h3>
+          <p><a href="kernbegrippen.html">Kernbegrippen</a></p>
+          <p><a href="aanbod.html">Aanbod</a></p>
+          <p><a href="contact.html">Contact</a></p>
+        </section>
+        <section>
+          <h3>Contact</h3>
+          <p><a href="mailto:info@sportmetrics.nl">info@sportmetrics.nl</a></p>
+          <p><a href="https://wa.me/31600000000" target="_blank" rel="noreferrer">WhatsApp</a></p>
+        </section>
+      </div>
+      <div class="container footer-copy">&copy; <span data-year></span> Sportmetrics.</div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

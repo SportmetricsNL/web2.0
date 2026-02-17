@@ -313,6 +313,78 @@ if (zoneModelButtons.length && zoneModelPanels.length) {
   applyZoneModel('z1');
 }
 
+const aiForm = document.querySelector('[data-ai-form]');
+const aiInput = document.querySelector('[data-ai-input]');
+const aiMessages = document.querySelector('[data-ai-messages]');
+const aiQuickButtons = document.querySelectorAll('[data-ai-quick]');
+const aiUpload = document.querySelector('[data-ai-upload]');
+const aiUploadStatus = document.querySelector('[data-ai-upload-status]');
+
+if (aiForm && aiInput && aiMessages) {
+  const appendMessage = (role, text) => {
+    const node = document.createElement('div');
+    node.className = `ai-msg ${role}`;
+    node.textContent = text;
+    aiMessages.appendChild(node);
+    aiMessages.scrollTop = aiMessages.scrollHeight;
+  };
+
+  const getDemoAnswer = (question) => {
+    const q = question.toLowerCase();
+
+    if (q.includes('vo2')) {
+      return 'VO2max is je aerobe plafond. Gebruik het samen met VT1/VT2, want alleen VO2max zegt niet hoe goed je het plafond benut in training.';
+    }
+
+    if (q.includes('vt1')) {
+      return 'VT1 is meestal je anker voor duurzame zone-2 training. Richt je op veel volume net onder/rond VT1 voor stabiele opbouw met lage herstelkosten.';
+    }
+
+    if (q.includes('vt2') || q.includes('drempel')) {
+      return 'VT2 markeert de overgang naar zwaar werk. Plan hier beperkte blokken met voldoende herstel, zodat je kwaliteit behoudt en niet te veel in het grijze gebied traint.';
+    }
+
+    if (q.includes('week') || q.includes('schema')) {
+      return 'Voor een basisweek: 2-3 rustige zone-2 sessies, 1 kwaliteitssessie rond VT2/VO2, en 1 rustdag. Pas dit aan op je beschikbare uren en herstel.';
+    }
+
+    return 'Goede vraag. Zodra we je API koppelen, geef ik hier volledige context-antwoorden op basis van je rapport en trainingsdoel.';
+  };
+
+  aiForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const question = aiInput.value.trim();
+    if (!question) {
+      return;
+    }
+
+    appendMessage('user', question);
+    aiInput.value = '';
+
+    const answer = getDemoAnswer(question);
+    window.setTimeout(() => {
+      appendMessage('assistant', answer);
+    }, 300);
+  });
+
+  aiQuickButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const prompt = button.dataset.aiQuick || '';
+      aiInput.value = prompt;
+      aiInput.focus();
+    });
+  });
+
+  if (aiUpload && aiUploadStatus) {
+    aiUpload.addEventListener('change', () => {
+      const fileName = aiUpload.files && aiUpload.files[0] ? aiUpload.files[0].name : '';
+      aiUploadStatus.textContent = fileName
+        ? `Rapport geselecteerd: ${fileName}`
+        : 'Nog geen rapport geüpload.';
+    });
+  }
+}
+
 const yearNode = document.querySelector('[data-year]');
 if (yearNode) {
   yearNode.textContent = String(new Date().getFullYear());

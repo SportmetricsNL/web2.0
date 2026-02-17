@@ -24,6 +24,7 @@
           <a href="aanbod.html">Aanbod</a>
           <a href="methode.html">Methode</a>
           <a href="kernbegrippen.html">Kernbegrippen</a>
+          <a href="ai-tool.html">AI Tool</a>
           <a class="active" href="contact.html">Contact</a>
         </nav>
         <a class="button button-primary button-sm desktop-book" href="contact.html">Boek test</a>
@@ -69,8 +70,30 @@
                 <input id="name" name="name" type="text" required />
               </div>
               <div class="form-field">
+                <label for="birthdate">Geboortedatum</label>
+                <input id="birthdate" name="birthdate" type="date" required />
+              </div>
+              <div class="form-field">
                 <label for="email">E-mailadres</label>
                 <input id="email" name="email" type="email" required />
+              </div>
+              <div class="form-field">
+                <label for="sex">Seks</label>
+                <select id="sex" name="sex" required>
+                  <option value="">Kies</option>
+                  <option>Vrouw</option>
+                  <option>Man</option>
+                  <option>Anders</option>
+                  <option>Zeg ik liever niet</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="weight">Gewicht (kg)</label>
+                <input id="weight" name="weight" type="number" min="30" max="200" step="0.1" required />
+              </div>
+              <div class="form-field">
+                <label for="height">Lengte (cm)</label>
+                <input id="height" name="height" type="number" min="120" max="230" step="1" required />
               </div>
               <div class="form-field">
                 <label for="goal">Doel</label>
@@ -91,6 +114,23 @@
                 </select>
               </div>
               <div class="form-field">
+                <label for="bike-goal">Fiets doel</label>
+                <input id="bike-goal" name="bike_goal" type="text" placeholder="Bijv. gran fondo uitrijden, tijdrit verbeteren" required />
+              </div>
+              <div class="form-field">
+                <label for="level-hours">Fiets niveau schatting (uur per week)</label>
+                <input id="level-hours" name="level_hours" type="number" min="0" max="40" step="0.5" required />
+              </div>
+              <div class="form-field">
+                <label for="axle">As fiets (through axle of quick release)</label>
+                <select id="axle" name="axle" required>
+                  <option value="">Kies type</option>
+                  <option>Through axle</option>
+                  <option>Quick release</option>
+                  <option>Weet ik niet</option>
+                </select>
+              </div>
+              <div class="form-field">
                 <label for="location">Locatie</label>
                 <select id="location" name="location">
                   <option>Amsterdam - Het Marnix</option>
@@ -98,16 +138,13 @@
                   <option>Twijfel nog</option>
                 </select>
               </div>
-              <div class="form-field">
-                <label for="date">Gewenste datum</label>
-                <input id="date" name="date" type="date" />
-              </div>
               <div class="form-field full">
                 <label for="notes">Opmerking / vraag</label>
                 <textarea id="notes" name="notes" placeholder="Bijvoorbeeld: blessure, huidige trainingsbelasting, planning."></textarea>
               </div>
               <div class="form-field full">
                 <button class="button button-primary" type="submit">Verstuur aanvraag</button>
+                <p class="form-hint">Gewenste datum plannen we na je aanvraag. Ik stuur zo snel mogelijk een voorstel terug.</p>
                 <p class="form-hint" data-form-status>We reageren binnen 24 uur met een concreet voorstel.</p>
               </div>
             </form>
@@ -121,14 +158,22 @@
             <article class="card">
               <span class="eyebrow">Locaties</span>
               <h3>Amsterdam - Het Marnix</h3>
-              <p>Marnixstraat 250, Amsterdam</p>
+              <p>Marnixplein 1, 1015 ZN Amsterdam</p>
               <p class="small-note">Volledige apparatuur aanwezig, makkelijk bereikbaar met OV en fiets.</p>
+              <div class="map-frame">
+                <iframe
+                  title="Sportmetrics locatie op Google Maps"
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                  src="https://www.google.com/maps?q=Marnixplein+1,+1015+ZN+Amsterdam&output=embed"
+                ></iframe>
+              </div>
             </article>
             <article class="card">
               <span class="eyebrow">Mobiel</span>
               <h3>Aan huis</h3>
               <p>We komen op locatie met meetapparatuur en testen in je eigen trainingsomgeving.</p>
-              <p class="small-note">Beschikbaar op aanvraag en in overleg met reistijd.</p>
+              <p class="small-note">Beschikbaar in heel Amsterdam, op aanvraag en in overleg met reistijd.</p>
             </article>
           </div>
         </div>
