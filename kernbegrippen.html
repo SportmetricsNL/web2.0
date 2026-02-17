@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sportmetrics | Kernbegrippen - VO2max Kennisbank</title>
+    <title>Sportmetrics | Kernbegrippen - Overzicht</title>
     <meta
       name="description"
-      content="Uitgebreide uitleg over VO2max met interactieve keten-slider, trainingsvertaling en aanvullende kernbegrippen zoals VT1, VT2 en Critical Power."
+      content="Overzicht van alle kernbegrippen: VO2max, VT1, VT2, energiesystemen, zonemodellen en critical power."
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -31,271 +31,53 @@
     </header>
 
     <main>
-      <section class="page-hero" id="vo2max">
-        <div class="container">
-          <article class="card vo2-panel">
-            <span class="eyebrow">VO2MAX</span>
-            <h1>VO2max: de gouden standaard, maar meer dan hard gaan</h1>
-            <p class="vo2-lead">
-              VO2max is je maximale zuurstofopname: hoeveel O2 je per minuut kunt opnemen, transporteren en gebruiken om
-              ATP te maken. Het is je aerobe plafond. Niet de enige voorspeller van prestatie, maar wel een kernanker in
-              je fysiologisch profiel.
-            </p>
-            <div class="grid three" style="margin-top: 16px">
-              <article class="card">
-                <h3 class="vo2-grid-title">Aerobe plafond</h3>
-                <p>Maximale O2-opname bepaalt hoe hoog je aerobe motor kan.</p>
-              </article>
-              <article class="card">
-                <h3 class="vo2-grid-title">Niet alles</h3>
-                <p>Zelfde VO2max kan anders presteren door drempels, efficiency en pacing.</p>
-              </article>
-              <article class="card">
-                <h3 class="vo2-grid-title">Trainbaar</h3>
-                <p>Je kunt het plafond verhogen door slim te doseren.</p>
-              </article>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="container">
-          <article class="card">
-            <h2>Wat het precies is, en wat het niet is</h2>
-            <div class="grid three">
-              <article class="soft-panel">
-                <h3>Definitie</h3>
-                <p>
-                  VO2max = maximale O2-opname (ml/min of ml per kg per minuut). Het is de maximale aerobe energie die je
-                  kunt leveren.
-                </p>
-              </article>
-              <article class="soft-panel">
-                <h3>Wat het niet is</h3>
-                <p>Het is geen directe maat voor hoe hard je bent.</p>
-                <p style="margin-top: 8px">Je drempels, efficiency en pacing bepalen hoe je dat plafond benut.</p>
-              </article>
-              <article class="soft-panel">
-                <h3>Waarom het telt</h3>
-                <p>Het is een anker om training te positioneren en progressie te volgen.</p>
-              </article>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="container">
-          <article class="card">
-            <h2>De keten die VO2max begrenst</h2>
+      <section class="page-hero">
+        <div class="container hero-layout">
+          <article class="hero-main">
+            <span class="eyebrow">Kernbegrippen - Overzicht</span>
+            <h1>Eerst het totaalplaatje, daarna de diepte in per begrip</h1>
             <p>
-              VO2max wordt bepaald door de hele keten van aanvoer en gebruik. Trainen verschuift waar de bottleneck
-              ligt.
+              Deze pagina geeft je eerst de algemene context van trainingsfysiologie. Daaronder kun je elk kernbegrip
+              uitklappen en doorklikken naar de volledige uitwerking op een aparte pagina.
             </p>
-
-            <div class="pill-row" style="margin: 10px 0 12px">
-              <button class="pill-button" type="button" data-chain-button="longen">Longen</button>
-              <button class="pill-button" type="button" data-chain-button="hart">Hart &amp; bloed</button>
-              <button class="pill-button" type="button" data-chain-button="spieren">Spieren</button>
+            <div class="hero-actions">
+              <a class="button button-primary" href="aanbod.html">Bekijk passende tests</a>
+              <a class="button button-secondary" href="contact.html">Stel een vraag</a>
             </div>
-
-            <article class="soft-panel">
-              <h3 data-chain-title>Ventilatie en gaswisseling</h3>
-              <p data-chain-text>
-                De longen leveren de O2 aan die het systeem in kan. Goede ventilatie en gaswisseling zijn de start van de
-                keten.
-              </p>
-            </article>
-
-            <div class="slider-wrap">
-              <label for="bottleneck-slider">Waar ligt de bottleneck vandaag?</label>
-              <input id="bottleneck-slider" type="range" min="0" max="100" step="1" value="76" data-bottleneck-slider />
-              <div class="progress-rows">
-                <div class="progress-row">
-                  <span>Aanvoer</span>
-                  <div class="progress-track">
-                    <div class="progress-fill supply" data-supply-fill></div>
-                  </div>
-                  <strong data-supply-value>24%</strong>
-                </div>
-                <div class="progress-row">
-                  <span>Gebruik</span>
-                  <div class="progress-track">
-                    <div class="progress-fill use" data-use-fill></div>
-                  </div>
-                  <strong data-use-value>76%</strong>
-                </div>
-              </div>
-            </div>
-
-            <h3 style="margin-top: 16px">Waar treedt vermoeidheid op na maximaal gaan?</h3>
-            <p>
-              Na maximaal gaan valt de keten vaak het eerst uit bij longen, hart of spieren. Welke plek limiterend is,
-              verschilt per persoon en is deels genetisch bepaald.
-            </p>
-
-            <div class="pill-row" style="margin: 8px 0 12px">
-              <button class="pill-button" type="button" data-fatigue-button="longen">Longen</button>
-              <button class="pill-button" type="button" data-fatigue-button="hart">Hart</button>
-              <button class="pill-button" type="button" data-fatigue-button="spieren">Spieren</button>
-              <button class="pill-button" type="button" data-fatigue-button="genetisch">Genetisch</button>
-            </div>
-
-            <div class="chain-flow">
-              <div class="chain-node" data-stage-node="longen">Longen</div>
-              <span class="chain-arrow">&rarr;</span>
-              <div class="chain-node" data-stage-node="hart">Hart &amp; bloed</div>
-              <span class="chain-arrow">&rarr;</span>
-              <div class="chain-node" data-stage-node="spieren">Spieren</div>
-            </div>
-
-            <p class="chain-note" data-fatigue-note>Genetisch profiel bepaalt startpunt en plafond.</p>
-
-            <article class="soft-panel" style="margin-top: 10px">
-              <h3 data-fatigue-title>Longen</h3>
-              <p data-fatigue-text>
-                Maximale ademarbeid en gaswisseling kunnen limiteren. De aanleg is deels genetisch, training kan
-                efficiency verbeteren.
-              </p>
-            </article>
           </article>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="container">
-          <article class="card">
-            <h2>Hoe verhoog je VO2max?</h2>
-            <p>
-              In de praktijk draait het om genoeg tijd dichtbij je maximale aerobe output. Je dwingt een hoge
-              zuurstofvraag af en prikkelt zowel centrale als perifere factoren.
-            </p>
-            <div class="grid three" style="margin-top: 10px">
-              <article class="soft-panel">
-                <h3>Tijd bij het plafond</h3>
-                <p>Niet sprinten, maar lang genoeg hoog blijven zodat je minuten "bij max" opbouwt.</p>
-              </article>
-              <article class="soft-panel">
-                <h3>Voorbeeld: Noorse 4x4</h3>
-                <p>
-                  4 blokken van 4 minuten op een intensiteit die je snel richting zeer hoge ademdruk en VO2 brengt, met
-                  herstel ertussen.
-                </p>
-              </article>
-              <article class="soft-panel">
-                <h3>Herhaalbaarheid</h3>
-                <p>De kwaliteit zit in het kunnen herhalen van hoge minuten, niet in een enkele piek.</p>
-              </article>
-            </div>
-
-            <article class="soft-panel" style="margin-top: 12px">
-              <p>Doel: zoveel mogelijk minuten dicht bij je VO2-plafond verzamelen zonder te sprinten.</p>
-            </article>
-
-            <div class="interval-strip">
-              <span class="interval-chip work">4 min hoog</span>
-              <span class="interval-chip">3 min herstel</span>
-              <span class="interval-chip work">4 min hoog</span>
-              <span class="interval-chip">3 min herstel</span>
-              <span class="interval-chip work">4 min hoog</span>
-              <span class="interval-chip">3 min herstel</span>
-              <span class="interval-chip work">4 min hoog</span>
-            </div>
-
-            <p class="small-note" style="margin-top: 10px">
-              Richt je op lang genoeg hoog blijven zodat je minuten bij het plafond opbouwt.
-            </p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="container">
-          <article class="card">
-            <h2>Waarom zone 2 essentieel blijft</h2>
-            <p>
-              Alleen hoog-intensief werk is zelden de snelste route omhoog. Het fundament is een grote aerobe basis.
-            </p>
-            <div class="grid three" style="margin-top: 10px">
-              <article class="soft-panel">
-                <h3>Meer capaciteit</h3>
-                <p>Meer mitochondrien en doorbloeding vergroten je aerobe motor.</p>
-              </article>
-              <article class="soft-panel">
-                <h3>Efficienter systeem</h3>
-                <p>Betere vetoxidatie en lagere herstelkosten maken consistent volume mogelijk.</p>
-              </article>
-              <article class="soft-panel">
-                <h3>Betere VO2-trainbaarheid</h3>
-                <p>Een sterke basis zorgt dat je hoge blokken vaker kunt herhalen en verwerken.</p>
-              </article>
-            </div>
-            <article class="soft-panel" style="margin-top: 12px">
-              <p>Zone 2 rond VT1 is de motor van volume en adaptatie.</p>
-            </article>
-          </article>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="container">
-          <article class="card">
-            <h2>Meten verslaat formules</h2>
-            <p>
-              Horloges, standaardformules en percentages geven een model. Met ademgasanalyse krijg je een meting met
-              minder individuele foutmarge.
-            </p>
-
-            <div class="pill-row" style="margin: 10px 0 12px">
-              <button class="pill-button" type="button" data-model-button="schattingen">Schattingen</button>
-              <button class="pill-button" type="button" data-model-button="meting">Meting</button>
-            </div>
-
-            <article class="soft-panel">
-              <h3 data-model-title>Model</h3>
-              <p data-model-text>
-                Percentages van HRmax, 220-leeftijd, FTP-only en horloge-schattingen zijn generieke aannames.
-              </p>
-            </article>
-          </article>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="container">
-          <article class="card">
-            <h2>Wat je praktisch krijgt bij SportMetrics</h2>
-            <div class="grid three" style="margin-top: 10px">
-              <article class="soft-panel">
-                <h3>VO2max plafond</h3>
-                <p>Objectieve bepaling van jouw aerobe plafond.</p>
-              </article>
-              <article class="soft-panel">
-                <h3>Progressie richting plafond</h3>
-                <p>Hoe snel je richting VO2max gaat bij oplopend vermogen.</p>
-              </article>
-              <article class="soft-panel">
-                <h3>Vertaling naar zones</h3>
-                <p>VT1/VT2 en wattage-zones gekoppeld aan jouw profiel.</p>
-              </article>
-            </div>
-            <p style="margin-top: 12px">Het doel is niet een mooi getal, maar een profiel om zone 2 en VO2max-werk gericht te doseren.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="container">
-          <article class="card">
-            <h2>Samenvatting</h2>
-            <ul class="summary-list">
-              <li>VO2max is je aerobe plafond: hoeveel O2 je maximaal kunt opnemen en gebruiken.</li>
-              <li>Het plafond verhoog je met veel minuten dicht bij max, zoals 4x4-blokken.</li>
-              <li>Zone 2 rond VT1 bouwt de basis zodat hoge blokken beter te herhalen zijn.</li>
-              <li>Met ademgasanalyse plaats je VO2max en VT1/VT2 precies, in plaats van generieke formules.</li>
+          <aside class="hero-side">
+            <h2>Waarom dit belangrijk is</h2>
+            <ul>
+              <li>Je begrijpt waarom je bepaalde zones traint</li>
+              <li>Je ziet het verschil tussen model en meting</li>
+              <li>Je vertaalt data direct naar betere trainingskeuzes</li>
             </ul>
-            <p class="summary-outro">We zien je snel bij SportMetrics.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <article class="card">
+            <h2>Algemene uitleg</h2>
+            <p>
+              Trainingsleer draait in de kern om energieaanvoer, gebruik en regulatie. Begrippen zoals VO2max, VT1,
+              VT2 en Critical Power zijn ankers: ze helpen je om intensiteit, volume en herstel logisch te doseren.
+            </p>
+            <div class="grid three" style="margin-top: 12px">
+              <article class="soft-panel">
+                <h3>1. Meten</h3>
+                <p>Met ademgasanalyse en vermogen bepaal je waar jouw fysiologische ankers liggen.</p>
+              </article>
+              <article class="soft-panel">
+                <h3>2. Begrijpen</h3>
+                <p>Je leert wat elk anker betekent voor belasting, drift, herstel en progressie.</p>
+              </article>
+              <article class="soft-panel">
+                <h3>3. Toepassen</h3>
+                <p>Je vertaalt dit naar zones en sessies die passen bij je doel en belastbaarheid.</p>
+              </article>
+            </div>
           </article>
         </div>
       </section>
@@ -304,67 +86,89 @@
         <div class="container">
           <div class="section-title-row">
             <div>
-              <span class="eyebrow">Overige Kernbegrippen</span>
-              <h2>Verdiep je verder</h2>
+              <span class="eyebrow">Uitklapbare Blokken</span>
+              <h2>Klik open en ga door naar de volledige pagina</h2>
             </div>
-            <p>Klik door op de termen en ga daarna direct naar passende testopties.</p>
+            <p>Elke uitklapper bevat een korte uitleg en een knop naar de complete uitwerking.</p>
           </div>
 
-          <div class="accordion">
+          <div class="concept-accordion">
+            <details>
+              <summary>VO2max</summary>
+              <p class="concept-summary">
+                VO2max is je maximale zuurstofopname en dus je aerobe plafond. Belangrijk anker, maar niet de enige
+                voorspeller van prestatie.
+              </p>
+              <div class="concept-actions">
+                <a class="button button-secondary button-sm" href="vo2max.html">Open volledige uitwerking VO2max</a>
+              </div>
+            </details>
+
             <details>
               <summary>VT1 (Aerobe drempel)</summary>
-              <p>
-                VT1 is het punt waarop ventilatie stijgt, maar nog stabiel blijft. Deze zone is cruciaal voor basisvolume
-                en herstel tussen intensieve sessies.
+              <p class="concept-summary">
+                VT1 is de eerste ventilatoire overgang en het fysiologische anker voor duurzaam volume en zone 2.
               </p>
-              <div class="links-inline" style="margin-top: 10px">
-                <a class="button button-ghost button-sm" href="aanbod.html">Wil je jouw VT1 weten? Bekijk de testen</a>
+              <div class="concept-actions">
+                <a class="button button-secondary button-sm" href="vt1.html">Open volledige uitwerking VT1</a>
               </div>
             </details>
 
             <details>
               <summary>VT2 (Anaerobe drempel)</summary>
-              <p>
-                VT2 markeert de overgang naar snel oplopende verzuring. Deze drempel helpt je bij tempo- en
-                wedstrijdgerichte trainingskeuzes.
+              <p class="concept-summary">
+                VT2 markeert de overgang naar non-steady-state: zwaarder werk met hogere drift en herstelkosten.
               </p>
-              <div class="links-inline" style="margin-top: 10px">
-                <a class="button button-ghost button-sm" href="aanbod.html">Wil je jouw VT2 weten? Bekijk de testen</a>
+              <div class="concept-actions">
+                <a class="button button-secondary button-sm" href="vt2.html">Open volledige uitwerking VT2</a>
               </div>
             </details>
 
             <details>
               <summary>Energiesystemen</summary>
-              <p>
-                Je aerobe en anaerobe systemen leveren continu samen energie. De kunst is per training te kiezen welk
-                systeem je precies prikkelt.
+              <p class="concept-summary">
+                ATP-PCr, anaerobe glycolyse en aerobe oxidatie werken altijd samen. Wat verandert is de dominante mix.
               </p>
-              <div class="links-inline" style="margin-top: 10px">
-                <a class="button button-ghost button-sm" href="aanbod.html">Wil je jouw energiesystemen kennen? Bekijk de testen</a>
+              <div class="concept-actions">
+                <a class="button button-secondary button-sm" href="energiesystemen.html">Open volledige uitwerking Energiesystemen</a>
               </div>
             </details>
 
             <details>
               <summary>Zonemodellen</summary>
-              <p>
-                Zonemodellen vertalen metingen naar praktische trainingsblokken. Niet het model zelf, maar de juiste
-                drempels maken het verschil.
+              <p class="concept-summary">
+                Zone-indelingen zijn praktische modellen. De kwaliteit zit in de kalibratie op VT1/VT2, niet in het
+                aantal zones.
               </p>
-              <div class="links-inline" style="margin-top: 10px">
-                <a class="button button-ghost button-sm" href="aanbod.html">Wil je jouw zones weten? Bekijk de testen</a>
+              <div class="concept-actions">
+                <a class="button button-secondary button-sm" href="zonemodellen.html">Open volledige uitwerking Zonemodellen</a>
               </div>
             </details>
 
             <details>
               <summary>Critical Power</summary>
-              <p>
-                Critical Power beschrijft welk vermogen je langdurig volhoudt en hoe snel je uitgeput raakt boven die
-                grens. Sterk voor pacing en intervalontwerp.
+              <p class="concept-summary">
+                Critical Power beschrijft je duurzame grens en W′ je beperkte boven-CP budget voor zware blokken.
               </p>
-              <div class="links-inline" style="margin-top: 10px">
-                <a class="button button-ghost button-sm" href="aanbod.html">Wil je jouw Critical Power weten? Bekijk de testen</a>
+              <div class="concept-actions">
+                <a class="button button-secondary button-sm" href="critical-power.html">Open volledige uitwerking Critical Power</a>
               </div>
             </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="cta-banner">
+            <div>
+              <h3>Wil je jouw eigen waarden weten?</h3>
+              <p>Kennis wordt pas waardevol als je het koppelt aan jouw meting en trainingsdoel.</p>
+            </div>
+            <div class="detail-links">
+              <a class="button button-primary" href="aanbod.html">Naar aanbod</a>
+              <a class="button button-secondary" href="contact.html">Plan een test</a>
+            </div>
           </div>
         </div>
       </section>
@@ -378,9 +182,9 @@
         </section>
         <section>
           <h3>Verder lezen</h3>
-          <p><a href="methode.html">Methode</a></p>
-          <p><a href="aanbod.html">Aanbod</a></p>
-          <p><a href="contact.html">Boeken</a></p>
+          <p><a href="vo2max.html">VO2max</a></p>
+          <p><a href="energiesystemen.html">Energiesystemen</a></p>
+          <p><a href="zonemodellen.html">Zonemodellen</a></p>
         </section>
         <section>
           <h3>Contact</h3>

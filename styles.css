@@ -70,6 +70,7 @@ body {
   display: block;
   width: auto;
   height: 58px;
+  max-width: 220px;
 }
 
 .main-nav {
@@ -440,6 +441,53 @@ h3 {
   color: #36527e;
 }
 
+.concept-accordion details {
+  background: var(--surface);
+  border: 1px solid #ccdbf4;
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 10px 20px rgba(20, 52, 130, 0.06);
+}
+
+.concept-accordion details + details {
+  margin-top: 10px;
+}
+
+.concept-accordion summary {
+  cursor: pointer;
+  font-family: 'Sora', sans-serif;
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: #1d3c65;
+}
+
+.concept-summary {
+  margin-top: 10px;
+  color: #37527d;
+}
+
+.concept-actions {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.detail-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.detail-links a {
+  text-decoration: none;
+}
+
+.back-link-row {
+  margin-top: 12px;
+}
+
 .vo2-panel {
   background: linear-gradient(165deg, #f8fcff 0%, #ecf5ff 100%);
   border: 1px solid #c9defb;
@@ -544,6 +592,26 @@ h3 {
   background: linear-gradient(145deg, #2f6cf6 0%, #1f55d1 100%);
 }
 
+.progress-fill.pcr {
+  background: linear-gradient(145deg, #f39d2b 0%, #da7d0a 100%);
+}
+
+.progress-fill.anaer {
+  background: linear-gradient(145deg, #ee5a5a 0%, #c02d5e 100%);
+}
+
+.progress-fill.aero {
+  background: linear-gradient(145deg, #1f8d86 0%, #11606a 100%);
+}
+
+.progress-fill.carb {
+  background: linear-gradient(145deg, #3470f4 0%, #204eb8 100%);
+}
+
+.progress-fill.fat {
+  background: linear-gradient(145deg, #26a181 0%, #10745a 100%);
+}
+
 .chain-flow {
   margin-top: 12px;
   display: grid;
@@ -606,6 +674,16 @@ h3 {
   border-color: #2e7287;
   background: #26677d;
   color: #fff;
+}
+
+[data-energy-zone-panel],
+[data-zone-model-panel] {
+  display: none;
+}
+
+[data-energy-zone-panel].active,
+[data-zone-model-panel].active {
+  display: block;
 }
 
 .summary-list {

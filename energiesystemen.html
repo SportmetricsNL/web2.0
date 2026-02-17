@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sportmetrics | Energiesystemen</title>
+    <meta
+      name="description"
+      content="Volledige uitleg over energiesystemen en brandstof: ATP-PCr, anaerobe glycolyse, aerobe oxidatie en de vertaling naar zones."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="brand" href="index.html" aria-label="Sportmetrics home">
+          <img class="brand-logo" src="assets/sportmetrics-logo.svg" alt="VO2 Sportmetrics logo" />
+        </a>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="main-nav">
+          Menu
+        </button>
+        <nav id="main-nav" class="main-nav" data-main-nav>
+          <a href="index.html">Home</a>
+          <a href="aanbod.html">Aanbod</a>
+          <a href="methode.html">Methode</a>
+          <a class="active" href="kernbegrippen.html">Kernbegrippen</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <a class="button button-primary button-sm desktop-book" href="contact.html">Boek test</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container hero-layout">
+          <article class="hero-main">
+            <span class="eyebrow">Energiesystemen en brandstof</span>
+            <h1>Energiesystemen en brandstof: hoe je lichaam vermogen maakt</h1>
+            <p>
+              Inspanning is geen "een systeem aan". Je lichaam levert ATP via meerdere routes tegelijk. Wat verandert is
+              de verdeling tussen die routes, afhankelijk van intensiteit, duur, trainingstoestand en brandstofvoorraad.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-secondary button-sm" href="kernbegrippen.html">Terug naar kernbegrippen</a>
+            </div>
+          </article>
+          <aside class="hero-side">
+            <h2>Kernpunten</h2>
+            <ul>
+              <li>ATP is de energievaluta voor elke spiercontractie</li>
+              <li>Er is altijd een mix, geen harde schakelaars</li>
+              <li>Zonekeuze bepaalt welke route dominant wordt</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <article class="card">
+            <h2>ATP als energievaluta</h2>
+            <p>
+              Omdat je soms direct maximale power nodig hebt (sprint) en soms lang en laag (duur), bestaan er meerdere
+              routes met verschillende power en capaciteit.
+            </p>
+
+            <div class="slider-wrap">
+              <label for="energy-intensity">Sleep: inspanningsintensiteit</label>
+              <input id="energy-intensity" type="range" min="0" max="100" value="35" data-energy-intensity />
+              <div class="progress-rows">
+                <div class="progress-row">
+                  <span>ATP-PCr</span>
+                  <div class="progress-track"><div class="progress-fill pcr" data-energy-pcr-fill></div></div>
+                  <strong data-energy-pcr-value>0%</strong>
+                </div>
+                <div class="progress-row">
+                  <span>Anaerobe</span>
+                  <div class="progress-track"><div class="progress-fill anaer" data-energy-anaer-fill></div></div>
+                  <strong data-energy-anaer-value>0%</strong>
+                </div>
+                <div class="progress-row">
+                  <span>Aerobe</span>
+                  <div class="progress-track"><div class="progress-fill aero" data-energy-aero-fill></div></div>
+                  <strong data-energy-aero-value>0%</strong>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <article class="card">
+            <h2>De drie hoofd routes (parallel + continu)</h2>
+            <div class="grid three">
+              <article class="soft-panel">
+                <h3>ATP-PCr (alactisch)</h3>
+                <p><strong>Bron:</strong> fosfocreatine (PCr)</p>
+                <p><strong>Dominant venster:</strong> 0-10(15) sec bij maximale inspanning</p>
+                <p><strong>Begrenzing:</strong> PCr voorraad is klein en snel leeg</p>
+              </article>
+              <article class="soft-panel">
+                <h3>Anaerobe glycolyse</h3>
+                <p><strong>Substraat:</strong> koolhydraat</p>
+                <p><strong>Dominant venster:</strong> 15 sec tot 2-3 min</p>
+                <p><strong>Begrenzing:</strong> systeemstress (ionen/H+) en tolerantie</p>
+              </article>
+              <article class="soft-panel">
+                <h3>Aerobe oxidatie</h3>
+                <p><strong>Substraat:</strong> koolhydraat + vet</p>
+                <p><strong>Dominant venster:</strong> minuten tot uren</p>
+                <p><strong>Begrenzing:</strong> VO2 plafond bij hoge intensiteit en glycogeen bij lange duur</p>
+              </article>
+            </div>
+            <p style="margin-top: 12px">
+              Continuum: alle routes dragen altijd iets bij. Met stijgende intensiteit schuift de dominantie richting
+              routes met hogere ATP productie.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <article class="card">
+            <h2>Aerobe oxidatie en substraten</h2>
+            <p>
+              De aerobe motor is je duurzame ATP fabriek. Je verbrandt altijd een mix van koolhydraat en vet. Naarmate
+              intensiteit stijgt wordt koolhydraat relatief dominanter.
+            </p>
+
+            <div class="slider-wrap">
+              <label for="energy-fuel">Sleep: intensiteit en brandstofmix</label>
+              <input id="energy-fuel" type="range" min="0" max="100" value="35" data-energy-fuel-slider />
+              <div class="progress-rows">
+                <div class="progress-row">
+                  <span>Koolhydraat</span>
+                  <div class="progress-track"><div class="progress-fill carb" data-energy-carb-fill></div></div>
+                  <strong data-energy-carb-value>0%</strong>
+                </div>
+                <div class="progress-row">
+                  <span>Vet</span>
+                  <div class="progress-track"><div class="progress-fill fat" data-energy-fat-fill></div></div>
+                  <strong data-energy-fat-value>0%</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid three" style="margin-top: 12px">
+              <article class="soft-panel">
+                <h3>Glycogeen als limiter</h3>
+                <p>
+                  Aerobe koolhydraatverbranding kan stevige intensiteit lang ondersteunen, maar bij lange duur wordt vaak
+                  glycogeen limiterend.
+                </p>
+              </article>
+              <article class="soft-panel">
+                <h3>Vet als voorraad</h3>
+                <p>Vetvoorraad raakt zelden op. Het is vooral bruikbaar bij lage tot matige intensiteit.</p>
+              </article>
+              <article class="soft-panel">
+                <h3>FatMax context</h3>
+                <p>FatMax is een piek in vetoxidatie, geen vet-only zone. De mix verschuift, niet de aanwezigheid van vet.</p>
+              </article>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <article class="card">
+            <h2>Koppeling naar zones</h2>
+            <p>
+              Zone modellen zijn de praktische kaart: rond VT1 stabiel en zuinig, richting VT2/CP nemen drift en
+              herstelkosten toe, en daarboven kom je in een domein zonder echte steady state.
+            </p>
+            <div class="pill-row" style="margin: 10px 0 12px">
+              <button class="pill-button" type="button" data-energy-zone-button="vt1">Rond VT1</button>
+              <button class="pill-button" type="button" data-energy-zone-button="vt2">Richting VT2/CP</button>
+              <button class="pill-button" type="button" data-energy-zone-button="above">Boven VT2/CP</button>
+            </div>
+
+            <article class="soft-panel active" data-energy-zone-panel="vt1">
+              <h3>Rond VT1</h3>
+              <p>Overwegend aerobe dominantie. Stabieler, zuinig en geschikt voor veel volume.</p>
+            </article>
+            <article class="soft-panel" data-energy-zone-panel="vt2">
+              <h3>Richting VT2/CP</h3>
+              <p>Hogere ATP vraag, meer koolhydraat en glycolytische druk. Meer drift en hogere herstelkosten.</p>
+            </article>
+            <article class="soft-panel" data-energy-zone-panel="above">
+              <h3>Boven VT2/CP</h3>
+              <p>Geen echte steady state. Tijd op beperkte capaciteit met hoge systeemstress.</p>
+            </article>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <article class="card">
+            <h2>Samenvatting</h2>
+            <ul class="summary-list">
+              <li>Elke beweging betaal je met ATP; meerdere routes draaien altijd parallel.</li>
+              <li>Er zijn geen harde afkappunten, wel verschuiving van dominantie bij hogere intensiteit.</li>
+              <li>Lactaat is geen afval, maar een transportvorm van energie.</li>
+              <li>Zones helpen deze fysiologie praktisch te doseren in training.</li>
+            </ul>
+            <div class="detail-links">
+              <a class="button button-secondary button-sm" href="zonemodellen.html">Volgende: Zonemodellen</a>
+              <a class="button button-secondary button-sm" href="kernbegrippen.html">Terug naar overzicht</a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <section>
+          <h3>Sportmetrics</h3>
+          <p>Kennisbank en testcentrum voor data-gedreven duurprestaties.</p>
+        </section>
+        <section>
+          <h3>Verder lezen</h3>
+          <p><a href="vo2max.html">VO2max</a></p>
+          <p><a href="vt1.html">VT1</a></p>
+          <p><a href="vt2.html">VT2</a></p>
+        </section>
+        <section>
+          <h3>Contact</h3>
+          <p><a href="mailto:info@sportmetrics.nl">info@sportmetrics.nl</a></p>
+          <p><a href="https://wa.me/31600000000" target="_blank" rel="noreferrer">WhatsApp</a></p>
+        </section>
+      </div>
+      <div class="container footer-copy">&copy; <span data-year></span> Sportmetrics.</div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

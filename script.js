@@ -201,6 +201,118 @@ if (modelButtons.length && modelTitle && modelText) {
   applyModel('schattingen');
 }
 
+const energyIntensity = document.querySelector('[data-energy-intensity]');
+const energyPcrFill = document.querySelector('[data-energy-pcr-fill]');
+const energyAnaerFill = document.querySelector('[data-energy-anaer-fill]');
+const energyAeroFill = document.querySelector('[data-energy-aero-fill]');
+const energyPcrValue = document.querySelector('[data-energy-pcr-value]');
+const energyAnaerValue = document.querySelector('[data-energy-anaer-value]');
+const energyAeroValue = document.querySelector('[data-energy-aero-value]');
+
+if (
+  energyIntensity &&
+  energyPcrFill &&
+  energyAnaerFill &&
+  energyAeroFill &&
+  energyPcrValue &&
+  energyAnaerValue &&
+  energyAeroValue
+) {
+  const normalize = (values) => {
+    const sum = values.reduce((acc, val) => acc + val, 0) || 1;
+    return values.map((val) => val / sum);
+  };
+
+  const systemMix = (value) => {
+    const pcr = Math.max(0, (value - 70) / 30);
+    const anaer = Math.max(0, 1 - Math.abs(value - 60) / 30);
+    const aero = Math.max(0, (70 - value) / 70);
+    const [p, a, e] = normalize([pcr, anaer, aero]);
+    return { p, a, e };
+  };
+
+  const updateEnergyMix = () => {
+    const value = Number(energyIntensity.value);
+    const { p, a, e } = systemMix(value);
+
+    const pPercent = Math.round(p * 100);
+    const aPercent = Math.round(a * 100);
+    const ePercent = Math.round(e * 100);
+
+    energyPcrFill.style.width = `${pPercent}%`;
+    energyAnaerFill.style.width = `${aPercent}%`;
+    energyAeroFill.style.width = `${ePercent}%`;
+    energyPcrValue.textContent = `${pPercent}%`;
+    energyAnaerValue.textContent = `${aPercent}%`;
+    energyAeroValue.textContent = `${ePercent}%`;
+  };
+
+  energyIntensity.addEventListener('input', updateEnergyMix);
+  updateEnergyMix();
+}
+
+const energyFuelSlider = document.querySelector('[data-energy-fuel-slider]');
+const energyCarbFill = document.querySelector('[data-energy-carb-fill]');
+const energyFatFill = document.querySelector('[data-energy-fat-fill]');
+const energyCarbValue = document.querySelector('[data-energy-carb-value]');
+const energyFatValue = document.querySelector('[data-energy-fat-value]');
+
+if (energyFuelSlider && energyCarbFill && energyFatFill && energyCarbValue && energyFatValue) {
+  const updateFuelMix = () => {
+    const value = Number(energyFuelSlider.value);
+    const carb = Math.max(0, Math.min(100, value));
+    const fat = 100 - carb;
+
+    energyCarbFill.style.width = `${carb}%`;
+    energyFatFill.style.width = `${fat}%`;
+    energyCarbValue.textContent = `${carb}%`;
+    energyFatValue.textContent = `${fat}%`;
+  };
+
+  energyFuelSlider.addEventListener('input', updateFuelMix);
+  updateFuelMix();
+}
+
+const energyZoneButtons = document.querySelectorAll('[data-energy-zone-button]');
+const energyZonePanels = document.querySelectorAll('[data-energy-zone-panel]');
+
+if (energyZoneButtons.length && energyZonePanels.length) {
+  const applyEnergyZone = (zone) => {
+    setActiveState(energyZoneButtons, 'energyZoneButton', zone);
+    energyZonePanels.forEach((panel) => {
+      panel.classList.toggle('active', panel.dataset.energyZonePanel === zone);
+    });
+  };
+
+  energyZoneButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      applyEnergyZone(button.dataset.energyZoneButton || 'vt1');
+    });
+  });
+
+  applyEnergyZone('vt1');
+}
+
+const zoneModelButtons = document.querySelectorAll('[data-zone-model-button]');
+const zoneModelPanels = document.querySelectorAll('[data-zone-model-panel]');
+
+if (zoneModelButtons.length && zoneModelPanels.length) {
+  const applyZoneModel = (zone) => {
+    setActiveState(zoneModelButtons, 'zoneModelButton', zone);
+    zoneModelPanels.forEach((panel) => {
+      panel.classList.toggle('active', panel.dataset.zoneModelPanel === zone);
+    });
+  };
+
+  zoneModelButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      applyZoneModel(button.dataset.zoneModelButton || 'z1');
+    });
+  });
+
+  applyZoneModel('z1');
+}
+
 const yearNode = document.querySelector('[data-year]');
 if (yearNode) {
   yearNode.textContent = String(new Date().getFullYear());
