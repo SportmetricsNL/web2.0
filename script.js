@@ -313,6 +313,161 @@ if (zoneModelButtons.length && zoneModelPanels.length) {
   applyZoneModel('z1');
 }
 
+const cpSlider = document.querySelector('[data-cp-slider]');
+const cpWprimeSlider = document.querySelector('[data-cp-wprime-slider]');
+const cpPowerSlider = document.querySelector('[data-cp-power-slider]');
+const cpTargetSlider = document.querySelector('[data-cp-target-slider]');
+
+const cpValue = document.querySelector('[data-cp-value]');
+const cpWprimeValue = document.querySelector('[data-cp-wprime-value]');
+const cpPowerValue = document.querySelector('[data-cp-power-value]');
+const cpTargetValue = document.querySelector('[data-cp-target-value]');
+
+const cpDeltaFill = document.querySelector('[data-cp-delta-fill]');
+const cpDeltaValue = document.querySelector('[data-cp-delta-value]');
+const cpTimeFill = document.querySelector('[data-cp-time-fill]');
+const cpTimeValue = document.querySelector('[data-cp-time-value]');
+const cpWuseFill = document.querySelector('[data-cp-wuse-fill]');
+const cpWuseValue = document.querySelector('[data-cp-wuse-value]');
+const cpMaxPowerFill = document.querySelector('[data-cp-maxpower-fill]');
+const cpMaxPowerValue = document.querySelector('[data-cp-maxpower-value]');
+
+const cpBands = document.querySelectorAll('[data-cp-band]');
+const cpBlocks = document.querySelectorAll('[data-cp-block]');
+const cpStripStatus = document.querySelector('[data-cp-strip-status]');
+const cpCaseText = document.querySelector('[data-cp-case-text]');
+
+if (
+  cpSlider &&
+  cpWprimeSlider &&
+  cpPowerSlider &&
+  cpTargetSlider &&
+  cpValue &&
+  cpWprimeValue &&
+  cpPowerValue &&
+  cpTargetValue &&
+  cpDeltaFill &&
+  cpDeltaValue &&
+  cpTimeFill &&
+  cpTimeValue &&
+  cpWuseFill &&
+  cpWuseValue &&
+  cpMaxPowerFill &&
+  cpMaxPowerValue
+) {
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+  const formatClock = (seconds) => {
+    if (!Number.isFinite(seconds)) {
+      return 'steady-state';
+    }
+    const safe = Math.max(0, Math.round(seconds));
+    const minutes = Math.floor(safe / 60);
+    const secs = safe % 60;
+    return `${minutes}:${String(secs).padStart(2, '0')}`;
+  };
+
+  const getBand = (cp) => {
+    if (cp < 200) {
+      return 'recreatief';
+    }
+    if (cp < 260) {
+      return 'getraind';
+    }
+    if (cp <= 320) {
+      return 'competitief';
+    }
+    return 'hoog';
+  };
+
+  const setBand = (band) => {
+    cpBands.forEach((node) => {
+      node.classList.toggle('active', node.dataset.cpBand === band);
+    });
+  };
+
+  const setStrip = (delta) => {
+    if (!cpBlocks.length) {
+      return;
+    }
+
+    const workRatio = clamp((delta + 40) / 180, 0, 1);
+    const workBlocks = Math.round(workRatio * cpBlocks.length);
+
+    cpBlocks.forEach((node, index) => {
+      node.classList.toggle('work', index < workBlocks);
+    });
+
+    if (!cpStripStatus) {
+      return;
+    }
+
+    if (delta <= 0) {
+      cpStripStatus.textContent = '≤ CP: steady-state, W′ kan herstellen';
+      return;
+    }
+
+    if (delta < 25) {
+      cpStripStatus.textContent = '> CP: lichte boven-CP belasting, W′ verbruik';
+      return;
+    }
+
+    if (delta < 60) {
+      cpStripStatus.textContent = '> CP: matig-zware boven-CP belasting, W′ verbruik';
+      return;
+    }
+
+    cpStripStatus.textContent = '> CP: zware boven-CP belasting, snelle W′ leegloop';
+  };
+
+  const updateCpModel = () => {
+    const cp = Number(cpSlider.value);
+    const wprimeKj = Number(cpWprimeSlider.value);
+    const power = Number(cpPowerSlider.value);
+    const targetSeconds = Number(cpTargetSlider.value);
+
+    const delta = power - cp;
+    const timeSeconds = delta > 0 ? (wprimeKj * 1000) / delta : Number.POSITIVE_INFINITY;
+    const wUseKj = delta > 0 ? wprimeKj : 0;
+    const maxSustainablePower = cp + (wprimeKj * 1000) / Math.max(1, targetSeconds);
+
+    cpValue.textContent = `${Math.round(cp)} W`;
+    cpWprimeValue.textContent = `${wprimeKj.toFixed(1)} kJ`;
+    cpPowerValue.textContent = `${Math.round(power)} W`;
+    cpTargetValue.textContent = `${Math.round(targetSeconds)} s`;
+
+    cpDeltaValue.textContent = `${delta >= 0 ? '+' : ''}${Math.round(delta)} W`;
+    cpTimeValue.textContent = formatClock(timeSeconds);
+    cpWuseValue.textContent = `${wUseKj.toFixed(1)} kJ`;
+    cpMaxPowerValue.textContent = `${Math.round(maxSustainablePower)} W`;
+
+    cpDeltaFill.style.width = `${clamp((Math.abs(delta) / 140) * 100, delta === 0 ? 2 : 8, 100)}%`;
+    cpTimeFill.style.width = `${Number.isFinite(timeSeconds) ? clamp((timeSeconds / 900) * 100, 8, 100) : 100}%`;
+    cpWuseFill.style.width = `${clamp((wUseKj / 35) * 100, 2, 100)}%`;
+    cpMaxPowerFill.style.width = `${clamp(((maxSustainablePower - 150) / 350) * 100, 4, 100)}%`;
+
+    setBand(getBand(cp));
+    setStrip(delta);
+
+    if (!cpCaseText) {
+      return;
+    }
+
+    if (delta > 0) {
+      cpCaseText.textContent = `CP = ${Math.round(cp)} W, W′ = ${wprimeKj.toFixed(1)} kJ. Bij ${Math.round(power)} W is (P−CP)=${Math.round(delta)} W → theoretische volhoudtijd ${formatClock(timeSeconds)}.`;
+      return;
+    }
+
+    cpCaseText.textContent = `CP = ${Math.round(cp)} W, W′ = ${wprimeKj.toFixed(1)} kJ. Bij ${Math.round(power)} W zit je op of onder CP: steady-state is mogelijk en W′ kan (gedeeltelijk) herstellen.`;
+  };
+
+  [cpSlider, cpWprimeSlider, cpPowerSlider, cpTargetSlider].forEach((slider) => {
+    slider.addEventListener('input', updateCpModel);
+  });
+
+  updateCpModel();
+}
+
 const aiForm = document.querySelector('[data-ai-form]');
 const aiInput = document.querySelector('[data-ai-input]');
 const aiMessages = document.querySelector('[data-ai-messages]');

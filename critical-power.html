@@ -6,7 +6,7 @@
     <title>Sportmetrics | Critical Power</title>
     <meta
       name="description"
-      content="Volledige uitleg van Critical Power en W′: duurzame grens, boven-CP capaciteit en praktische toepassing in pacing en intervaltraining."
+      content="Volledige uitwerking van Critical Power en W′: duurzame grens, boven-CP budget, sliders en praktische toepassing in pacing en intervaltraining."
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -14,7 +14,7 @@
     <header class="site-header">
       <div class="container nav-wrap">
         <a class="brand" href="index.html" aria-label="Sportmetrics home">
-          <img class="brand-logo" src="assets/sportmetrics-logo-tight.png" alt="VO2 Sportmetrics logo" />
+          <img class="brand-logo" src="assets/sportmetrics-logo.svg" alt="VO2 Sportmetrics logo" />
         </a>
         <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="main-nav">
           Menu
@@ -32,48 +32,68 @@
     </header>
 
     <main>
-      <section class="page-hero">
-        <div class="container hero-layout">
-          <article class="hero-main">
+      <section class="page-hero" id="critical-power">
+        <div class="container">
+          <article class="card vo2-panel">
             <span class="eyebrow">Critical Power</span>
-            <h1>Critical Power: je duurzame grens in het zware domein</h1>
-            <p>
-              Critical Power (CP) beschrijft het hoogste vermogen dat je langdurig kunt volhouden zonder continue
-              uitputting. W′ (W-prime) is je beperkte extra budget boven CP.
+            <h1>Critical Power: jouw duurzame grens in watt</h1>
+            <p class="vo2-lead">
+              CP met W′ beschrijft je gedrag in het zware domein: wat je duurzaam kunt leveren en hoeveel boven-CP budget
+              je hebt. Krachtige aanvulling op VT1/VT2 en VO2max.
             </p>
-            <div class="hero-actions">
+            <div class="grid three" style="margin-top: 16px">
+              <article class="card">
+                <h3 class="vo2-grid-title">Duurzame grens</h3>
+                <p>CP is waar je naartoe trekt als de inspanning langer wordt.</p>
+              </article>
+              <article class="card">
+                <h3 class="vo2-grid-title">Boven-CP budget</h3>
+                <p>W′ verklaart aanvallen, heuvels en surges.</p>
+              </article>
+              <article class="card">
+                <h3 class="vo2-grid-title">Praktisch</h3>
+                <p>Helpt pacing en intervalontwerp onderbouwen.</p>
+              </article>
+            </div>
+            <div class="back-link-row">
               <a class="button button-secondary button-sm" href="kernbegrippen.html">Terug naar kernbegrippen</a>
             </div>
           </article>
-          <aside class="hero-side">
-            <h2>CP in het kort</h2>
-            <ul>
-              <li>CP = duurzame grens in zwaar domein</li>
-              <li>W′ = beperkte boven-CP capaciteit</li>
-              <li>Sterk voor pacing en intervalontwerp</li>
-            </ul>
-          </aside>
         </div>
       </section>
 
       <section class="section">
         <div class="container">
           <article class="card">
-            <h2>Wat betekenen de variabelen?</h2>
+            <h2>Wat CP en W′ zijn</h2>
             <div class="grid three">
               <article class="soft-panel">
-                <h3>Vermogen (P)</h3>
-                <p>Mechanische energie per seconde. Gemeten met vermogensmeter en onafhankelijk van terrein.</p>
-              </article>
-              <article class="soft-panel">
-                <h3>Critical Power (CP)</h3>
-                <p>De grens tussen steady-state en non-steady-state belasting.</p>
+                <h3>CP</h3>
+                <p>Duurzame grens in het zware domein. Boven CP geen echte steady-state.</p>
               </article>
               <article class="soft-panel">
                 <h3>W′</h3>
-                <p>Modelmatige, beperkte extra energie boven CP (in kJ).</p>
+                <p>Eindig boven-CP budget. Elke extra watt boven CP verbruikt W′ sneller.</p>
+              </article>
+              <article class="soft-panel">
+                <h3>Waarom relevant</h3>
+                <p>Verklaart waarom je kunt aanvallen én waarom je kunt opblazen.</p>
               </article>
             </div>
+
+            <article class="soft-panel cp-figure" style="margin-top: 12px">
+              <h3>Critical Power profiel (schematisch)</h3>
+              <div class="cp-figure-plot" aria-hidden="true">
+                <div class="cp-axis cp-axis-y">Power (W)</div>
+                <div class="cp-axis cp-axis-x">Tijd (min)</div>
+                <div class="cp-curve"></div>
+                <div class="cp-area"></div>
+                <div class="cp-line"></div>
+                <div class="cp-label cp-label-wprime">W′ = boven-CP budget</div>
+                <div class="cp-label cp-label-cp">Critical Power</div>
+              </div>
+              <p class="small-note" style="margin-top: 10px">Als visual niet laadt: CP = grens, W′ = budget boven die grens.</p>
+            </article>
           </article>
         </div>
       </section>
@@ -81,15 +101,97 @@
       <section class="section">
         <div class="container">
           <article class="card">
-            <h2>Formules bij constante belasting boven CP</h2>
-            <ul class="summary-list">
-              <li>W′-verbruik: W′ = (P − CP) × t</li>
-              <li>Volhoudtijd: t = W′ / (P − CP)</li>
-            </ul>
-            <p>
-              Deze formules zijn vereenvoudigd en gelden het beste bij constante belasting. In de praktijk wisselt
-              vermogen continu.
+            <h2>Critical Power-model (constante belasting)</h2>
+            <p>Geldig bij constant vermogen boven CP. Boven CP wordt W′ lineair verbruikt; onder CP kan W′ herstellen.</p>
+            <p style="margin-top: 8px">CP is de steady-state grens; alles daarboven is non-steady en tijdelijk.</p>
+
+            <div class="cp-model-box" style="margin-top: 14px">
+              <div class="cp-control">
+                <label for="cp-slider">Jouw CP (W) <span class="cp-value-pill" data-cp-value>280 W</span></label>
+                <input id="cp-slider" type="range" min="140" max="420" step="1" value="280" data-cp-slider />
+                <div class="cp-band-row">
+                  <span class="cp-band" data-cp-band="recreatief">&lt; 200 W: recreatief</span>
+                  <span class="cp-band" data-cp-band="getraind">200-260 W: getraind</span>
+                  <span class="cp-band" data-cp-band="competitief">260-320 W: competitief</span>
+                  <span class="cp-band" data-cp-band="hoog">&gt; 320 W: zeer hoog niveau</span>
+                </div>
+                <p class="small-note">Indicatief, geen norm. Individuele waarden verschillen sterk.</p>
+              </div>
+
+              <div class="cp-control">
+                <label for="wprime-slider">Jouw W′ (kJ) <span class="cp-value-pill" data-cp-wprime-value>15.0 kJ</span></label>
+                <input id="wprime-slider" type="range" min="5" max="35" step="0.1" value="15" data-cp-wprime-slider />
+              </div>
+
+              <div class="cp-control">
+                <label for="power-slider">Vermogen (W) <span class="cp-value-pill" data-cp-power-value>320 W</span></label>
+                <input id="power-slider" type="range" min="120" max="500" step="1" value="320" data-cp-power-slider />
+              </div>
+
+              <div class="progress-rows cp-progress-rows">
+                <div class="progress-row cp-progress-row">
+                  <span>ΔP = P − CP</span>
+                  <div class="progress-track">
+                    <div class="progress-fill cp-delta" data-cp-delta-fill></div>
+                  </div>
+                  <strong data-cp-delta-value>+40 W</strong>
+                </div>
+                <div class="progress-row cp-progress-row">
+                  <span>Theoretische volhoudtijd (mm:ss)</span>
+                  <div class="progress-track">
+                    <div class="progress-fill cp-time" data-cp-time-fill></div>
+                  </div>
+                  <strong data-cp-time-value>6:15</strong>
+                </div>
+                <div class="progress-row cp-progress-row">
+                  <span>W′ gebruik (kJ)</span>
+                  <div class="progress-track">
+                    <div class="progress-fill cp-wuse" data-cp-wuse-fill></div>
+                  </div>
+                  <strong data-cp-wuse-value>15.0 kJ</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="cp-model-box" style="margin-top: 12px">
+              <div class="cp-control">
+                <label for="target-slider">Doelduur (s) voor een klim / blok <span class="cp-value-pill" data-cp-target-value>360 s</span></label>
+                <input id="target-slider" type="range" min="60" max="1200" step="10" value="360" data-cp-target-slider />
+              </div>
+
+              <div class="progress-rows cp-progress-rows">
+                <div class="progress-row cp-progress-row">
+                  <span>Maximaal vol te houden vermogen</span>
+                  <div class="progress-track">
+                    <div class="progress-fill cp-maxpower" data-cp-maxpower-fill></div>
+                  </div>
+                  <strong data-cp-maxpower-value>322 W</strong>
+                </div>
+              </div>
+
+              <p style="margin-top: 10px">Bij constante belasting en volledige inzet.</p>
+            </div>
+
+            <p class="small-note" style="margin-top: 12px">
+              ⓘ Critical Power is individueel en afhankelijk van trainingstoestand, testprotocol en meetmethode; waarden zijn
+              niet 1-op-1 vergelijkbaar.
             </p>
+
+            <article class="soft-panel cp-strip-panel" style="margin-top: 14px">
+              <p class="cp-strip-legend" data-cp-strip-status>&gt; CP: non-steady, W′ verbruik</p>
+              <div class="cp-strip" data-cp-strip>
+                <div class="cp-strip-block" data-cp-block></div>
+                <div class="cp-strip-block" data-cp-block></div>
+                <div class="cp-strip-block" data-cp-block></div>
+                <div class="cp-strip-block" data-cp-block></div>
+                <div class="cp-strip-block" data-cp-block></div>
+                <div class="cp-strip-block" data-cp-block></div>
+                <div class="cp-strip-block" data-cp-block></div>
+                <div class="cp-strip-block" data-cp-block></div>
+                <div class="cp-strip-cp-line">CP</div>
+              </div>
+              <p class="cp-strip-legend">≤ CP: steady-state, W′ kan herstellen</p>
+            </article>
           </article>
         </div>
       </section>
@@ -101,7 +203,7 @@
             <div class="grid three">
               <article class="soft-panel">
                 <h3>Efforts</h3>
-                <p>3-4 maximale efforts tussen 3 en 20 minuten (bijv. 3, 5, 12, 20 min).</p>
+                <p>3-4 max efforts in 3-20 min (bijv. 3, 5, 12, 20 min).</p>
               </article>
               <article class="soft-panel">
                 <h3>Kwaliteit</h3>
@@ -109,9 +211,72 @@
               </article>
               <article class="soft-panel">
                 <h3>Model</h3>
-                <p>Beste gemiddelde power per effort vormt samen CP + W′.</p>
+                <p>We nemen de beste gemiddelde power per effort. Dat vormt CP + W′.</p>
               </article>
             </div>
+            <article class="soft-panel" style="margin-top: 12px">
+              <p>CP/W′ komt uit je power-duration gedrag en maakt expliciet wat er boven je duurzame grens gebeurt.</p>
+            </article>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <article class="card">
+            <h2>Wat betekenen de variabelen?</h2>
+            <div class="cp-vars-grid">
+              <article class="soft-panel">
+                <h3>Vermogen (P, W)</h3>
+                <ul>
+                  <li>Mechanische energie per seconde (1 W = 1 J/s).</li>
+                  <li>Hoger vermogen = meer energie per tijdseenheid.</li>
+                  <li>Gemeten met vermogensmeter; kalibratie blijft belangrijk.</li>
+                  <li>Onafhankelijk van snelheid of terrein.</li>
+                </ul>
+              </article>
+              <article class="soft-panel">
+                <h3>Critical Power (CP)</h3>
+                <ul>
+                  <li>Hoogste vermogen dat langdurig vol te houden is zonder voortgaande uitputting.</li>
+                  <li>Grens tussen steady-state en non-steady-state.</li>
+                  <li>Typisch ongeveer 30-60 minuten vol te houden.</li>
+                </ul>
+              </article>
+              <article class="soft-panel">
+                <h3>W′ ("W-prime")</h3>
+                <ul>
+                  <li>Beperkte extra energie boven CP (kJ); model van anaerobe capaciteit.</li>
+                  <li>Verbruikt bij P &gt; CP; kan (gedeeltelijk) herstellen bij P &lt; CP.</li>
+                  <li>Geen vaste "tank", maar een modelmatige tijdelijke capaciteit.</li>
+                </ul>
+              </article>
+              <article class="soft-panel">
+                <h3>P</h3>
+                <ul>
+                  <li>Gekozen of geleverd vermogen.</li>
+                  <li>P ≤ CP: steady-state mogelijk; P &gt; CP: W′ wordt aangesproken.</li>
+                </ul>
+              </article>
+              <article class="soft-panel cp-vars-time">
+                <h3>Tijd (t)</h3>
+                <ul>
+                  <li>Duur (s) dat een vermogen wordt geleverd.</li>
+                  <li>Hoe groter ΔP, hoe sneller W′ opgaat en hoe korter de maximale volhoudtijd.</li>
+                </ul>
+              </article>
+            </div>
+
+            <h3 style="margin-top: 16px">Formules (constante belasting boven CP)</h3>
+            <ul class="summary-list">
+              <li>W′-verbruik: W′ = (P − CP) × t</li>
+              <li>Volhoudtijd: t = W′ / (P − CP)</li>
+            </ul>
+            <p style="margin-top: 10px">Alleen geldig bij constant vermogen; vereenvoudigd model.</p>
+            <p style="margin-top: 8px">
+              In praktijk wisselt vermogen voortdurend; CP-model helpt plannen/begrijpen, niet exact voorspellen.
+            </p>
+            <p style="margin-top: 8px">W′ herstelt alleen bij belasting onder of rond CP; hersteltempo hangt af van hoe ver je onder CP zit.</p>
           </article>
         </div>
       </section>
@@ -120,12 +285,12 @@
         <div class="container">
           <article class="card">
             <h2>Casus: klim van ~6 minuten</h2>
-            <p>
-              Voorbeeld: CP = 280 W en W′ = 15 kJ. Bij 330 W is (P−CP)=50 W, dan is theoretische volhoudtijd 300 sec
-              (5:00). Voor een klim van 6 minuten is een lager gemiddeld vermogen realistischer.
+            <p data-cp-case-text>
+              CP = 280 W, W′ = 15 kJ. Bij 330 W is (P−CP)=50 W → tijd = 15.000/50 = 300 s (5:00) → te hoog voor 6 min.
+              Bij 315 W is tijd ~ 7:09 → realistischer.
             </p>
             <article class="soft-panel" style="margin-top: 12px">
-              <p>Gebruik CP/W′ om pacing te plannen, niet om blind op één getal te varen.</p>
+              <p>Gebruik CP/W′ om pacing te plannen en intervalwerk te doseren.</p>
             </article>
           </article>
         </div>
@@ -136,13 +301,13 @@
           <article class="card">
             <h2>Samenvatting</h2>
             <ul class="summary-list">
-              <li>CP is je duurzame grens in het zware domein; W′ is je boven-CP budget.</li>
-              <li>Het model maakt concreet hoe snel je "opbrandt" boven je grens.</li>
-              <li>Met meerdere max efforts krijg je reproduceerbare CP/W′-inzichten.</li>
-              <li>Praktisch inzetbaar voor pacing, intervalontwerp en wedstrijdstrategie.</li>
+              <li>CP = duurzame grens in het zware domein; W′ = boven-CP budget.</li>
+              <li>Model: tijd = W′/(P−CP) en W′-gebruik = (P−CP)×tijd → direct toepasbaar.</li>
+              <li>Meerwaarde voor aanvallen, heuvels, tijdritten en intervalontwerp.</li>
+              <li>Gebruik CP/W′ samen met VT1/VT2 en VO2max voor een volledig profiel.</li>
             </ul>
             <div class="detail-links">
-              <a class="button button-secondary button-sm" href="vo2max.html">Terug naar VO2max</a>
+              <a class="button button-secondary button-sm" href="vt2.html">Terug naar VT2</a>
               <a class="button button-secondary button-sm" href="kernbegrippen.html">Terug naar overzicht</a>
             </div>
           </article>
@@ -158,9 +323,9 @@
         </section>
         <section>
           <h3>Verder lezen</h3>
-          <p><a href="vt2.html">VT2</a></p>
-          <p><a href="zonemodellen.html">Zonemodellen</a></p>
+          <p><a href="vo2max.html">VO2max</a></p>
           <p><a href="energiesystemen.html">Energiesystemen</a></p>
+          <p><a href="zonemodellen.html">Zonemodellen</a></p>
         </section>
         <section>
           <h3>Contact</h3>

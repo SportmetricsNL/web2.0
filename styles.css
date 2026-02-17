@@ -628,6 +628,238 @@ h3 {
   background: linear-gradient(145deg, #26a181 0%, #10745a 100%);
 }
 
+.cp-figure {
+  overflow: hidden;
+}
+
+.cp-figure-plot {
+  margin-top: 6px;
+  position: relative;
+  min-height: 280px;
+  border-radius: 14px;
+  border: 1px solid #c7d8f2;
+  background: linear-gradient(180deg, #fdfefe 0%, #f4f9ff 100%);
+  overflow: hidden;
+}
+
+.cp-axis {
+  position: absolute;
+  color: #38557f;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.cp-axis-y {
+  left: 10px;
+  top: 112px;
+  transform: rotate(-90deg);
+  transform-origin: left top;
+}
+
+.cp-axis-x {
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 10px;
+}
+
+.cp-curve {
+  position: absolute;
+  left: 16%;
+  top: 16%;
+  width: 58%;
+  height: 58%;
+  border-top: 7px solid #2b73f6;
+  border-right: 7px solid transparent;
+  border-radius: 60% 0 50% 0 / 80% 0 40% 0;
+  transform: skewX(-14deg);
+}
+
+.cp-area {
+  position: absolute;
+  left: 16%;
+  right: 15%;
+  bottom: 20%;
+  height: 34%;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(55, 120, 230, 0.12) 0px,
+    rgba(55, 120, 230, 0.12) 6px,
+    rgba(55, 120, 230, 0.26) 6px,
+    rgba(55, 120, 230, 0.26) 10px
+  );
+  border: 1px solid #b9d0f2;
+  border-radius: 8px;
+}
+
+.cp-line {
+  position: absolute;
+  left: 12%;
+  right: 10%;
+  bottom: 35%;
+  border-top: 2px dashed #7797c4;
+}
+
+.cp-label {
+  position: absolute;
+  background: #f7fbff;
+  border: 1px solid #c3d7f6;
+  border-radius: 999px;
+  color: #2a507f;
+  font-weight: 700;
+  font-size: 0.78rem;
+  padding: 4px 9px;
+}
+
+.cp-label-wprime {
+  top: 22%;
+  left: 42%;
+}
+
+.cp-label-cp {
+  right: 5%;
+  bottom: 37%;
+}
+
+.cp-model-box {
+  border: 1px dashed #a8c7e8;
+  border-radius: 14px;
+  background: #f8fcff;
+  padding: 12px 14px;
+}
+
+.cp-control + .cp-control {
+  margin-top: 12px;
+}
+
+.cp-control label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: #2d4d77;
+  margin-bottom: 8px;
+}
+
+.cp-control input[type='range'] {
+  width: 100%;
+}
+
+.cp-value-pill {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #c2d6f5;
+  border-radius: 999px;
+  background: #eef6ff;
+  color: #2c5c8e;
+  padding: 3px 9px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.cp-band-row {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cp-band {
+  border: 1px solid #c7d8f1;
+  border-radius: 999px;
+  background: #f8fbff;
+  color: #3f5f87;
+  padding: 5px 10px;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.cp-band.active {
+  border-color: #2f7794;
+  background: linear-gradient(145deg, #1f6c89 0%, #1a5268 100%);
+  color: #fff;
+}
+
+.cp-progress-rows {
+  margin-top: 12px;
+}
+
+.cp-progress-row {
+  grid-template-columns: minmax(130px, 220px) 1fr minmax(56px, 90px);
+}
+
+.progress-fill.cp-delta {
+  background: linear-gradient(145deg, #2f6cf6 0%, #1f55d1 100%);
+}
+
+.progress-fill.cp-time {
+  background: linear-gradient(145deg, #2f7f94 0%, #1f667b 100%);
+}
+
+.progress-fill.cp-wuse {
+  background: linear-gradient(145deg, #2a8c94 0%, #206e87 100%);
+}
+
+.progress-fill.cp-maxpower {
+  background: linear-gradient(145deg, #2f7f94 0%, #1f667b 100%);
+}
+
+.cp-strip-panel {
+  border-style: solid;
+}
+
+.cp-strip-legend {
+  margin: 0;
+  color: #2d537f;
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.cp-strip {
+  position: relative;
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 6px;
+  align-items: stretch;
+}
+
+.cp-strip-block {
+  height: 62px;
+  border-radius: 8px;
+  border: 1px solid #9ec7d2;
+  background: #d9eef2;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.cp-strip-block.work {
+  background: #2d7580;
+  border-color: #1f6572;
+}
+
+.cp-strip-cp-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 1px dashed #6e93b9;
+  pointer-events: none;
+  text-align: right;
+  color: #315c8a;
+  font-weight: 800;
+  font-size: 0.82rem;
+}
+
+.cp-vars-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.cp-vars-time {
+  grid-column: span 1;
+}
+
 .chain-flow {
   margin-top: 12px;
   display: grid;
@@ -925,6 +1157,7 @@ textarea {
   .footer-grid,
   .grid.two,
   .grid.three,
+  .cp-vars-grid,
   .coach-layout {
     grid-template-columns: 1fr;
   }
@@ -975,6 +1208,19 @@ textarea {
 
   .brand-logo {
     height: 58px;
+  }
+
+  .cp-progress-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .cp-progress-row strong {
+    justify-self: start;
+  }
+
+  .cp-label {
+    display: none;
   }
 
   .ai-shell {
