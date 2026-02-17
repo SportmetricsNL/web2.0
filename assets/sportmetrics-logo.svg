@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 350" role="img" aria-labelledby="title desc">
+  <title id="title">VO2 Sportmetrics logo</title>
+  <desc id="desc">Sportmetrics logo with VO2 waveform and wordmark</desc>
+  <rect width="640" height="350" fill="none"/>
+  <path d="M30 110H165L205 185L272 38L346 244L390 112" fill="none" stroke="#091019" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"/>
+  <text x="384" y="168" fill="#091019" font-family="Avenir Next, Montserrat, Sora, sans-serif" font-size="156" font-weight="500">O</text>
+  <text x="528" y="198" fill="#091019" font-family="Avenir Next, Montserrat, Sora, sans-serif" font-size="84" font-weight="500">2</text>
+  <text x="84" y="274" fill="#091019" font-family="Avenir Next, Montserrat, Sora, sans-serif" font-size="98" font-weight="500" letter-spacing="1.5">SPORT</text>
+  <text x="84" y="342" fill="#091019" font-family="Avenir Next, Montserrat, Sora, sans-serif" font-size="98" font-weight="500" letter-spacing="1.5">METRICS</text>
+</svg>
