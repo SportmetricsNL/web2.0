@@ -69,8 +69,9 @@ body {
 .brand-logo {
   display: block;
   width: auto;
-  height: 58px;
-  max-width: 220px;
+  height: 72px;
+  max-width: none;
+  object-fit: contain;
 }
 
 .main-nav {
@@ -968,7 +969,7 @@ textarea {
   }
 
   .brand-logo {
-    height: 50px;
+    height: 58px;
   }
 
   .ai-shell {

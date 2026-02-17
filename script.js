@@ -319,14 +319,56 @@ const aiMessages = document.querySelector('[data-ai-messages]');
 const aiQuickButtons = document.querySelectorAll('[data-ai-quick]');
 const aiUpload = document.querySelector('[data-ai-upload]');
 const aiUploadStatus = document.querySelector('[data-ai-upload-status]');
+const aiApiKeyInput = document.querySelector('[data-ai-api-key]');
+const aiApiStatus = document.querySelector('[data-ai-api-status]');
+const AI_KEY_STORAGE = 'sportmetrics_gemini_api_key';
+
+const setAiApiStatus = (text, isError = false) => {
+  if (!aiApiStatus) {
+    return;
+  }
+  aiApiStatus.textContent = text;
+  aiApiStatus.style.color = isError ? '#a43f3f' : '#3e5f8c';
+};
+
+if (aiApiKeyInput) {
+  const savedKey = window.localStorage.getItem(AI_KEY_STORAGE) || '';
+  if (savedKey) {
+    aiApiKeyInput.value = savedKey;
+    setAiApiStatus('API-status: gekoppeld (lokaal opgeslagen in je browser).');
+  }
+
+  aiApiKeyInput.addEventListener('input', () => {
+    const value = aiApiKeyInput.value.trim();
+    if (value) {
+      window.localStorage.setItem(AI_KEY_STORAGE, value);
+      setAiApiStatus('API-status: gekoppeld (lokaal opgeslagen in je browser).');
+      return;
+    }
+
+    window.localStorage.removeItem(AI_KEY_STORAGE);
+    setAiApiStatus('API-status: nog niet gekoppeld.');
+  });
+}
 
 if (aiForm && aiInput && aiMessages) {
+  const aiHistory = [];
+  let uploadedReportName = '';
+
   const appendMessage = (role, text) => {
     const node = document.createElement('div');
     node.className = `ai-msg ${role}`;
     node.textContent = text;
     aiMessages.appendChild(node);
     aiMessages.scrollTop = aiMessages.scrollHeight;
+    return node;
+  };
+
+  const getApiKey = () => {
+    if (!aiApiKeyInput) {
+      return '';
+    }
+    return aiApiKeyInput.value.trim();
   };
 
   const getDemoAnswer = (question) => {
@@ -351,6 +393,63 @@ if (aiForm && aiInput && aiMessages) {
     return 'Goede vraag. Zodra we je API koppelen, geef ik hier volledige context-antwoorden op basis van je rapport en trainingsdoel.';
   };
 
+  const callGemini = async (question) => {
+    const apiKey = getApiKey();
+    if (!apiKey) {
+      return '';
+    }
+
+    const conversationSnippet = aiHistory
+      .slice(-6)
+      .map((item) => `${item.role === 'user' ? 'Gebruiker' : 'Assistent'}: ${item.text}`)
+      .join('\n');
+
+    const reportContext = uploadedReportName
+      ? `Er is een rapport geupload met bestandsnaam: ${uploadedReportName}.`
+      : 'Er is nog geen rapport geupload.';
+
+    const prompt = [
+      'Je bent een sportfysioloog van Sportmetrics.',
+      'Geef praktische, korte antwoorden in het Nederlands met direct toepasbare tips.',
+      'Geen medisch advies geven.',
+      reportContext,
+      conversationSnippet ? `Context uit dit gesprek:\n${conversationSnippet}` : '',
+      `Nieuwe vraag: ${question}`,
+    ]
+      .filter(Boolean)
+      .join('\n\n');
+
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: 'user',
+              parts: [{ text: prompt }],
+            },
+          ],
+          generationConfig: {
+            temperature: 0.5,
+            maxOutputTokens: 700,
+          },
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`AI API fout (${response.status})`);
+    }
+
+    const data = await response.json();
+    const text = data?.candidates?.[0]?.content?.parts?.map((part) => part.text).join('\n').trim();
+    return text || '';
+  };
+
   aiForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const question = aiInput.value.trim();
@@ -361,10 +460,32 @@ if (aiForm && aiInput && aiMessages) {
     appendMessage('user', question);
     aiInput.value = '';
 
-    const answer = getDemoAnswer(question);
-    window.setTimeout(() => {
-      appendMessage('assistant', answer);
-    }, 300);
+    const pendingNode = appendMessage('assistant', 'Even denken...');
+
+    const run = async () => {
+      let answer = '';
+
+      try {
+        if (getApiKey()) {
+          answer = await callGemini(question);
+          if (answer) {
+            setAiApiStatus('API-status: gekoppeld en actief.');
+          }
+        }
+      } catch (error) {
+        setAiApiStatus('API-status: sleutel ongeldig of request mislukt. Demo-modus actief.', true);
+      }
+
+      if (!answer) {
+        answer = getDemoAnswer(question);
+      }
+
+      pendingNode.textContent = answer;
+      aiHistory.push({ role: 'user', text: question });
+      aiHistory.push({ role: 'assistant', text: answer });
+    };
+
+    run();
   });
 
   aiQuickButtons.forEach((button) => {
@@ -378,6 +499,7 @@ if (aiForm && aiInput && aiMessages) {
   if (aiUpload && aiUploadStatus) {
     aiUpload.addEventListener('change', () => {
       const fileName = aiUpload.files && aiUpload.files[0] ? aiUpload.files[0].name : '';
+      uploadedReportName = fileName;
       aiUploadStatus.textContent = fileName
         ? `Rapport geselecteerd: ${fileName}`
         : 'Nog geen rapport geüpload.';
