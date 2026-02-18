@@ -156,22 +156,23 @@ body {
 
 .floating-instagram {
   position: fixed;
-  right: 16px;
-  bottom: 16px;
+  right: 18px;
+  bottom: 18px;
   z-index: 120;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  padding: 10px 14px;
+  min-height: 56px;
+  padding: 14px 20px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.5);
   background: linear-gradient(145deg, #26354d 0%, #111b2d 100%);
   color: #fff;
-  font-size: 0.9rem;
+  font-size: 1.02rem;
   font-weight: 800;
+  letter-spacing: 0.01em;
   text-decoration: none;
-  box-shadow: 0 14px 24px rgba(13, 25, 48, 0.3);
+  box-shadow: 0 16px 28px rgba(13, 25, 48, 0.34);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -1414,8 +1415,8 @@ textarea {
   .floating-instagram {
     right: 12px;
     bottom: 12px;
-    min-height: 40px;
-    padding: 8px 12px;
-    font-size: 0.86rem;
+    min-height: 48px;
+    padding: 10px 14px;
+    font-size: 0.92rem;
   }
 }

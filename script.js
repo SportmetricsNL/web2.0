@@ -885,7 +885,7 @@ if (!document.querySelector('.floating-instagram')) {
   instagramLink.target = '_blank';
   instagramLink.rel = 'noreferrer';
   instagramLink.setAttribute('aria-label', 'Volg Sportmetrics op Instagram');
-  instagramLink.textContent = 'Instagram';
+  instagramLink.textContent = 'Volg op Instagram';
   document.body.appendChild(instagramLink);
 }
 
