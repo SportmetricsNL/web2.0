@@ -325,6 +325,65 @@ h3 {
   border: 1px solid #bfd4fb;
 }
 
+.media-frame {
+  margin-top: 12px;
+  border: 1px solid #bfd5f8;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #e8f2ff;
+  aspect-ratio: 4 / 3;
+}
+
+.media-frame img,
+.media-frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.media-frame img {
+  object-fit: cover;
+}
+
+.step-media {
+  aspect-ratio: 4 / 3;
+}
+
+.report-media {
+  background: #fff;
+}
+
+.report-controls {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.report-button {
+  border: 1px solid #c5d8f6;
+  border-radius: 10px;
+  background: #f7fbff;
+  color: #244a79;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 7px 10px;
+  cursor: pointer;
+}
+
+.report-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.report-page-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #2f4e79;
+}
+
 .testimonial {
   position: relative;
 }
@@ -1184,7 +1243,7 @@ textarea {
 
 .coach-layout {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 0.9fr 1.1fr;
   gap: 14px;
   align-items: stretch;
 }
@@ -1194,11 +1253,14 @@ textarea {
   padding: 0;
 }
 
+.coach-media {
+  margin-top: 0;
+}
+
 .coach-photo {
   display: block;
   width: 100%;
   height: 100%;
-  max-height: 420px;
   object-fit: cover;
 }
 
