@@ -1009,16 +1009,24 @@ h3 {
 }
 
 .ai-chat-full {
-  max-width: 980px;
+  max-width: 1120px;
   margin: 0 auto;
+}
+
+.ai-chat-surface {
+  border: 1px solid #bcd2f3;
+  border-radius: 26px;
+  background: linear-gradient(165deg, #f7fbff 0%, #e9f3ff 100%);
+  box-shadow: 0 18px 40px rgba(18, 63, 147, 0.12);
+  padding: clamp(18px, 3vw, 28px);
 }
 
 .ai-chat-feed {
   border: 1px solid #c4d8fb;
   border-radius: 14px;
   background: #f5faff;
-  min-height: 320px;
-  max-height: 420px;
+  min-height: 460px;
+  max-height: 560px;
   overflow: auto;
   padding: 12px;
   display: grid;
