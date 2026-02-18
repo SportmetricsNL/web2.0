@@ -878,13 +878,25 @@ if (yearNode) {
   yearNode.textContent = String(new Date().getFullYear());
 }
 
+if (!document.querySelector('.floating-instagram')) {
+  const instagramLink = document.createElement('a');
+  instagramLink.className = 'floating-instagram';
+  instagramLink.href = 'https://www.instagram.com/sportmetricsnl/';
+  instagramLink.target = '_blank';
+  instagramLink.rel = 'noreferrer';
+  instagramLink.setAttribute('aria-label', 'Volg Sportmetrics op Instagram');
+  instagramLink.textContent = 'Instagram';
+  document.body.appendChild(instagramLink);
+}
+
 const bookingForm = document.querySelector('[data-booking-form]');
 if (bookingForm) {
   bookingForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const status = bookingForm.querySelector('[data-form-status]');
     if (status) {
-      status.textContent = 'Dank! Je aanvraag is ontvangen. We nemen binnen 24 uur contact met je op.';
+      status.textContent =
+        'Dank! Je aanvraag is ontvangen en doorgestuurd via info@sportmetrics.nl. We nemen binnen 24 uur contact met je op.';
     }
     bookingForm.reset();
   });

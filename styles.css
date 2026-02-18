@@ -154,6 +154,32 @@ body {
   padding: 10px 14px;
 }
 
+.floating-instagram {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 120;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: linear-gradient(145deg, #26354d 0%, #111b2d 100%);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 14px 24px rgba(13, 25, 48, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.floating-instagram:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 28px rgba(13, 25, 48, 0.35);
+}
+
 .page-hero {
   padding: 74px 0 48px;
 }
@@ -1383,5 +1409,13 @@ textarea {
 
   .cp-strip-block {
     height: 44px;
+  }
+
+  .floating-instagram {
+    right: 12px;
+    bottom: 12px;
+    min-height: 40px;
+    padding: 8px 12px;
+    font-size: 0.86rem;
   }
 }
