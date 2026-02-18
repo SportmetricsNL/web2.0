@@ -349,6 +349,13 @@ h3 {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 14px;
+  align-items: stretch;
+}
+
+.location-grid > .card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .location-note {
