@@ -1177,7 +1177,7 @@ textarea {
 
 .coach-layout {
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
+  grid-template-columns: 1fr;
   gap: 14px;
   align-items: stretch;
 }
