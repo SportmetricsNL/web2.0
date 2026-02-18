@@ -313,36 +313,6 @@ if (zoneModelButtons.length && zoneModelPanels.length) {
   applyZoneModel('z1');
 }
 
-const reportFrame = document.querySelector('[data-report-frame]');
-const reportPrev = document.querySelector('[data-report-prev]');
-const reportNext = document.querySelector('[data-report-next]');
-const reportPageLabel = document.querySelector('[data-report-page-label]');
-const reportContainer = document.querySelector('[data-report-max]');
-
-if (reportFrame && reportPrev && reportNext && reportPageLabel) {
-  const maxPage = Math.max(1, Number(reportContainer?.dataset.reportMax || 1));
-  let currentPage = 1;
-
-  const updateReportViewer = () => {
-    reportFrame.src = `assets/voorbeeld-rapport.pdf#page=${currentPage}&view=FitH`;
-    reportPageLabel.textContent = `Pagina ${currentPage} van ${maxPage}`;
-    reportPrev.disabled = currentPage <= 1;
-    reportNext.disabled = currentPage >= maxPage;
-  };
-
-  reportPrev.addEventListener('click', () => {
-    currentPage = Math.max(1, currentPage - 1);
-    updateReportViewer();
-  });
-
-  reportNext.addEventListener('click', () => {
-    currentPage = Math.min(maxPage, currentPage + 1);
-    updateReportViewer();
-  });
-
-  updateReportViewer();
-}
-
 const cpSlider = document.querySelector('[data-cp-slider]');
 const cpWprimeSlider = document.querySelector('[data-cp-wprime-slider]');
 const cpPowerSlider = document.querySelector('[data-cp-power-slider]');
