@@ -768,6 +768,21 @@ const aiUploadStatus = document.querySelector('[data-ai-upload-status]');
 if (aiForm && aiInput && aiMessages) {
   const aiHistory = [];
   let uploadedReportName = '';
+  let uploadedReportBase64 = '';
+  let includeUploadedReportOnNextQuestion = false;
+
+  const arrayBufferToBase64 = (buffer) => {
+    const bytes = new Uint8Array(buffer);
+    const chunkSize = 0x8000;
+    let binary = '';
+
+    for (let i = 0; i < bytes.length; i += chunkSize) {
+      const chunk = bytes.subarray(i, i + chunkSize);
+      binary += String.fromCharCode(...chunk);
+    }
+
+    return btoa(binary);
+  };
 
   const appendMessage = (role, text) => {
     const node = document.createElement('div');
@@ -800,7 +815,7 @@ if (aiForm && aiInput && aiMessages) {
     return 'Goede vraag. De live AI-koppeling lijkt tijdelijk niet bereikbaar; dit is een fallback-antwoord.';
   };
 
-  const callBackendAi = async (question) => {
+  const callBackendAi = async (question, includeReport) => {
     const response = await fetch('/api/chat', {
       method: 'POST',
       headers: {
@@ -809,6 +824,7 @@ if (aiForm && aiInput && aiMessages) {
       body: JSON.stringify({
         question,
         reportName: uploadedReportName,
+        reportPdfBase64: includeReport ? uploadedReportBase64 : '',
         history: aiHistory.slice(-6),
       }),
     });
@@ -835,9 +851,13 @@ if (aiForm && aiInput && aiMessages) {
 
     const run = async () => {
       let answer = '';
+      const includeReport = includeUploadedReportOnNextQuestion && !!uploadedReportBase64;
 
       try {
-        answer = await callBackendAi(question);
+        answer = await callBackendAi(question, includeReport);
+        if (answer && includeReport) {
+          includeUploadedReportOnNextQuestion = false;
+        }
       } catch (error) {
         console.error(error);
       }
@@ -863,12 +883,40 @@ if (aiForm && aiInput && aiMessages) {
   });
 
   if (aiUpload && aiUploadStatus) {
-    aiUpload.addEventListener('change', () => {
-      const fileName = aiUpload.files && aiUpload.files[0] ? aiUpload.files[0].name : '';
-      uploadedReportName = fileName;
-      aiUploadStatus.textContent = fileName
-        ? `Rapport geselecteerd: ${fileName}`
-        : 'Nog geen rapport geüpload.';
+    aiUpload.addEventListener('change', async () => {
+      const file = aiUpload.files && aiUpload.files[0] ? aiUpload.files[0] : null;
+
+      if (!file) {
+        uploadedReportName = '';
+        uploadedReportBase64 = '';
+        includeUploadedReportOnNextQuestion = false;
+        aiUploadStatus.textContent = 'Nog geen rapport geüpload.';
+        return;
+      }
+
+      if (file.size > 6 * 1024 * 1024) {
+        uploadedReportName = '';
+        uploadedReportBase64 = '';
+        includeUploadedReportOnNextQuestion = false;
+        aiUpload.value = '';
+        aiUploadStatus.textContent = 'Bestand is te groot (max 6 MB). Upload een kleinere PDF.';
+        return;
+      }
+
+      uploadedReportName = file.name;
+      aiUploadStatus.textContent = `Rapport geselecteerd: ${file.name}. Verwerken...`;
+
+      try {
+        const buffer = await file.arrayBuffer();
+        uploadedReportBase64 = arrayBufferToBase64(buffer);
+        includeUploadedReportOnNextQuestion = true;
+        aiUploadStatus.textContent = `Rapport ontvangen: ${file.name}. Stel nu je vraag.`;
+      } catch (error) {
+        console.error(error);
+        uploadedReportBase64 = '';
+        includeUploadedReportOnNextQuestion = false;
+        aiUploadStatus.textContent = 'Rapport uploaden mislukt. Probeer opnieuw.';
+      }
     });
   }
 }

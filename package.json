@@ -1,0 +1,10 @@
+{
+  "name": "sportmetrics-web2",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sportmetrics static website with Vercel serverless AI endpoint",
+  "dependencies": {
+    "mammoth": "^1.8.0",
+    "pdf-parse": "^1.1.1"
+  }
+}
