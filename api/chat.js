@@ -7,6 +7,8 @@ const GEMINI_MODEL = 'gemini-2.5-flash';
 const KNOWLEDGE_DIR = path.join(process.cwd(), 'knowledge');
 const KNOWLEDGE_MAX_CHARS = Number(process.env.KNOWLEDGE_MAX_CHARS || 90000);
 const REPORT_MAX_CHARS = Number(process.env.REPORT_MAX_CHARS || 30000);
+const MAX_OUTPUT_TOKENS = Number(process.env.GEMINI_MAX_OUTPUT_TOKENS || 1300);
+const CONTINUATION_TOKENS = Number(process.env.GEMINI_CONTINUATION_TOKENS || 700);
 
 let knowledgeCache = {
   loadedAt: 0,
@@ -139,6 +141,53 @@ const getReportText = async (body) => {
   }
 };
 
+const getCandidateData = (data) => {
+  const candidate = data?.candidates?.[0] || {};
+  const answer = candidate?.content?.parts?.map((part) => part.text).join('\n').trim() || '';
+  const finishReason = typeof candidate?.finishReason === 'string' ? candidate.finishReason : '';
+  return { answer, finishReason };
+};
+
+const callGemini = async (apiKey, prompt, maxOutputTokens) => {
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            role: 'user',
+            parts: [{ text: prompt }],
+          },
+        ],
+        generationConfig: {
+          temperature: 0.5,
+          maxOutputTokens,
+        },
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    const detail = await response.text();
+    throw new Error(`Gemini request failed: ${detail.slice(0, 400)}`);
+  }
+
+  const data = await response.json();
+  return getCandidateData(data);
+};
+
+const looksIncomplete = (text) => {
+  const trimmed = (text || '').trim();
+  if (!trimmed) {
+    return true;
+  }
+  return !/[.!?…]["')\]]?$/.test(trimmed);
+};
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -187,6 +236,7 @@ module.exports = async (req, res) => {
     '4. Wees praktisch, enthousiast en gebruik bulletpoints.',
     '5. Geen medisch advies.',
     '6. Geef altijd props aan de sporter voor de test en bedank dat hij/zij deze bij SportMetrics heeft gedaan.',
+    '7. Rond elke zin volledig af. Geef liever een korter, afgerond antwoord dan een afgekapt antwoord.',
   ].join('\n');
 
   const reportContext = reportText
@@ -206,35 +256,29 @@ module.exports = async (req, res) => {
     .join('\n\n');
 
   try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              role: 'user',
-              parts: [{ text: prompt }],
-            },
-          ],
-          generationConfig: {
-            temperature: 0.5,
-            maxOutputTokens: 900,
-          },
-        }),
-      },
-    );
+    const firstPass = await callGemini(apiKey, prompt, MAX_OUTPUT_TOKENS);
+    let answer = firstPass.answer;
 
-    if (!response.ok) {
-      const detail = await response.text();
-      return res.status(502).json({ error: 'Gemini request failed', detail: detail.slice(0, 400) });
+    const needsContinuation =
+      !!answer &&
+      (firstPass.finishReason === 'MAX_TOKENS' || (answer.length > 220 && looksIncomplete(answer)));
+
+    if (needsContinuation) {
+      const continuationPrompt = [
+        'Je vorige antwoord stopte te vroeg.',
+        'Ga verder vanaf exact het laatste deel hieronder.',
+        'Herhaal geen eerdere zinnen.',
+        'Maak elke zin volledig af.',
+        '',
+        `Originele klantvraag: ${question}`,
+        `Laatste deel van eerder antwoord:\n${answer.slice(-1400)}`,
+      ].join('\n');
+
+      const continuation = await callGemini(apiKey, continuationPrompt, CONTINUATION_TOKENS);
+      if (continuation.answer) {
+        answer = `${answer}\n${continuation.answer}`.trim();
+      }
     }
-
-    const data = await response.json();
-    const answer = data?.candidates?.[0]?.content?.parts?.map((part) => part.text).join('\n').trim() || '';
 
     if (!answer) {
       return res.status(502).json({ error: 'No answer from Gemini' });
