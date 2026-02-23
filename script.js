@@ -769,7 +769,6 @@ if (aiForm && aiInput && aiMessages) {
   const aiHistory = [];
   let uploadedReportName = '';
   let uploadedReportBase64 = '';
-  let includeUploadedReportOnNextQuestion = false;
 
   const arrayBufferToBase64 = (buffer) => {
     const bytes = new Uint8Array(buffer);
@@ -793,29 +792,11 @@ if (aiForm && aiInput && aiMessages) {
     return node;
   };
 
-  const getDemoAnswer = (question) => {
-    const q = question.toLowerCase();
-
-    if (q.includes('vo2')) {
-      return 'VO2max is je aerobe plafond. Gebruik het samen met VT1/VT2, want alleen VO2max zegt niet hoe goed je het plafond benut in training.';
-    }
-
-    if (q.includes('vt1')) {
-      return 'VT1 is meestal je anker voor duurzame zone-2 training. Richt je op veel volume net onder/rond VT1 voor stabiele opbouw met lage herstelkosten.';
-    }
-
-    if (q.includes('vt2') || q.includes('drempel')) {
-      return 'VT2 markeert de overgang naar zwaar werk. Plan hier beperkte blokken met voldoende herstel, zodat je kwaliteit behoudt en niet te veel in het grijze gebied traint.';
-    }
-
-    if (q.includes('week') || q.includes('schema')) {
-      return 'Voor een basisweek: 2-3 rustige zone-2 sessies, 1 kwaliteitssessie rond VT2/VO2, en 1 rustdag. Pas dit aan op je beschikbare uren en herstel.';
-    }
-
-    return 'Goede vraag. De live AI-koppeling lijkt tijdelijk niet bereikbaar; dit is een fallback-antwoord.';
+  const getFallbackAnswer = () => {
+    return 'De live AI-koppeling is tijdelijk niet bereikbaar. Probeer het zo opnieuw. Als dit blijft gebeuren, ververs de pagina en test nogmaals.';
   };
 
-  const callBackendAi = async (question, includeReport) => {
+  const callBackendAi = async (question) => {
     const response = await fetch('/api/chat', {
       method: 'POST',
       headers: {
@@ -824,7 +805,7 @@ if (aiForm && aiInput && aiMessages) {
       body: JSON.stringify({
         question,
         reportName: uploadedReportName,
-        reportPdfBase64: includeReport ? uploadedReportBase64 : '',
+        reportPdfBase64: uploadedReportBase64 || '',
         history: aiHistory.slice(-6),
       }),
     });
@@ -844,26 +825,31 @@ if (aiForm && aiInput && aiMessages) {
       return;
     }
 
+    const reportHeavyQuestion = /(rapport|analyse|analyseren|zones maken|maak mijn zones)/i.test(question);
+    if (reportHeavyQuestion && !uploadedReportBase64) {
+      appendMessage(
+        'assistant',
+        'Upload eerst je rapport-PDF, dan kan ik echt op jouw waarden analyseren in plaats van alleen algemene uitleg.',
+      );
+      return;
+    }
+
     appendMessage('user', question);
     aiInput.value = '';
 
-    const pendingNode = appendMessage('assistant', 'Even denken...');
+    const pendingNode = appendMessage('assistant', 'Even denken... ik combineer je rapport met trainingsliteratuur.');
 
     const run = async () => {
       let answer = '';
-      const includeReport = includeUploadedReportOnNextQuestion && !!uploadedReportBase64;
 
       try {
-        answer = await callBackendAi(question, includeReport);
-        if (answer && includeReport) {
-          includeUploadedReportOnNextQuestion = false;
-        }
+        answer = await callBackendAi(question);
       } catch (error) {
         console.error(error);
       }
 
       if (!answer) {
-        answer = getDemoAnswer(question);
+        answer = getFallbackAnswer();
       }
 
       pendingNode.textContent = answer;
@@ -889,17 +875,15 @@ if (aiForm && aiInput && aiMessages) {
       if (!file) {
         uploadedReportName = '';
         uploadedReportBase64 = '';
-        includeUploadedReportOnNextQuestion = false;
         aiUploadStatus.textContent = 'Nog geen rapport geüpload.';
         return;
       }
 
-      if (file.size > 6 * 1024 * 1024) {
+      if (file.size > 3 * 1024 * 1024) {
         uploadedReportName = '';
         uploadedReportBase64 = '';
-        includeUploadedReportOnNextQuestion = false;
         aiUpload.value = '';
-        aiUploadStatus.textContent = 'Bestand is te groot (max 6 MB). Upload een kleinere PDF.';
+        aiUploadStatus.textContent = 'Bestand is te groot (max 3 MB). Upload een kleinere PDF.';
         return;
       }
 
@@ -909,12 +893,10 @@ if (aiForm && aiInput && aiMessages) {
       try {
         const buffer = await file.arrayBuffer();
         uploadedReportBase64 = arrayBufferToBase64(buffer);
-        includeUploadedReportOnNextQuestion = true;
         aiUploadStatus.textContent = `Rapport ontvangen: ${file.name}. Stel nu je vraag.`;
       } catch (error) {
         console.error(error);
         uploadedReportBase64 = '';
-        includeUploadedReportOnNextQuestion = false;
         aiUploadStatus.textContent = 'Rapport uploaden mislukt. Probeer opnieuw.';
       }
     });

@@ -6,7 +6,7 @@
     <title>Sportmetrics | AI Tool</title>
     <meta
       name="description"
-      content="Chat met de Sportmetrics AI tool. Upload je rapport en krijg praktische uitleg over training, zones en testresultaten."
+      content="Upload je inspanningsrapport en krijg heldere uitleg in leken-taal, onderbouwd met trainingsliteratuur."
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -31,59 +31,59 @@
       </div>
     </header>
 
-    <main>
-      <section class="page-hero">
-        <div class="container hero-layout">
-          <article class="hero-main">
-            <span class="eyebrow">Sportfysioloog AI</span>
-            <h1>Jouw wieler- en hardloopexpert in chatvorm</h1>
-            <p>
-              Stel vragen, upload je rapport en ontvang praktische uitleg op basis van trainingsleer. De chat is direct
-              gekoppeld aan de Sportmetrics backend.
+    <main class="ai-page-main">
+      <section class="section ai-interface-section">
+        <div class="container ai-interface-container">
+          <article class="ai-chat-wrap ai-chat-full ai-chat-surface ai-streamlit-surface">
+            <h1 class="ai-main-title">🚴‍♂️ Jouw Wieler &amp; Hardloop Expert</h1>
+            <p class="ai-main-subtitle">
+              Stel je vraag in gewone taal. De AI analyseert eerst je rapport en onderbouwt antwoorden met
+              trainingsliteratuur.
             </p>
-          </article>
-          <aside class="hero-side">
-            <h2>Wat deze tool doet</h2>
-            <p>
-              Deze AI is getraind met de juiste literatuur over trainingsleer en geeft daarom gerichte antwoorden op
-              jouw sportvragen.
-            </p>
-            <ul>
-              <li>Rapporten samenvatten in heldere taal</li>
-              <li>VT1/VT2/VO2max vertalen naar trainingskeuzes</li>
-              <li>Krachttraining, hardlopen, periodiseren en plannen ondersteunen</li>
-            </ul>
-          </aside>
-        </div>
-      </section>
 
-      <section class="section">
-        <div class="container">
-          <article class="ai-chat-wrap ai-chat-full ai-chat-surface">
-            <h2>AI Chat</h2>
-            <p class="ai-upload-note" data-ai-upload-status>Nog geen rapport geüpload.</p>
-            <input type="file" accept=".pdf" data-ai-upload />
+            <details class="ai-upload-expander">
+              <summary>📄 Klik hier om een PDF Rapport te uploaden</summary>
+              <div class="ai-upload-body">
+                <p class="ai-upload-note" data-ai-upload-status>Nog geen rapport geüpload.</p>
+                <input type="file" accept=".pdf" data-ai-upload />
+                <p class="small-note">
+                  Upload een duidelijke PDF zodat de AI concrete waarden (zoals VO2max, VT1, VT2, watt en hartslag)
+                  kan analyseren.
+                </p>
+              </div>
+            </details>
 
-            <div class="ai-chat-actions">
-              <button class="button button-secondary button-sm" type="button" data-ai-quick="Leg VO2max eenvoudig uit">VO2max uitleg</button>
-              <button class="button button-secondary button-sm" type="button" data-ai-quick="Hoe gebruik ik VT1 in zone 2 training?">VT1 toepassen</button>
-              <button class="button button-secondary button-sm" type="button" data-ai-quick="Maak een voorbeeldweek met 6 uur trainen">Voorbeeldweek 6u</button>
+            <div class="ai-chat-actions ai-chip-row">
+              <button class="button button-secondary button-sm" type="button" data-ai-quick="Analyseer mijn rapport in simpele taal">
+                Analyseer rapport
+              </button>
+              <button class="button button-secondary button-sm" type="button" data-ai-quick="Leg VO2max uit op basis van mijn rapport">
+                VO2max uitleg
+              </button>
+              <button class="button button-secondary button-sm" type="button" data-ai-quick="Hoe pas ik VT1 en VT2 toe in mijn trainingsweek?">
+                VT1/VT2 toepassen
+              </button>
+              <button class="button button-secondary button-sm" type="button" data-ai-quick="Maak een voorbeeldweek voor 6 uur trainen">
+                Voorbeeldweek 6u
+              </button>
             </div>
 
             <div class="ai-chat-feed" data-ai-messages>
               <div class="ai-msg assistant">
-                Hoi! Ik ben de Sportmetrics AI tool. Stel je vraag over training, testresultaten of zones.
+                Hoi! Upload je rapport en stel je vraag. Ik geef eerst een analyse van je rapport en vertaal dat daarna
+                naar praktische trainingskeuzes.
               </div>
             </div>
 
-            <form class="ai-chat-form" data-ai-form>
-              <label for="ai-input">Jouw vraag</label>
-              <textarea id="ai-input" data-ai-input placeholder="Bijv. hoe vertaal ik mijn VT2 naar intervaltraining?" required></textarea>
-              <button class="button button-primary" type="submit">Verstuur</button>
+            <form class="ai-chat-form ai-chat-form-inline" data-ai-form>
+              <label class="sr-only" for="ai-input">Jouw vraag</label>
+              <textarea id="ai-input" data-ai-input placeholder="Stel je vraag of zeg 'Maak mijn zones'..." required></textarea>
+              <button class="button button-primary ai-send-btn" type="submit" aria-label="Verstuur vraag">⬆</button>
             </form>
 
             <p class="small-note">
-              Deze chat gebruikt de beveiligde backend-koppeling van Sportmetrics. Geen medisch advies.
+              Deze chat gebruikt de beveiligde Sportmetrics-backend en jouw geüploade rapport. Disclaimer: geen
+              medisch advies.
             </p>
           </article>
         </div>
@@ -94,7 +94,7 @@
       <div class="container footer-grid">
         <section>
           <h3>Sportmetrics</h3>
-          <p>Kennisbank, tests en straks AI-ondersteuning in één flow.</p>
+          <p>Kennisbank, tests en AI-ondersteuning in één flow.</p>
         </section>
         <section>
           <h3>Snel naar</h3>
