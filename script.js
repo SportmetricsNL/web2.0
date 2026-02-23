@@ -863,6 +863,16 @@ if (aiForm && aiInput && aiMessages) {
     return html || `<p>${escapeHtml(rawText)}</p>`;
   };
 
+  const renderThinkingMarkup = (message) =>
+    `
+      <div class="ai-thinking" role="status" aria-live="polite">
+        <div class="ai-thinking-lane" aria-hidden="true">
+          <span class="ai-thinking-bikes">🚴‍♂️ &nbsp;💨&nbsp; 🚴‍♂️ &nbsp;💨&nbsp; 🚴‍♂️</span>
+        </div>
+        <p>${escapeHtml(message)}</p>
+      </div>
+    `.trim();
+
   const arrayBufferToBase64 = (buffer) => {
     const bytes = new Uint8Array(buffer);
     const chunkSize = 0x8000;
@@ -934,12 +944,14 @@ if (aiForm && aiInput && aiMessages) {
     appendMessage('user', question);
     aiInput.value = '';
 
-    const pendingNode = appendMessage(
-      'assistant',
+    const thinkingText =
       uploadedReportBase64 && includeUploadedReportOnNextQuestion
         ? 'Even denken... ik combineer je rapport met trainingsliteratuur.'
-        : 'Even denken... ik gebruik de sportliteratuur om je vraag praktisch te beantwoorden.',
-    );
+        : 'Even denken... ik gebruik de sportliteratuur om je vraag praktisch te beantwoorden.';
+
+    const pendingNode = appendMessage('assistant', thinkingText);
+    pendingNode.classList.add('is-thinking');
+    pendingNode.innerHTML = renderThinkingMarkup(thinkingText);
 
     const run = async () => {
       let answer = '';
@@ -958,6 +970,7 @@ if (aiForm && aiInput && aiMessages) {
         answer = getFallbackAnswer();
       }
 
+      pendingNode.classList.remove('is-thinking');
       pendingNode.innerHTML = renderMarkdownLike(answer);
       aiHistory.push({ role: 'user', text: question });
       aiHistory.push({ role: 'assistant', text: answer });

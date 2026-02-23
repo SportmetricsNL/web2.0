@@ -1239,6 +1239,46 @@ h3 {
   margin: 20px 0;
 }
 
+.ai-msg.assistant.is-thinking {
+  max-width: min(74%, 620px);
+}
+
+.ai-thinking {
+  display: grid;
+  gap: 8px;
+}
+
+.ai-thinking-lane {
+  overflow: hidden;
+  border: 1px dashed #b8ccef;
+  border-radius: 999px;
+  background: #f4f8ff;
+  padding: 6px 0;
+}
+
+.ai-thinking-bikes {
+  display: inline-block;
+  white-space: nowrap;
+  padding-left: 8px;
+  animation: ai-bike-ride 2.8s linear infinite;
+  will-change: transform;
+}
+
+@keyframes ai-bike-ride {
+  0% {
+    transform: translateX(-32%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-thinking-bikes {
+    animation: none;
+  }
+}
+
 .ai-chat-form {
   display: grid;
   gap: 10px;
