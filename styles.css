@@ -1078,8 +1078,8 @@ h3 {
 }
 
 .ai-interface-container {
-  width: min(1600px, 96vw);
-  max-width: none;
+  width: min(1120px, 94vw);
+  max-width: 1120px;
 }
 
 .ai-shell {
@@ -1094,7 +1094,7 @@ h3 {
 }
 
 .ai-chat-full {
-  max-width: none;
+  max-width: 1120px;
   margin: 0 auto;
 }
 
@@ -1174,7 +1174,7 @@ h3 {
 }
 
 .ai-msg {
-  max-width: min(86%, 820px);
+  max-width: min(82%, 760px);
   padding: 14px 16px;
   border-radius: 16px;
   line-height: 1.52;
@@ -1187,6 +1187,7 @@ h3 {
   background: linear-gradient(145deg, #2868f3 0%, #1f53c6 100%);
   color: #fff;
   border-bottom-right-radius: 8px;
+  max-width: min(72%, 680px);
 }
 
 .ai-msg.assistant {
@@ -1195,7 +1196,7 @@ h3 {
   border: 1px solid #bdd0f0;
   color: #22446d;
   border-bottom-left-radius: 8px;
-  max-width: 100%;
+  max-width: min(100%, 92ch);
 }
 
 .ai-msg.assistant h2,
