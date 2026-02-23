@@ -390,20 +390,20 @@ const looksIncomplete = (text) => {
   return !/[.!?…]["')\]]?$/.test(trimmed);
 };
 
-const buildSystemPrompt = () =>
-  [
+const buildSystemPrompt = ({ hasReport }) => {
+  const lines = [
     'ROL',
     'Je bent een inspanningsfysioloog van SportMetrics.',
     'Je schrijft in duidelijke leken-taal (B1), concreet en praktisch.',
     '',
     'WAARHEIDSBRONNEN',
-    '1) Eerst het geuploade rapport van de sporter.',
-    '2) Daarna de aangeleverde literatuurfragmenten.',
+    hasReport
+      ? '1) Eerst het geuploade rapport van de sporter, 2) daarna de aangeleverde literatuurfragmenten.'
+      : '1) De aangeleverde literatuurfragmenten van SportMetrics.',
     'Gebruik alleen deze context. Als informatie ontbreekt, zeg dat expliciet.',
     '',
     'HARD RULES',
     '- SportMetrics doet GEEN lactaatmetingen; alleen ademgasanalyse + vermogen + hartslag.',
-    '- Bedank de sporter kort voor het delen van het rapport.',
     '- Geen medisch advies of diagnose.',
     '- Rond alle zinnen af; nooit afkappen.',
     '- Gebruik bulletpoints en korte alinea’s.',
@@ -413,12 +413,25 @@ const buildSystemPrompt = () =>
     '',
     'VERPLICHTE ANTWOORDSTRUCTUUR',
     '1) Korte conclusie (max 2 zinnen).',
-    '2) Wat ik letterlijk uit jouw rapport haal (bulletpoints).',
-    '3) Vertaling naar training (3-5 acties).',
-    '4) Onderbouwing uit literatuur (2-4 bullets, zonder bestandsnamen).',
-    `5) Sluit af met exact deze zin: "${LITERATURE_NOTE}"`,
-    '6) Sluit daarna af met: "Disclaimer: dit is geen medisch advies."',
-  ].join('\n');
+  ];
+
+  if (hasReport) {
+    lines.push('- Bedank de sporter kort voor het delen van het rapport.');
+    lines.push('2) Wat ik letterlijk uit jouw rapport haal (bulletpoints).');
+    lines.push('3) Vertaling naar training (3-5 acties).');
+    lines.push('4) Onderbouwing uit literatuur (2-4 bullets, zonder bestandsnamen).');
+    lines.push(`5) Sluit af met exact deze zin: "${LITERATURE_NOTE}"`);
+    lines.push('6) Sluit daarna af met: "Disclaimer: dit is geen medisch advies."');
+  } else {
+    lines.push('2) Uitleg in simpele taal van de vraag (max 5 bullets).');
+    lines.push('3) Praktische toepassing voor training (3-5 acties).');
+    lines.push('4) Onderbouwing uit literatuur (2-4 bullets, zonder bestandsnamen).');
+    lines.push(`5) Sluit af met exact deze zin: "${LITERATURE_NOTE}"`);
+    lines.push('6) Sluit daarna af met: "Disclaimer: dit is geen medisch advies."');
+  }
+
+  return lines.join('\n');
+};
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -452,7 +465,8 @@ module.exports = async (req, res) => {
   const literatureContext = selectLiteratureContext(knowledgeDocuments, question, reportText);
   const historyText = safeHistory.map((item) => `${item.role}: ${item.text}`).join('\n');
 
-  const systemPrompt = buildSystemPrompt();
+  const hasReport = !!reportText;
+  const systemPrompt = buildSystemPrompt({ hasReport });
 
   const reportContext = reportText
     ? `=== RAPPORT (bestand: ${reportName || 'onbekend'}) ===\n${reportText}`

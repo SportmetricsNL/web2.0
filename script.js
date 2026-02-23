@@ -829,15 +829,19 @@ if (aiForm && aiInput && aiMessages) {
     if (reportHeavyQuestion && !uploadedReportBase64) {
       appendMessage(
         'assistant',
-        'Upload eerst je rapport-PDF, dan kan ik echt op jouw waarden analyseren in plaats van alleen algemene uitleg.',
+        'Ik kan je vraag ook zonder rapport beantwoorden op basis van sportliteratuur. Upload je rapport als je daarna een persoonlijke analyse wilt.',
       );
-      return;
     }
 
     appendMessage('user', question);
     aiInput.value = '';
 
-    const pendingNode = appendMessage('assistant', 'Even denken... ik combineer je rapport met trainingsliteratuur.');
+    const pendingNode = appendMessage(
+      'assistant',
+      uploadedReportBase64
+        ? 'Even denken... ik combineer je rapport met trainingsliteratuur.'
+        : 'Even denken... ik gebruik de sportliteratuur om je vraag praktisch te beantwoorden.',
+    );
 
     const run = async () => {
       let answer = '';
