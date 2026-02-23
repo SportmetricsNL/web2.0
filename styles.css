@@ -1167,18 +1167,18 @@ h3 {
   min-height: calc(100vh - 410px);
   max-height: none;
   overflow: auto;
-  padding: 18px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .ai-msg {
   max-width: min(82%, 760px);
-  padding: 14px 16px;
+  padding: 12px 14px;
   border-radius: 16px;
-  line-height: 1.52;
-  font-size: 1.02rem;
+  line-height: 1.46;
+  font-size: 0.94rem;
   white-space: pre-wrap;
 }
 
@@ -1202,35 +1202,35 @@ h3 {
 .ai-msg.assistant h2,
 .ai-msg.assistant h3,
 .ai-msg.assistant h4 {
-  margin: 20px 0 10px;
+  margin: 16px 0 8px;
   color: #1d3154;
   line-height: 1.2;
 }
 
 .ai-msg.assistant h2 {
-  font-size: 1.85rem;
+  font-size: 1.45rem;
 }
 
 .ai-msg.assistant h3 {
-  font-size: 1.55rem;
+  font-size: 1.24rem;
 }
 
 .ai-msg.assistant h4 {
-  font-size: 1.25rem;
+  font-size: 1.08rem;
 }
 
 .ai-msg.assistant p {
-  margin: 0 0 14px;
+  margin: 0 0 10px;
 }
 
 .ai-msg.assistant ul,
 .ai-msg.assistant ol {
-  margin: 0 0 14px 22px;
+  margin: 0 0 10px 20px;
   padding: 0;
 }
 
 .ai-msg.assistant li {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .ai-msg.assistant hr {
@@ -1257,6 +1257,8 @@ h3 {
 .ai-chat-form-inline textarea {
   min-height: 68px !important;
   max-height: 260px;
+  font-size: 0.95rem;
+  line-height: 1.4;
 }
 
 .ai-send-btn {
