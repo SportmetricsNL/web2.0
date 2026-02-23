@@ -873,6 +873,13 @@ if (aiForm && aiInput && aiMessages) {
       </div>
     `.trim();
 
+  const addUiDisclaimer = (text) => {
+    if (/disclaimer:\s*dit is geen medisch advies\./i.test(text || '')) {
+      return text;
+    }
+    return `${text}\n\n---\n*Disclaimer: Dit is geen medisch advies.*`;
+  };
+
   const arrayBufferToBase64 = (buffer) => {
     const bytes = new Uint8Array(buffer);
     const chunkSize = 0x8000;
@@ -890,7 +897,7 @@ if (aiForm && aiInput && aiMessages) {
     const node = document.createElement('div');
     node.className = `ai-msg ${role}`;
     if (role === 'assistant' && rich) {
-      node.innerHTML = renderMarkdownLike(text);
+      node.innerHTML = renderMarkdownLike(addUiDisclaimer(text));
     } else {
       node.textContent = text;
     }
@@ -937,7 +944,6 @@ if (aiForm && aiInput && aiMessages) {
       appendMessage(
         'assistant',
         'Ik kan je vraag ook zonder rapport beantwoorden op basis van sportliteratuur. Upload je rapport als je daarna een persoonlijke analyse wilt.',
-        true,
       );
     }
 
@@ -971,7 +977,7 @@ if (aiForm && aiInput && aiMessages) {
       }
 
       pendingNode.classList.remove('is-thinking');
-      pendingNode.innerHTML = renderMarkdownLike(answer);
+      pendingNode.innerHTML = renderMarkdownLike(addUiDisclaimer(answer));
       aiHistory.push({ role: 'user', text: question });
       aiHistory.push({ role: 'assistant', text: answer });
     };
