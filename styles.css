@@ -241,6 +241,14 @@ h3 {
   max-width: 62ch;
 }
 
+.hero-overline {
+  margin: 12px 0 0;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #1f4e8e;
+  max-width: 64ch;
+}
+
 .hero-actions {
   margin-top: 24px;
   display: flex;
