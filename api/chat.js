@@ -5,6 +5,7 @@ const mammoth = require('mammoth');
 
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 const KNOWLEDGE_DIR = path.join(process.cwd(), 'knowledge');
+const ASSET_ADEMGAS_GUIDE = path.join(process.cwd(), 'assets', 'ademgasanalyse-o2-only-drempelbepaling-2.pdf');
 
 const KNOWLEDGE_MAX_CHARS = Number(process.env.KNOWLEDGE_MAX_CHARS || 120000);
 const REPORT_MAX_CHARS = Number(process.env.REPORT_MAX_CHARS || 50000);
@@ -64,17 +65,41 @@ const extractTextFromDocxBuffer = async (buffer) => {
   return sanitizeText(parsed?.value || '', KNOWLEDGE_MAX_CHARS);
 };
 
+const loadKnowledgeFileFromPath = async (fullPath, explicitFileName = '') => {
+  const fileName = explicitFileName || path.basename(fullPath);
+  const lower = fileName.toLowerCase();
+
+  if (!lower.endsWith('.pdf') && !lower.endsWith('.docx')) {
+    return null;
+  }
+
+  const buffer = await fs.readFile(fullPath);
+  const text = lower.endsWith('.pdf') ? await extractTextFromPdfBuffer(buffer) : await extractTextFromDocxBuffer(buffer);
+
+  if (!text) {
+    return null;
+  }
+
+  return {
+    fileName,
+    text,
+    isReader: lower.includes('reader'),
+    isGasGuide: /(ademgasanalyse|o2-only|lactaat|drempelbepaling|gasanalyse)/i.test(lower),
+  };
+};
+
 const loadKnowledgeDocuments = async () => {
   let entries = [];
 
   try {
     entries = await fs.readdir(KNOWLEDGE_DIR, { withFileTypes: true });
   } catch (_error) {
-    return [];
+    entries = [];
   }
 
   const docs = [];
   const orderedFiles = prioritizeKnowledgeFiles(entries);
+  const docKeys = new Set();
 
   for (const file of orderedFiles) {
     const fileName = file.name;
@@ -84,24 +109,26 @@ const loadKnowledgeDocuments = async () => {
       continue;
     }
 
-    const fullPath = path.join(KNOWLEDGE_DIR, fileName);
-
     try {
-      const buffer = await fs.readFile(fullPath);
-      const text = lower.endsWith('.pdf')
-        ? await extractTextFromPdfBuffer(buffer)
-        : await extractTextFromDocxBuffer(buffer);
-
-      if (text) {
-        docs.push({
-          fileName,
-          text,
-          isReader: lower.includes('reader'),
-        });
+      const fullPath = path.join(KNOWLEDGE_DIR, fileName);
+      const doc = await loadKnowledgeFileFromPath(fullPath, fileName);
+      if (doc) {
+        docs.push(doc);
+        docKeys.add(doc.fileName.toLowerCase());
       }
     } catch (error) {
       console.error(`Kon kennisbestand niet lezen (${fileName}):`, error.message || error);
     }
+  }
+
+  // Extra prioritaire bron in assets: O2-only drempelbepaling.
+  try {
+    const extraDoc = await loadKnowledgeFileFromPath(ASSET_ADEMGAS_GUIDE);
+    if (extraDoc && !docKeys.has(extraDoc.fileName.toLowerCase())) {
+      docs.push(extraDoc);
+    }
+  } catch (_error) {
+    // Optioneel bestand; geen fout nodig als dit ontbreekt.
   }
 
   return docs;
@@ -179,6 +206,7 @@ const selectLiteratureContext = (documents, question, reportText) => {
     return '';
   }
 
+  const gasTopic = /(ademgas|gasanalyse|lactaat|o2|drempel|vt1|vt2|ventilatie|teugvolume)/i.test(`${question}\n${reportText}`);
   const queryTokens = new Set(tokenize(`${question}\n${reportText}`));
   const scored = [];
 
@@ -188,6 +216,9 @@ const selectLiteratureContext = (documents, question, reportText) => {
     for (const segment of segments) {
       const segmentLower = segment.toLowerCase();
       let score = doc.isReader ? 8 : 2;
+      if (doc.isGasGuide) {
+        score += gasTopic ? 10 : 2;
+      }
 
       queryTokens.forEach((token) => {
         if (segmentLower.includes(token)) {
@@ -199,11 +230,16 @@ const selectLiteratureContext = (documents, question, reportText) => {
         score += 2;
       }
 
+      if (gasTopic && /(ademgas|gasanalyse|o2|ventil|teugvolume|lactaat|drempel)/.test(segmentLower)) {
+        score += 6;
+      }
+
       scored.push({
         fileName: doc.fileName,
         text: segment,
         score,
         isReader: doc.isReader,
+        isGasGuide: !!doc.isGasGuide,
       });
     }
   }
@@ -217,6 +253,14 @@ const selectLiteratureContext = (documents, question, reportText) => {
     }
     if (!a.isReader && b.isReader) {
       return 1;
+    }
+    if (gasTopic) {
+      if (a.isGasGuide && !b.isGasGuide) {
+        return -1;
+      }
+      if (!a.isGasGuide && b.isGasGuide) {
+        return 1;
+      }
     }
     return a.fileName.localeCompare(b.fileName, 'nl');
   });
@@ -407,6 +451,7 @@ const buildSystemPrompt = ({ hasReport }) => {
     '3) INHOUDELIJKE REGELS EN GRENZEN',
     '- SportMetrics doet GEEN lactaatmetingen; alleen ademgasanalyse + vermogen + hartslag.',
     '- Trainingsprincipes volgen de SportMetrics-literatuur (o.a. zone-/drempelmodel in die bronnen).',
+    '- Bij vragen over ademgasanalyse of waarom we geen lactaatmeting doen: leg O2-only drempelbepaling duidelijk uit en koppel dit aan ons protocol zonder prikken.',
     '- Geef geen medisch advies of diagnose.',
     '- Rond alle zinnen af; nooit afkappen.',
     '- Gebruik Markdown-opmaak met duidelijke kopjes, bullets en korte alinea’s.',
