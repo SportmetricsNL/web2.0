@@ -1195,6 +1195,47 @@ h3 {
   border: 1px solid #bdd0f0;
   color: #22446d;
   border-bottom-left-radius: 8px;
+  max-width: 100%;
+}
+
+.ai-msg.assistant h2,
+.ai-msg.assistant h3,
+.ai-msg.assistant h4 {
+  margin: 20px 0 10px;
+  color: #1d3154;
+  line-height: 1.2;
+}
+
+.ai-msg.assistant h2 {
+  font-size: 1.85rem;
+}
+
+.ai-msg.assistant h3 {
+  font-size: 1.55rem;
+}
+
+.ai-msg.assistant h4 {
+  font-size: 1.25rem;
+}
+
+.ai-msg.assistant p {
+  margin: 0 0 14px;
+}
+
+.ai-msg.assistant ul,
+.ai-msg.assistant ol {
+  margin: 0 0 14px 22px;
+  padding: 0;
+}
+
+.ai-msg.assistant li {
+  margin-bottom: 8px;
+}
+
+.ai-msg.assistant hr {
+  border: none;
+  border-top: 1px solid #bed0ea;
+  margin: 20px 0;
 }
 
 .ai-chat-form {

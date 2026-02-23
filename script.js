@@ -770,6 +770,98 @@ if (aiForm && aiInput && aiMessages) {
   let uploadedReportName = '';
   let uploadedReportBase64 = '';
 
+  const escapeHtml = (value) =>
+    String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+
+  const renderInline = (text) =>
+    text
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/__(.+?)__/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/_(.+?)_/g, '<em>$1</em>');
+
+  const renderMarkdownLike = (rawText) => {
+    const lines = escapeHtml(rawText).replace(/\r/g, '').split('\n');
+    let html = '';
+    let inUl = false;
+    let inOl = false;
+
+    const closeLists = () => {
+      if (inUl) {
+        html += '</ul>';
+        inUl = false;
+      }
+      if (inOl) {
+        html += '</ol>';
+        inOl = false;
+      }
+    };
+
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+
+      if (!trimmed) {
+        closeLists();
+        return;
+      }
+
+      if (/^---+$/.test(trimmed)) {
+        closeLists();
+        html += '<hr />';
+        return;
+      }
+
+      if (/^###\s+/.test(trimmed)) {
+        closeLists();
+        html += `<h4>${renderInline(trimmed.replace(/^###\s+/, ''))}</h4>`;
+        return;
+      }
+
+      if (/^##\s+/.test(trimmed)) {
+        closeLists();
+        html += `<h3>${renderInline(trimmed.replace(/^##\s+/, ''))}</h3>`;
+        return;
+      }
+
+      if (/^#\s+/.test(trimmed)) {
+        closeLists();
+        html += `<h2>${renderInline(trimmed.replace(/^#\s+/, ''))}</h2>`;
+        return;
+      }
+
+      if (/^[-*]\s+/.test(trimmed)) {
+        if (!inUl) {
+          closeLists();
+          html += '<ul>';
+          inUl = true;
+        }
+        html += `<li>${renderInline(trimmed.replace(/^[-*]\s+/, ''))}</li>`;
+        return;
+      }
+
+      if (/^\d+\.\s+/.test(trimmed)) {
+        if (!inOl) {
+          closeLists();
+          html += '<ol>';
+          inOl = true;
+        }
+        html += `<li>${renderInline(trimmed.replace(/^\d+\.\s+/, ''))}</li>`;
+        return;
+      }
+
+      closeLists();
+      html += `<p>${renderInline(trimmed)}</p>`;
+    });
+
+    closeLists();
+    return html || `<p>${escapeHtml(rawText)}</p>`;
+  };
+
   const arrayBufferToBase64 = (buffer) => {
     const bytes = new Uint8Array(buffer);
     const chunkSize = 0x8000;
@@ -783,10 +875,14 @@ if (aiForm && aiInput && aiMessages) {
     return btoa(binary);
   };
 
-  const appendMessage = (role, text) => {
+  const appendMessage = (role, text, rich = false) => {
     const node = document.createElement('div');
     node.className = `ai-msg ${role}`;
-    node.textContent = text;
+    if (role === 'assistant' && rich) {
+      node.innerHTML = renderMarkdownLike(text);
+    } else {
+      node.textContent = text;
+    }
     aiMessages.appendChild(node);
     aiMessages.scrollTop = aiMessages.scrollHeight;
     return node;
@@ -830,6 +926,7 @@ if (aiForm && aiInput && aiMessages) {
       appendMessage(
         'assistant',
         'Ik kan je vraag ook zonder rapport beantwoorden op basis van sportliteratuur. Upload je rapport als je daarna een persoonlijke analyse wilt.',
+        true,
       );
     }
 
@@ -856,7 +953,7 @@ if (aiForm && aiInput && aiMessages) {
         answer = getFallbackAnswer();
       }
 
-      pendingNode.textContent = answer;
+      pendingNode.innerHTML = renderMarkdownLike(answer);
       aiHistory.push({ role: 'user', text: question });
       aiHistory.push({ role: 'assistant', text: answer });
     };
