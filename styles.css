@@ -1062,15 +1062,16 @@ h3 {
 }
 
 .ai-page-main {
-  padding-bottom: 26px;
+  padding: 10px 0 28px;
 }
 
 .ai-interface-section {
-  padding-top: 42px;
+  padding: 14px 0 0;
 }
 
 .ai-interface-container {
-  max-width: 980px;
+  width: min(1600px, 96vw);
+  max-width: none;
 }
 
 .ai-shell {
@@ -1085,8 +1086,16 @@ h3 {
 }
 
 .ai-chat-full {
-  max-width: 980px;
+  max-width: none;
   margin: 0 auto;
+}
+
+.ai-fullpage-chat {
+  min-height: calc(100vh - 220px);
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .ai-chat-surface {
@@ -1111,7 +1120,7 @@ h3 {
 .ai-main-subtitle {
   margin: 0;
   color: #35507a;
-  max-width: 68ch;
+  max-width: 84ch;
 }
 
 .ai-upload-expander {
@@ -1147,13 +1156,13 @@ h3 {
   border: 1px solid #bdd3f4;
   border-radius: 16px;
   background: #edf3fb;
-  min-height: 490px;
-  max-height: 64vh;
+  min-height: calc(100vh - 410px);
+  max-height: none;
   overflow: auto;
-  padding: 16px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .ai-msg {
@@ -1188,11 +1197,16 @@ h3 {
 .ai-chat-form-inline {
   grid-template-columns: 1fr auto;
   align-items: end;
+  position: sticky;
+  bottom: 0;
+  z-index: 6;
+  background: linear-gradient(180deg, rgba(239, 246, 255, 0) 0%, rgba(239, 246, 255, 0.92) 34%, #eff6ff 100%);
+  padding-top: 8px;
 }
 
 .ai-chat-form-inline textarea {
   min-height: 68px !important;
-  max-height: 180px;
+  max-height: 260px;
 }
 
 .ai-send-btn {
@@ -1450,8 +1464,8 @@ textarea {
   }
 
   .ai-chat-feed {
-    min-height: 360px;
-    max-height: 62vh;
+    min-height: 56vh;
+    max-height: none;
   }
 
   .cp-strip-block {
@@ -1504,8 +1518,8 @@ textarea {
   }
 
   .ai-chat-feed {
-    min-height: 300px;
-    max-height: 50vh;
+    min-height: 52vh;
+    max-height: none;
   }
 
   .cp-strip {

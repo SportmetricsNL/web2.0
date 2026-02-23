@@ -9,8 +9,11 @@ const KNOWLEDGE_DIR = path.join(process.cwd(), 'knowledge');
 const KNOWLEDGE_MAX_CHARS = Number(process.env.KNOWLEDGE_MAX_CHARS || 120000);
 const REPORT_MAX_CHARS = Number(process.env.REPORT_MAX_CHARS || 50000);
 const LITERATURE_CONTEXT_MAX_CHARS = Number(process.env.LITERATURE_CONTEXT_MAX_CHARS || 22000);
-const MAX_OUTPUT_TOKENS = Number(process.env.GEMINI_MAX_OUTPUT_TOKENS || 1800);
-const CONTINUATION_TOKENS = Number(process.env.GEMINI_CONTINUATION_TOKENS || 900);
+const MAX_OUTPUT_TOKENS = Number(process.env.GEMINI_MAX_OUTPUT_TOKENS || 2800);
+const CONTINUATION_TOKENS = Number(process.env.GEMINI_CONTINUATION_TOKENS || 1400);
+const MAX_CONTINUATION_PASSES = Number(process.env.GEMINI_MAX_CONTINUATION_PASSES || 3);
+const LITERATURE_NOTE =
+  'Mijn antwoord is op basis van mijn aangeleverde literatuur die komt vanuit SportMetrics. Hiermee zorg ik ervoor dat ik altijd zo goed mogelijk bij de theorie blijf en juiste antwoorden geef.';
 
 let knowledgeCache = {
   loadedAt: 0,
@@ -387,7 +390,7 @@ const looksIncomplete = (text) => {
   return !/[.!?…]["')\]]?$/.test(trimmed);
 };
 
-const buildSystemPrompt = ({ sourceFiles }) =>
+const buildSystemPrompt = () =>
   [
     'ROL',
     'Je bent een inspanningsfysioloog van SportMetrics.',
@@ -406,16 +409,15 @@ const buildSystemPrompt = ({ sourceFiles }) =>
     '- Gebruik bulletpoints en korte alinea’s.',
     '- Noem concrete waarden met eenheid als ze in het rapport staan (bijv. W, bpm, ml/kg/min).',
     '- Verzin geen waarden die niet in de context staan.',
+    '- Noem GEEN losse bronbestandsnamen in je antwoord.',
     '',
     'VERPLICHTE ANTWOORDSTRUCTUUR',
     '1) Korte conclusie (max 2 zinnen).',
     '2) Wat ik letterlijk uit jouw rapport haal (bulletpoints).',
     '3) Vertaling naar training (3-5 acties).',
-    '4) Onderbouwing uit literatuur (2-4 bullets, met bronnaam).',
-    '5) Bronnen gebruikt (altijd):',
-    '   - Rapport: <bestandsnaam of "niet beschikbaar">',
-    ...sourceFiles.map((name) => `   - Literatuur: ${name}`),
-    '6) Sluit af met: "Disclaimer: dit is geen medisch advies."',
+    '4) Onderbouwing uit literatuur (2-4 bullets, zonder bestandsnamen).',
+    `5) Sluit af met exact deze zin: "${LITERATURE_NOTE}"`,
+    '6) Sluit daarna af met: "Disclaimer: dit is geen medisch advies."',
   ].join('\n');
 
 module.exports = async (req, res) => {
@@ -448,10 +450,9 @@ module.exports = async (req, res) => {
   const reportText = await getReportText(body);
   const reportHighlights = extractReportHighlights(reportText);
   const literatureContext = selectLiteratureContext(knowledgeDocuments, question, reportText);
-  const sourceFiles = knowledgeDocuments.map((doc) => doc.fileName);
   const historyText = safeHistory.map((item) => `${item.role}: ${item.text}`).join('\n');
 
-  const systemPrompt = buildSystemPrompt({ sourceFiles });
+  const systemPrompt = buildSystemPrompt();
 
   const reportContext = reportText
     ? `=== RAPPORT (bestand: ${reportName || 'onbekend'}) ===\n${reportText}`
@@ -481,45 +482,54 @@ module.exports = async (req, res) => {
   try {
     const firstPass = await callGemini(apiKey, prompt, MAX_OUTPUT_TOKENS);
     let answer = firstPass.answer;
+    let finishReason = firstPass.finishReason;
 
-    const needsContinuation =
-      !!answer &&
-      (firstPass.finishReason === 'MAX_TOKENS' || (answer.length > 260 && looksIncomplete(answer)));
+    for (let pass = 0; pass < MAX_CONTINUATION_PASSES; pass += 1) {
+      const needsContinuation =
+        !!answer && (finishReason === 'MAX_TOKENS' || (answer.length > 260 && looksIncomplete(answer)));
 
-    if (needsContinuation) {
+      if (!needsContinuation) {
+        break;
+      }
+
       const continuationPrompt = [
         systemPrompt,
         '',
         'Je vorige antwoord is afgekapt.',
         'Ga alleen verder met het ontbrekende slot en herhaal geen vorige zinnen.',
+        'Maak de laatste lopende zin eerst netjes af, en werk daarna de resterende punten af.',
         '',
-        `Laatste deel van eerder antwoord:\n${answer.slice(-1600)}`,
+        `Laatste deel van eerder antwoord:\n${answer.slice(-2200)}`,
       ].join('\n');
 
       const continuation = await callGemini(apiKey, continuationPrompt, CONTINUATION_TOKENS);
-      if (continuation.answer) {
-        answer = `${answer}\n${continuation.answer}`.trim();
+      if (!continuation.answer) {
+        break;
       }
+
+      answer = `${answer}\n${continuation.answer}`.trim();
+      finishReason = continuation.finishReason;
     }
 
     if (!answer) {
       return res.status(502).json({ error: 'No answer from Gemini' });
     }
 
-    if (!/bronnen gebruikt/i.test(answer)) {
-      const sourcesBlock = [
-        'Bronnen gebruikt:',
-        `- Rapport: ${reportName || (reportText ? 'geupload rapport' : 'niet beschikbaar')}`,
-        ...sourceFiles.slice(0, 6).map((name) => `- Literatuur: ${name}`),
-      ].join('\n');
-      answer = `${answer}\n\n${sourcesBlock}`;
+    answer = answer
+      .replace(/\n{0,2}Bronnen gebruikt:[\s\S]*?(?=\n+Disclaimer:|$)/gi, '\n')
+      .replace(/^\s*-\s*(Rapport|Literatuur):.*$/gim, '')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+
+    if (!answer.includes(LITERATURE_NOTE)) {
+      answer = `${answer}\n\n${LITERATURE_NOTE}`;
     }
 
     if (!/disclaimer:\s*dit is geen medisch advies\./i.test(answer)) {
       answer = `${answer}\n\nDisclaimer: dit is geen medisch advies.`;
     }
 
-    return res.status(200).json({ answer: sanitizeText(answer, 12000) });
+    return res.status(200).json({ answer: sanitizeText(answer, 18000) });
   } catch (error) {
     return res.status(500).json({ error: 'Internal server error', detail: String(error.message || error) });
   }
