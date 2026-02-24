@@ -382,6 +382,16 @@ h3 {
   object-fit: cover;
 }
 
+.device-media {
+  margin-top: 0;
+  background: #ffffff;
+}
+
+.device-media img {
+  object-fit: contain;
+  padding: 10px;
+}
+
 .step-media {
   aspect-ratio: 4 / 3;
 }
