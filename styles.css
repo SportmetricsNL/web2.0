@@ -1399,6 +1399,36 @@ textarea {
   margin: 8px 0 0;
 }
 
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 4px;
+  font-size: 0.86rem;
+  color: #6d82a8;
+}
+
+.breadcrumbs a {
+  color: #2c4f83;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-sep {
+  color: #9fb3d7;
+  font-weight: 700;
+}
+
+.breadcrumbs [aria-current='page'] {
+  color: #6d82a8;
+  font-weight: 700;
+}
+
 .faq details + details {
   margin-top: 10px;
 }
@@ -1453,6 +1483,25 @@ textarea {
   margin: 0;
   font-size: 0.88rem;
   color: #4e678f;
+}
+
+.summary-cta {
+  margin-top: 14px;
+  background: #eef5ff;
+  border: 1px solid #ccdefe;
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.summary-cta p {
+  margin: 0;
+  color: #2d4e7c;
+  max-width: 62ch;
 }
 
 .coach-layout {
