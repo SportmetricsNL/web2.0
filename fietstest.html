@@ -44,7 +44,7 @@
       </div>
 
       <section class="page-hero">
-        <div class="container hero-layout">
+        <div class="container hero-layout offer-hero-layout">
           <article class="hero-main">
             <span class="eyebrow">Fietstest</span>
             <h1>Fietstest met gasanalyse voor wielrenners en triatleten</h1>
@@ -56,49 +56,23 @@
               <span class="inline-term" tabindex="0">VO2max<span class="inline-term-bubble">Maat voor je maximale aerobe capaciteit.</span></span>
               liggen via
               <span class="inline-term" tabindex="0">gasanalyse<span class="inline-term-bubble">Meten van je ademhaling tijdens inspanning om drempels en VO2max in kaart te brengen.</span></span>.
-              Wij vertalen dat naar wattage en hartslag waar je direct mee kunt trainen.
+              Zo train je gerichter, verdeel je je energie beter en haal je meer uit je trainingen en wedstrijden.
             </p>
             <div class="hero-actions">
-              <a class="button button-primary" href="#testen">Bekijk onze testen</a>
-              <a class="button button-secondary" href="contact.html#booking-form">Boek fietstest</a>
+              <a class="button button-primary" href="contact.html#booking-form">Boek fietstest</a>
+              <a class="button button-secondary" href="#testen">Bekijk de testen</a>
             </div>
           </article>
           <aside class="hero-side">
-            <h2>Wat je eraan hebt</h2>
+            <h2>Wat je altijd krijgt</h2>
             <ul>
-              <li>Helder zien hoe rustig, stevig en zwaar er voor jou uitzien</li>
-              <li>Beter doseren in training, rit en wedstrijd</li>
-              <li>Concreet rapport met nabespreking</li>
-              <li>Vertaling naar wattage en hartslag</li>
+              <li>Rapport met drempels en zones</li>
+              <li>Zones in wattage en hartslag</li>
+              <li>Praktisch trainingsadvies</li>
+              <li>Korte observatie van trapbeweging en traptempo</li>
+              <li>1-op-1 nabespreking</li>
             </ul>
           </aside>
-        </div>
-      </section>
-
-      <section class="offer-subnav">
-        <div class="container">
-          <nav class="offer-subnav-track" aria-label="Aanbod submenu">
-            <a class="offer-subnav-link" href="aanbod.html">Overzicht</a>
-            <a class="offer-subnav-link active" href="fietstest.html">Fietstest</a>
-            <a class="offer-subnav-link" href="hardlooptest.html">Hardlooptest</a>
-          </nav>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="container">
-          <div class="offer-recommend-grid">
-            <article class="card offer-recommend-card">
-              <span class="eyebrow">Meest logisch als je</span>
-              <h3>Slimmer wilt trainen of beter wilt doseren</h3>
-              <p>Kies meestal de <strong>Trainingsprofiel Test</strong>.</p>
-            </article>
-            <article class="card offer-recommend-card">
-              <span class="eyebrow">Meest logisch als je</span>
-              <h3>Naar klim, tijdrit of wedstrijd toewerkt</h3>
-              <p>Kies meestal de <strong>Prestatieprofiel Test</strong>.</p>
-            </article>
-          </div>
         </div>
       </section>
 
@@ -106,30 +80,54 @@
         <div class="container">
           <div class="section-title-row">
             <div>
-              <span class="eyebrow">Altijd inbegrepen</span>
-              <h2>Kort, bruikbaar en praktijkgericht</h2>
+              <span class="eyebrow">Keuzehulp</span>
+              <h2>Start vanuit je trainingsvraag</h2>
             </div>
-            <p>Geen overbodige theorie. Wel data die je direct kunt gebruiken in je week.</p>
+            <p>Klik op wat het best bij je doel past.</p>
           </div>
 
-          <div class="offer-value-grid">
-            <article class="card">
-              <h3>Rapport</h3>
-              <p>Met drempels, zones en duidelijke uitleg.</p>
-            </article>
-            <article class="card">
-              <h3>Vertaling</h3>
-              <p>Naar wattage en hartslag.</p>
-            </article>
-            <article class="card">
-              <h3>Trainingsadvies</h3>
-              <p>Voor duur, interval en weekindeling.</p>
-            </article>
-            <article class="card">
-              <h3>Nabespreking</h3>
-              <p>1-op-1 met praktische volgende stap.</p>
-            </article>
-          </div>
+          <article class="card recommendation-box" data-recommendation-group="bike">
+            <div class="goal-buttons" aria-label="Keuzehulp fietstest">
+              <button
+                class="goal-button"
+                type="button"
+                data-recommendation-button
+                data-recommendation-target="trainingsprofiel"
+                data-recommendation-message="Aanrader: Trainingsprofiel Test."
+                data-recommendation-default
+              >
+                Ik wil slimmer trainen
+              </button>
+              <button
+                class="goal-button"
+                type="button"
+                data-recommendation-button
+                data-recommendation-target="trainingsprofiel"
+                data-recommendation-message="Aanrader: Trainingsprofiel Test."
+              >
+                Ik wil mijn energie beter verdelen
+              </button>
+              <button
+                class="goal-button"
+                type="button"
+                data-recommendation-button
+                data-recommendation-target="prestatieprofiel"
+                data-recommendation-message="Aanrader: Prestatieprofiel Test."
+              >
+                Ik train voor klim, tijdrit of wedstrijd
+              </button>
+              <button
+                class="goal-button"
+                type="button"
+                data-recommendation-button
+                data-recommendation-target="trainingsprofiel"
+                data-recommendation-message="Aanrader: Trainingsprofiel Test."
+              >
+                Ik ben in opbouw of herstel
+              </button>
+            </div>
+            <div class="goal-feedback" data-recommendation-feedback></div>
+          </article>
         </div>
       </section>
 
@@ -138,104 +136,52 @@
           <div class="section-title-row">
             <div>
               <span class="eyebrow">Kies je test</span>
-              <h2>Open alleen de info die voor jou relevant is</h2>
+              <h2>De testkeuze in 2 duidelijke opties</h2>
             </div>
-            <p>
-              Beide hoofdtesten geven inzicht in VT1, VT2 en VO2max. Het verschil zit in de vraag: wil je vooral sturen op
-              training, of wil je ook extra scherpte richting wedstrijd en pacing?
-            </p>
+            <p>Beide testen geven inzicht in VT1, VT2 en VO2max. Het verschil zit vooral in trainingssturing versus wedstrijdgerichte toepassing.</p>
           </div>
 
-          <div class="offer-choice-grid">
-            <details class="card offer-choice">
-              <summary>
-                <div class="offer-choice-heading">
-                  <span class="eyebrow">Trainingsprofiel Test</span>
-                  <h3>Voor slimmer trainen</h3>
-                  <p class="offer-choice-lead">Heldere zones, duidelijke drempels en direct bruikbaar trainingsadvies.</p>
-                </div>
-                <div class="offer-choice-meta">
-                  <span>Wielrennen</span>
-                  <span>Triathlon</span>
-                  <span>60-75 min</span>
-                  <span>&euro;100</span>
-                </div>
-              </summary>
-              <div class="offer-choice-body">
-                <p>
-                  Voor fietsers die vooral hun training slimmer willen inrichten en hun test direct willen vertalen naar
-                  bruikbare zones voor duur, interval en energieverdeling.
-                </p>
-                <div class="offer-choice-list">
-                  <div>Ideaal voor recreatieve fietsers, wielrenners en halve of hele triathlon</div>
-                  <div>Helpt je beter doseren tijdens trainingen en langere ritten</div>
-                  <div>Inclusief praktische tips voor trainingstoepassing</div>
-                </div>
-                <div class="offer-choice-footer">
-                  <span class="offer-choice-price">Indicatie: 60-75 minuten inclusief intake en nabespreking</span>
-                  <a class="button button-primary" href="contact.html#booking-form">Boek deze test</a>
-                </div>
+          <div class="offer-test-stack">
+            <article class="card offer-primary-card test-card" data-recommendation-card-group="bike" data-recommendation-card="trainingsprofiel">
+              <span class="offer-card-label">Meest gekozen</span>
+              <span class="eyebrow">Trainingsprofiel Test</span>
+              <h3>Heldere drempelwaardes, zones en praktisch trainingsadvies</h3>
+              <p class="offer-card-intro">
+                Voor fietsers die vooral hun training slimmer willen inrichten en hun data direct willen vertalen naar bruikbare watt- en hartslagzones.
+              </p>
+              <div class="offer-choice-list">
+                <div>Ideaal voor wielrenners, recreatieve fietsers en halve of hele triathlon</div>
+                <div>Gericht op duidelijke zones voor duurtraining, intervaltraining en energieverdeling</div>
+                <div>Helpt je beter doseren tijdens trainingen en langere ritten</div>
+                <div>Inclusief praktische tips voor trainingstoepassing</div>
               </div>
-            </details>
+              <div class="offer-meta-row">
+                <span>Duur: 60-75 min</span>
+                <span>Prijs: &euro;100</span>
+                <span>Locatie: Marnixgebouw of aan huis</span>
+              </div>
+              <a class="button button-primary" href="contact.html#booking-form">Boek deze test</a>
+            </article>
 
-            <details class="card offer-choice">
-              <summary>
-                <div class="offer-choice-heading">
-                  <span class="eyebrow">Prestatieprofiel Test</span>
-                  <h3>Voor klim, tijdrit of wedstrijd</h3>
-                  <p class="offer-choice-lead">Meer nadruk op je maximale profiel en wedstrijdgerichte belasting.</p>
-                </div>
-                <div class="offer-choice-meta">
-                  <span>Wedstrijdgericht</span>
-                  <span>Triathlon</span>
-                  <span>45-60 min</span>
-                  <span>&euro;100</span>
-                </div>
-              </summary>
-              <div class="offer-choice-body">
-                <p>
-                  Voor fietsers die naast heldere zones ook beter zicht willen op hun maximale profiel en extra informatie
-                  willen gebruiken richting klimdoel, tijdrit of wedstrijd.
-                </p>
-                <div class="offer-choice-list">
-                  <div>Meer nadruk op de bovenkant van je profiel en intensievere belasting</div>
-                  <div>Handig voor gerichte bloktraining en wedstrijdspecifieke voorbereiding</div>
-                  <div>Inclusief vertaalslag naar race power, pacing en trainingsblokken</div>
-                </div>
-                <div class="offer-choice-footer">
-                  <span class="offer-choice-price">Indicatie: 45-60 minuten inclusief intake en nabespreking</span>
-                  <a class="button button-primary" href="contact.html#booking-form">Boek deze test</a>
-                </div>
+            <article class="card offer-secondary-card test-card" data-recommendation-card-group="bike" data-recommendation-card="prestatieprofiel">
+              <span class="eyebrow">Prestatieprofiel Test</span>
+              <h3>Extra inzicht in je maximale profiel en wedstrijdgerichte belasting</h3>
+              <p class="offer-card-intro">
+                Voor fietsers die naast duidelijke zones ook beter zicht willen op hun maximale profiel richting klimdoel, tijdrit of wedstrijd.
+              </p>
+              <div class="offer-choice-list">
+                <div>Sterk voor wedstrijdgerichte fietsers en fanatieke triatleten</div>
+                <div>Meer nadruk op de bovenkant van je profiel en intensievere belasting</div>
+                <div>Handig voor gerichte bloktraining en wedstrijdspecifieke voorbereiding</div>
+                <div>Inclusief praktische vertaalslag naar race power, pacing en trainingsblokken</div>
               </div>
-            </details>
-
-            <details class="card offer-choice">
-              <summary>
-                <div class="offer-choice-heading">
-                  <span class="eyebrow">Race power pakket</span>
-                  <h3>Voor extra wedstrijddiepte</h3>
-                  <p class="offer-choice-lead">Extra scherpte op pacing, race power en gerichte wedstrijdblokken.</p>
-                </div>
-                <div class="offer-choice-meta">
-                  <span>Tijdrit</span>
-                  <span>Klimdoel</span>
-                  <span>Verdieping</span>
-                  <span>&euro;100</span>
-                </div>
-              </summary>
-              <div class="offer-choice-body">
-                <p>Voor fietsers die hun wedstrijdvermogen en pacing nog scherper willen bepalen.</p>
-                <div class="offer-choice-list">
-                  <div>Interessant voor tijdrit, klimdoel en fanatieke triatleten</div>
-                  <div>Gericht op pacing, race power en wedstrijdspecifieke trainingsblokken</div>
-                  <div>Kan worden toegepast met critical power testing</div>
-                </div>
-                <div class="offer-choice-footer">
-                  <span class="offer-choice-price">Verdiepende test of vervolgmeting</span>
-                  <a class="button button-primary" href="contact.html#booking-form">Boek deze test</a>
-                </div>
+              <div class="offer-meta-row">
+                <span>Duur: 45-60 min</span>
+                <span>Prijs: &euro;100</span>
+                <span>Locatie: Marnixgebouw of aan huis</span>
               </div>
-            </details>
+              <a class="button button-primary" href="contact.html#booking-form">Boek deze test</a>
+            </article>
           </div>
         </div>
       </section>
@@ -244,22 +190,29 @@
         <div class="container">
           <div class="grid two">
             <article class="card">
-              <span class="eyebrow">Prijs</span>
+              <span class="eyebrow">Extra verdieping</span>
+              <h3>Race power pakket</h3>
+              <p class="offer-card-intro">Voor fietsers die hun wedstrijdvermogen en pacing nog scherper willen bepalen.</p>
+              <div class="offer-choice-list">
+                <div>Relevant voor tijdrit, klimdoel en fanatieke triatleten</div>
+                <div>Gericht op pacing, race power en wedstrijdspecifieke trainingsblokken</div>
+                <div>Kan worden toegepast met critical power testing</div>
+              </div>
+              <a class="button button-primary" href="contact.html#booking-form">Boek deze test</a>
+            </article>
+            <article class="card">
+              <span class="eyebrow">Praktisch</span>
               <div class="price-block">
                 <div class="price-number">&euro;100</div>
                 <p>per test</p>
                 <div class="price-support">
-                  Wil je niet alleen een startpunt weten, maar ook volgen of je training echt effect heeft? Dan is het logisch
-                  om meerdere tests over het seizoen te doen. Bij meerdere tests geldt stapelkorting.
+                  <p>Stapelkorting bij meerdere tests.</p>
+                  <p>Logisch als je trainingsblokken of seizoensopbouw wilt volgen.</p>
+                  <p>Een hertest laat zien of zones en belastbaarheid echt verschuiven.</p>
                 </div>
               </div>
-            </article>
-            <article class="card">
-              <span class="eyebrow">Meer weten over de uitvoering?</span>
-              <h3>Zo werkt het in de praktijk</h3>
-              <p>
-                Wil je weten hoe de meting verloopt, wat je voorbereidt en hoe we de uitkomst vertalen? Bekijk dan
-                <a href="methode.html">Methode</a>.
+              <p class="offer-compact-note">
+                Meer weten hoe de meting in de praktijk werkt? Bekijk <a href="methode.html">Methode</a>.
               </p>
             </article>
           </div>
@@ -270,8 +223,8 @@
         <div class="container">
           <div class="cta-banner">
             <div>
-              <h3>Twijfel je nog tussen trainingsprofiel en prestatieprofiel?</h3>
-              <p>We helpen je kort kiezen op basis van je doel en trainingsfase.</p>
+              <h3>Twijfel je nog welke test bij je past?</h3>
+              <p>We helpen je kort kiezen tussen de Trainingsprofiel Test en Prestatieprofiel Test.</p>
             </div>
             <div class="links-inline">
               <a class="button button-secondary" href="contact.html">Vraag kort advies</a>
@@ -279,10 +232,7 @@
             </div>
           </div>
           <article class="soft-panel" style="margin-top: 14px">
-            <p>
-              <strong>Locatie:</strong> in het Marnixgebouw in Amsterdam of aan huis, als je beschikt over een geschikte
-              smart trainer met bluetooth-koppeling.
-            </p>
+            <p><strong>Locatie:</strong> Marnixgebouw in Amsterdam of aan huis met geschikte smart trainer en bluetooth-koppeling.</p>
           </article>
         </div>
       </section>

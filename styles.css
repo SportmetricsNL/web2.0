@@ -475,6 +475,11 @@ h3 {
   color: #48607f;
 }
 
+.offer-hero-layout {
+  grid-template-columns: 1.5fr 1fr;
+  align-items: start;
+}
+
 .offer-value-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -610,6 +615,57 @@ h3 {
 .offer-choice-price {
   color: #21498a;
   font-weight: 800;
+}
+
+.offer-test-stack {
+  display: grid;
+  gap: 16px;
+}
+
+.offer-primary-card {
+  border-color: #7aa5ff;
+  box-shadow: 0 18px 34px rgba(37, 103, 251, 0.14);
+}
+
+.offer-card-label {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #215de7;
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.offer-card-intro {
+  max-width: 68ch;
+}
+
+.offer-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.offer-meta-row span {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 11px;
+  border-radius: 999px;
+  background: #eef4ff;
+  border: 1px solid #d1e0fb;
+  color: #234879;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.offer-secondary-card {
+  max-width: 920px;
 }
 
 .inline-term {
@@ -1920,6 +1976,7 @@ textarea {
 
 @media (max-width: 980px) {
   .hero-layout,
+  .offer-hero-layout,
   .location-grid,
   .offer-overview-grid,
   .offer-recommend-grid,
