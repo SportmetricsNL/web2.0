@@ -21,40 +21,40 @@ const setActiveState = (buttons, key, value) => {
   });
 };
 
-const goalButtons = document.querySelectorAll('[data-goal-button]');
-const testCards = document.querySelectorAll('[data-test-card]');
-const goalFeedback = document.querySelector('[data-goal-feedback]');
+document.querySelectorAll('[data-recommendation-group]').forEach((group) => {
+  const buttons = Array.from(group.querySelectorAll('[data-recommendation-button]'));
+  const feedback = group.querySelector('[data-recommendation-feedback]');
+  const groupName = group.dataset.recommendationGroup;
+  const cards = Array.from(document.querySelectorAll(`[data-recommendation-card-group="${groupName}"]`));
 
-const goalMessages = {
-  conditie:
-    'Aanrader: Step-test. Je krijgt precieze zones voor duurtraining zonder direct maximaal te gaan.',
-  tijdrit:
-    'Aanrader: Ramp-test + Critical Power. Gericht op wedstrijdspecifiek vermogen en pacing.',
-  herstel:
-    'Aanrader: Submaximale Step-test. Veilig opbouwen met betrouwbare feedback op VT1/VT2.',
-  default:
-    'Kies je doel en je ziet direct welke test het beste past bij je situatie.',
-};
+  if (!buttons.length || !feedback || !cards.length) {
+    return;
+  }
 
-if (goalButtons.length && testCards.length && goalFeedback) {
-  const applyGoal = (goal) => {
-    testCards.forEach((card) => {
-      const goals = card.dataset.goals ? card.dataset.goals.split(',') : [];
-      card.classList.toggle('recommended', goals.includes(goal));
+  const applyRecommendation = (selectedButton) => {
+    const target = selectedButton.dataset.recommendationTarget || '';
+    const message = selectedButton.dataset.recommendationMessage || '';
+
+    buttons.forEach((button) => {
+      button.classList.toggle('active', button === selectedButton);
     });
 
-    setActiveState(goalButtons, 'goalButton', goal);
-    goalFeedback.textContent = goalMessages[goal] || goalMessages.default;
+    cards.forEach((card) => {
+      card.classList.toggle('recommended', card.dataset.recommendationCard === target);
+    });
+
+    feedback.textContent = message;
   };
 
-  goalButtons.forEach((button) => {
+  buttons.forEach((button) => {
     button.addEventListener('click', () => {
-      applyGoal(button.dataset.goalButton || 'default');
+      applyRecommendation(button);
     });
   });
 
-  applyGoal('conditie');
-}
+  const defaultButton = buttons.find((button) => button.hasAttribute('data-recommendation-default')) || buttons[0];
+  applyRecommendation(defaultButton);
+});
 
 const chainButtons = document.querySelectorAll('[data-chain-button]');
 const chainTitle = document.querySelector('[data-chain-title]');
