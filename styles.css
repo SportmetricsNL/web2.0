@@ -475,6 +475,198 @@ h3 {
   color: #48607f;
 }
 
+.offer-value-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.offer-recommend-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.offer-recommend-card {
+  background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+  border: 1px solid #d0def8;
+}
+
+.offer-recommend-card h3 {
+  margin-bottom: 8px;
+}
+
+.offer-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.offer-choice {
+  overflow: hidden;
+  padding: 0;
+}
+
+.offer-choice summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 20px;
+}
+
+.offer-choice summary::-webkit-details-marker {
+  display: none;
+}
+
+.offer-choice summary::marker {
+  display: none;
+}
+
+.offer-choice summary::after {
+  content: 'Bekijk details';
+  display: inline-flex;
+  margin-top: 14px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid #cfe0fb;
+  background: #f5f8ff;
+  color: #2957b4;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.offer-choice[open] summary::after {
+  content: 'Verberg details';
+}
+
+.offer-choice-heading {
+  margin-bottom: 10px;
+}
+
+.offer-choice-heading .eyebrow {
+  margin-bottom: 8px;
+}
+
+.offer-choice-heading h3 {
+  margin-bottom: 8px;
+}
+
+.offer-choice-lead {
+  margin: 0;
+  color: #36527d;
+}
+
+.offer-choice-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.offer-choice-meta span {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #eef4ff;
+  border: 1px solid #d1e0fb;
+  color: #224677;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.offer-choice-body {
+  display: grid;
+  gap: 14px;
+  padding: 0 20px 20px;
+  border-top: 1px solid #d8e4f7;
+}
+
+.offer-choice-body p {
+  margin: 0;
+}
+
+.offer-choice-list {
+  display: grid;
+  gap: 8px;
+  color: #315078;
+}
+
+.offer-choice-list div {
+  background: #f4f8ff;
+  border: 1px solid #d7e3f7;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-weight: 600;
+}
+
+.offer-choice-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.offer-choice-price {
+  color: #21498a;
+  font-weight: 800;
+}
+
+.inline-term {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  font-weight: 800;
+  color: #244472;
+}
+
+.inline-term::after {
+  content: 'i';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 999px;
+  background: #e8f0ff;
+  color: #215de7;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.inline-term-bubble {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 8px);
+  z-index: 8;
+  width: min(250px, 70vw);
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #173968;
+  color: #f4f8ff;
+  box-shadow: 0 16px 28px rgba(15, 39, 84, 0.24);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.inline-term:hover .inline-term-bubble,
+.inline-term:focus .inline-term-bubble,
+.inline-term:focus-within .inline-term-bubble {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.inline-term[tabindex='0'] {
+  outline: none;
+}
+
 .section {
   padding: 42px 0;
 }
@@ -1730,7 +1922,10 @@ textarea {
   .hero-layout,
   .location-grid,
   .offer-overview-grid,
+  .offer-recommend-grid,
   .offer-location-grid,
+  .offer-value-grid,
+  .offer-choice-grid,
   .footer-grid,
   .grid.two,
   .grid.three,
