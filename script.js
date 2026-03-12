@@ -1037,6 +1037,31 @@ if (yearNode) {
   yearNode.textContent = String(new Date().getFullYear());
 }
 
+const runTrackPage = document.querySelector('[data-run-track-page]');
+const runTrackRunner = document.querySelector('[data-run-track-runner]');
+
+if (runTrackPage && runTrackRunner) {
+  const updateRunTrackRunner = () => {
+    const pageTop = runTrackPage.offsetTop;
+    const pageHeight = runTrackPage.offsetHeight;
+    const viewportHeight = window.innerHeight;
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const usableHeight = Math.max(pageHeight - viewportHeight, 1);
+    const rawProgress = (scrollTop - pageTop + 140) / usableHeight;
+    const progress = Math.min(Math.max(rawProgress, 0), 1);
+    const minTop = 180;
+    const maxTop = Math.max(pageHeight - 220, minTop);
+    const nextTop = minTop + (maxTop - minTop) * progress;
+
+    runTrackRunner.style.top = `${nextTop}px`;
+    runTrackRunner.style.opacity = progress > 0.01 && progress < 0.995 ? '0.95' : '0.82';
+  };
+
+  window.addEventListener('scroll', updateRunTrackRunner, { passive: true });
+  window.addEventListener('resize', updateRunTrackRunner);
+  updateRunTrackRunner();
+}
+
 if (!document.querySelector('.floating-instagram')) {
   const instagramLink = document.createElement('a');
   instagramLink.className = 'floating-instagram';

@@ -480,6 +480,210 @@ h3 {
   align-items: start;
 }
 
+.run-track-main {
+  position: relative;
+  overflow: hidden;
+}
+
+.run-track-main > * {
+  position: relative;
+  z-index: 1;
+}
+
+.run-track-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.run-track-lane {
+  position: absolute;
+  top: 88px;
+  bottom: 44px;
+  width: 92px;
+  border-radius: 48px;
+  border: 2px solid rgba(220, 117, 21, 0.34);
+  box-shadow: inset 0 0 0 1px rgba(255, 244, 232, 0.35);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(231, 126, 28, 0.18) 0%,
+      rgba(231, 126, 28, 0.18) 23%,
+      rgba(255, 247, 240, 0.82) 23%,
+      rgba(255, 247, 240, 0.82) 24.2%,
+      rgba(231, 126, 28, 0.24) 24.2%,
+      rgba(231, 126, 28, 0.24) 48%,
+      rgba(255, 247, 240, 0.82) 48%,
+      rgba(255, 247, 240, 0.82) 49.2%,
+      rgba(231, 126, 28, 0.18) 49.2%,
+      rgba(231, 126, 28, 0.18) 73%,
+      rgba(255, 247, 240, 0.82) 73%,
+      rgba(255, 247, 240, 0.82) 74.2%,
+      rgba(231, 126, 28, 0.24) 74.2%,
+      rgba(231, 126, 28, 0.24) 100%
+    );
+  opacity: 0.82;
+}
+
+.run-track-lane-left {
+  left: max(18px, calc(50vw - 652px));
+}
+
+.run-track-lane-right {
+  right: max(18px, calc(50vw - 652px));
+}
+
+.run-track-curve {
+  position: absolute;
+  left: max(18px, calc(50vw - 652px));
+  width: calc(100% - (max(18px, calc(50vw - 652px)) * 2));
+  max-width: 1304px;
+  border: 14px solid rgba(229, 125, 28, 0.17);
+  border-radius: 999px;
+  opacity: 0.9;
+}
+
+.run-track-curve-top {
+  top: 88px;
+  height: 180px;
+  border-bottom: 0;
+}
+
+.run-track-curve-bottom {
+  bottom: 44px;
+  height: 180px;
+  border-top: 0;
+}
+
+.run-track-runner {
+  position: absolute;
+  top: 180px;
+  right: max(44px, calc(50vw - 626px));
+  width: 34px;
+  height: 78px;
+  transform: translateX(50%) rotate(8deg);
+  transform-origin: center top;
+  transition: top 0.1s linear, opacity 0.2s ease;
+  opacity: 0.95;
+}
+
+.run-track-head,
+.run-track-torso,
+.run-track-arm,
+.run-track-leg {
+  position: absolute;
+  display: block;
+  border-radius: 999px;
+}
+
+.run-track-head {
+  top: 0;
+  left: 10px;
+  width: 14px;
+  height: 14px;
+  background: #ffb45c;
+  box-shadow: 0 0 0 4px rgba(255, 180, 92, 0.16);
+}
+
+.run-track-torso {
+  top: 13px;
+  left: 13px;
+  width: 8px;
+  height: 28px;
+  background: #245ef1;
+}
+
+.run-track-arm {
+  top: 20px;
+  left: 16px;
+  width: 6px;
+  height: 22px;
+  transform-origin: top center;
+  background: #245ef1;
+}
+
+.run-track-arm-front {
+  transform: rotate(38deg);
+}
+
+.run-track-arm-back {
+  transform: rotate(-48deg);
+}
+
+.run-track-leg {
+  top: 36px;
+  left: 15px;
+  width: 7px;
+  height: 28px;
+  transform-origin: top center;
+  background: #ea7c1f;
+}
+
+.run-track-leg-front {
+  transform: rotate(30deg);
+}
+
+.run-track-leg-back {
+  transform: rotate(-34deg);
+}
+
+@keyframes run-track-swing-front {
+  0%,
+  100% {
+    transform: rotate(34deg);
+  }
+  50% {
+    transform: rotate(-6deg);
+  }
+}
+
+@keyframes run-track-swing-back {
+  0%,
+  100% {
+    transform: rotate(-42deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+@keyframes run-track-leg-front {
+  0%,
+  100% {
+    transform: rotate(28deg);
+  }
+  50% {
+    transform: rotate(-14deg);
+  }
+}
+
+@keyframes run-track-leg-back {
+  0%,
+  100% {
+    transform: rotate(-32deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+}
+
+.run-track-arm-front {
+  animation: run-track-swing-front 0.8s linear infinite;
+}
+
+.run-track-arm-back {
+  animation: run-track-swing-back 0.8s linear infinite;
+}
+
+.run-track-leg-front {
+  animation: run-track-leg-front 0.8s linear infinite;
+}
+
+.run-track-leg-back {
+  animation: run-track-leg-back 0.8s linear infinite;
+}
+
 .offer-value-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -2077,6 +2281,19 @@ textarea {
 
   .section {
     padding: 34px 0;
+  }
+
+  .run-track-overlay {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .run-track-arm-front,
+  .run-track-arm-back,
+  .run-track-leg-front,
+  .run-track-leg-back {
+    animation: none;
   }
 }
 
