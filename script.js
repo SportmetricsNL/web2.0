@@ -1135,8 +1135,8 @@ if (runTrackPage && runTrackSvg) {
     const innerPath = buildStadiumPath(innerX, innerY, innerWidth, innerHeight, innerRadius);
     const heroBottom = heroSection ? heroSection.offsetTop + heroSection.offsetHeight : outerY + radius + 140;
     const ctaTop = ctaSection ? ctaSection.offsetTop : pageHeight - 220;
-    const straightMaskTop = clamp(heroBottom + 26, straightTop + 34, straightBottom - 180);
-    const straightMaskBottom = clamp(ctaTop - 24, straightMaskTop + 120, straightBottom - 26);
+    const straightMaskTop = clamp(heroBottom + 22, straightTop + 28, straightBottom - 180);
+    const straightMaskBottom = clamp(ctaTop - 18, straightMaskTop + 120, straightBottom - 26);
     const straightMaskWidth = trackWidth + laneGap * 0.65;
     const leftMaskX = outerX - laneGap * 0.24;
     const rightMaskX = outerRight - straightMaskWidth + laneGap * 0.24;
@@ -1208,20 +1208,20 @@ if (runTrackPage && runTrackSvg) {
         />
         ${lanePaths.join('')}
         ${markers}
-        <rect x="${leftMaskX}" y="${straightMaskTop}" width="${straightMaskWidth}" height="${straightMaskBottom - straightMaskTop}" rx="${trackWidth * 0.28}" fill="#eef4fb" fill-opacity="0.98" />
-        <rect x="${rightMaskX}" y="${straightMaskTop}" width="${straightMaskWidth}" height="${straightMaskBottom - straightMaskTop}" rx="${trackWidth * 0.28}" fill="#eef4fb" fill-opacity="0.98" />
-        <g data-run-track-finish-zone></g>
         <g data-run-track-runner-node filter="url(#runTrackRunnerShadow)" opacity="0.94">
-          <circle cx="-1.5" cy="-10" r="4.2" fill="#163579" />
+          <circle cx="0" cy="-8.5" r="4.1" fill="#163579" />
           <path
-            d="M -1 -5 L 2 4 M 1 -1 L 8 -6 M 1 1 L -7 6 M 2 4 L 9 16 M 2 4 L -5 15"
+            d="M 0 -4 L 0 5 M 0 -1 L 7 -6 M 0 1 L -7 6 M 0 5 L 7 16 M 0 5 L -7 15"
             fill="none"
             stroke="#163579"
-            stroke-width="4.6"
+            stroke-width="4.4"
             stroke-linecap="round"
             stroke-linejoin="round"
           />
         </g>
+        <rect x="${leftMaskX}" y="${straightMaskTop - 2}" width="${straightMaskWidth}" height="${straightMaskBottom - straightMaskTop + 4}" fill="#eef4fb" fill-opacity="0.985" />
+        <rect x="${rightMaskX}" y="${straightMaskTop - 2}" width="${straightMaskWidth}" height="${straightMaskBottom - straightMaskTop + 4}" fill="#eef4fb" fill-opacity="0.985" />
+        <g data-run-track-finish-zone></g>
       </g>
     `;
 
@@ -1230,9 +1230,8 @@ if (runTrackPage && runTrackSvg) {
 
     if (runTrackMotionPath) {
       const pathLength = runTrackMotionPath.getTotalLength();
-      const topVisibleRatio = clamp((straightMaskTop - outerY) / outerHeight, 0.08, 0.42);
       runTrackMotionStart = pathLength * 0.015;
-      runTrackMotionEnd = Math.min(pathLength * 0.185, pathLength * (0.04 + topVisibleRatio * 0.32));
+      runTrackMotionEnd = pathLength * 0.305;
 
       const finishNode = runTrackSvg.querySelector('[data-run-track-finish-zone]');
       if (finishNode) {
@@ -1242,8 +1241,8 @@ if (runTrackPage && runTrackSvg) {
         const aheadPoint = runTrackMotionPath.getPointAtLength(Math.min(pathLength, finishDistance + tangentStep));
         const behindPoint = runTrackMotionPath.getPointAtLength(Math.max(0, finishDistance - tangentStep));
         const finishAngle = (Math.atan2(aheadPoint.y - behindPoint.y, aheadPoint.x - behindPoint.x) * 180) / Math.PI;
-        const finishHeight = laneGap * 2.2;
-        const finishWidth = 22;
+        const finishHeight = laneGap * 2.05;
+        const finishWidth = 24;
         const rows = 2;
         const cols = 5;
         const tileWidth = finishWidth / cols;
@@ -1260,7 +1259,7 @@ if (runTrackPage && runTrackSvg) {
         finishNode.setAttribute('transform', `translate(${finishPoint.x} ${finishPoint.y}) rotate(${finishAngle + 90})`);
         finishNode.innerHTML = `
           <g filter="url(#runTrackFinishShadow)">
-            <rect x="${-finishWidth / 2 - 3}" y="${-finishHeight / 2 - 3}" width="${finishWidth + 6}" height="${finishHeight + 6}" rx="6" fill="#ffffff" fill-opacity="0.32" />
+            <rect x="${-finishWidth / 2 - 3}" y="${-finishHeight / 2 - 3}" width="${finishWidth + 6}" height="${finishHeight + 6}" rx="3" fill="#ffffff" fill-opacity="0.26" />
             ${finishTiles}
           </g>
         `;
@@ -1275,7 +1274,9 @@ if (runTrackPage && runTrackSvg) {
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
     const usableHeight = Math.max(pageHeight - viewportHeight, 1);
     const rawProgress = (scrollTop - pageTop + viewportHeight * 0.12) / usableHeight;
-    runTrackTargetProgress = clamp(rawProgress * 0.82, 0, 1);
+    const clamped = clamp(rawProgress, 0, 1);
+    const eased = clamped * clamped * (3 - 2 * clamped);
+    runTrackTargetProgress = eased;
   };
 
   const updateRunTrackRunner = () => {
@@ -1284,8 +1285,8 @@ if (runTrackPage && runTrackSvg) {
     }
 
     const delta = runTrackTargetProgress - runTrackCurrentProgress;
-    runTrackCurrentProgress += delta * 0.12;
-    if (Math.abs(delta) < 0.0015) {
+    runTrackCurrentProgress += delta * 0.08;
+    if (Math.abs(delta) < 0.001) {
       runTrackCurrentProgress = runTrackTargetProgress;
     }
 
