@@ -1065,6 +1065,57 @@ if (runTrackPage && runTrackSvg) {
     ].join(' ');
   };
 
+  const getWrappedPointAtLength = (path, distance) => {
+    const totalLength = path.getTotalLength();
+    const normalizedDistance = ((distance % totalLength) + totalLength) % totalLength;
+    return path.getPointAtLength(normalizedDistance);
+  };
+
+  const findClosestDistanceOnPath = (path, targetX, targetY) => {
+    const pathLength = path.getTotalLength();
+    let bestDistance = 0;
+    let bestScore = Number.POSITIVE_INFINITY;
+    const coarseSteps = 360;
+
+    for (let step = 0; step <= coarseSteps; step += 1) {
+      const distance = (pathLength * step) / coarseSteps;
+      const point = path.getPointAtLength(distance);
+      const dx = point.x - targetX;
+      const dy = point.y - targetY;
+      const score = dx * dx + dy * dy;
+
+      if (score < bestScore) {
+        bestScore = score;
+        bestDistance = distance;
+      }
+    }
+
+    let windowSize = pathLength / coarseSteps;
+    for (let pass = 0; pass < 5; pass += 1) {
+      let localBestDistance = bestDistance;
+      let localBestScore = bestScore;
+
+      for (let step = -6; step <= 6; step += 1) {
+        const distance = bestDistance + (windowSize * step) / 6;
+        const point = getWrappedPointAtLength(path, distance);
+        const dx = point.x - targetX;
+        const dy = point.y - targetY;
+        const score = dx * dx + dy * dy;
+
+        if (score < localBestScore) {
+          localBestScore = score;
+          localBestDistance = distance;
+        }
+      }
+
+      bestDistance = localBestDistance;
+      bestScore = localBestScore;
+      windowSize /= 3;
+    }
+
+    return ((bestDistance % pathLength) + pathLength) % pathLength;
+  };
+
   const buildFinishZone = (centerX, centerY, width) => {
     const rows = 2;
     const cols = 6;
@@ -1147,6 +1198,9 @@ if (runTrackPage && runTrackSvg) {
     const straightBottom = outerY + outerHeight - radius;
     const finishY = straightBottom - Math.max(34, radius * 0.16);
     const trackPath = buildStadiumPath(outerX, outerY, outerWidth, outerHeight, radius);
+    const motionLaneInset = laneGap * 2;
+    const motionLaneTopY = outerY + motionLaneInset;
+    const motionLaneFinishX = outerRight - motionLaneInset;
 
     const lanePaths = [1, 2, 3].map((index) => {
       const inset = laneGap * index;
@@ -1209,7 +1263,6 @@ if (runTrackPage && runTrackSvg) {
       />
       ${lanePaths.join('')}
       ${markers}
-      ${buildFinishZone(outerRight, finishY, trackBand * 0.94)}
       <g data-run-track-runner-node filter="url(#runTrackRunnerShadow)" opacity="0.98">
         <circle cx="0" cy="-18" r="5.3" fill="#f1c39f" />
         <path d="M -3 -20 H 3" fill="none" stroke="#ff5d73" stroke-width="2.4" stroke-linecap="round" />
@@ -1226,8 +1279,27 @@ if (runTrackPage && runTrackSvg) {
 
     if (runTrackMotionPath) {
       const pathLength = runTrackMotionPath.getTotalLength();
-      runTrackMotionStart = pathLength * 0.015;
-      runTrackMotionEnd = pathLength * 0.96;
+      const startTargetX = outerX + outerWidth / 2;
+      const startTargetY = motionLaneTopY;
+      const finishTargetX = motionLaneFinishX;
+      const finishTargetY = finishY;
+      const startDistance = findClosestDistanceOnPath(runTrackMotionPath, startTargetX, startTargetY);
+      const finishDistance = findClosestDistanceOnPath(runTrackMotionPath, finishTargetX, finishTargetY);
+
+      runTrackMotionStart = startDistance;
+      runTrackMotionEnd = finishDistance <= startDistance ? finishDistance + pathLength : finishDistance;
+
+      const finishPoint = getWrappedPointAtLength(runTrackMotionPath, runTrackMotionEnd);
+      const tangentStep = Math.max(6, pathLength * 0.003);
+      const aheadPoint = getWrappedPointAtLength(runTrackMotionPath, runTrackMotionEnd + tangentStep);
+      const behindPoint = getWrappedPointAtLength(runTrackMotionPath, runTrackMotionEnd - tangentStep);
+      const finishAngle = (Math.atan2(aheadPoint.y - behindPoint.y, aheadPoint.x - behindPoint.x) * 180) / Math.PI;
+      const finishMarkup = buildFinishZone(0, 0, trackBand * 0.94);
+
+      runTrackSvg.insertAdjacentHTML(
+        'beforeend',
+        `<g data-run-track-finish-node transform="translate(${finishPoint.x} ${finishPoint.y}) rotate(${finishAngle + 90})">${finishMarkup}</g>`,
+      );
     }
   };
 
@@ -1251,9 +1323,9 @@ if (runTrackPage && runTrackSvg) {
     const progress = clamp(getRunTrackProgress(), 0, 1);
     const distance = runTrackMotionStart + (runTrackMotionEnd - runTrackMotionStart) * progress;
     const lookDistance = Math.max(6, pathLength * 0.0025);
-    const point = runTrackMotionPath.getPointAtLength(distance);
-    const aheadPoint = runTrackMotionPath.getPointAtLength(Math.min(pathLength, distance + lookDistance));
-    const behindPoint = runTrackMotionPath.getPointAtLength(Math.max(0, distance - lookDistance));
+    const point = getWrappedPointAtLength(runTrackMotionPath, distance);
+    const aheadPoint = getWrappedPointAtLength(runTrackMotionPath, distance + lookDistance);
+    const behindPoint = getWrappedPointAtLength(runTrackMotionPath, distance - lookDistance);
     const angle = (Math.atan2(aheadPoint.y - behindPoint.y, aheadPoint.x - behindPoint.x) * 180) / Math.PI;
     const opacity = progress > 0.01 && progress < 0.995 ? 0.96 : 0.78;
 
