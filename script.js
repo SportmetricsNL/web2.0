@@ -1067,6 +1067,30 @@ if (runTrackPage && runTrackSvg) {
     ].join(' ');
   };
 
+  const buildFinishZone = (centerX, centerY, width) => {
+    const rows = 2;
+    const cols = 6;
+    const tileWidth = width / cols;
+    const tileHeight = 12;
+    const startX = centerX - width / 2;
+    const startY = centerY - tileHeight;
+    let tiles = '';
+
+    for (let row = 0; row < rows; row += 1) {
+      for (let col = 0; col < cols; col += 1) {
+        const fill = (row + col) % 2 === 0 ? '#ffffff' : '#163579';
+        tiles += `<rect x="${startX + col * tileWidth}" y="${startY + row * tileHeight}" width="${tileWidth}" height="${tileHeight}" fill="${fill}" />`;
+      }
+    }
+
+    return `
+      <g filter="url(#runTrackFinishShadow)">
+        <rect x="${startX - 4}" y="${startY - 4}" width="${width + 8}" height="${tileHeight * rows + 8}" rx="8" fill="#ffffff" fill-opacity="0.34" />
+        ${tiles}
+      </g>
+    `;
+  };
+
   const buildStraightMarker = (centerX, y, band, label, side) => {
     const halfWidth = band * 0.42;
     const labelOffset = band * 0.62;
@@ -1102,9 +1126,6 @@ if (runTrackPage && runTrackSvg) {
     const pageWidth = runTrackPage.clientWidth;
     const pageHeight = runTrackPage.offsetHeight;
     const leadContainer = runTrackPage.querySelector('.container');
-    const heroSection = runTrackPage.querySelector('.page-hero');
-    const ctaBanner = runTrackPage.querySelector('.cta-banner');
-    const ctaSection = ctaBanner ? ctaBanner.closest('.section') : null;
     const contentWidth = leadContainer ? leadContainer.clientWidth : Math.min(pageWidth * 0.92, 1120);
 
     if (!pageWidth || !pageHeight) {
@@ -1114,32 +1135,21 @@ if (runTrackPage && runTrackSvg) {
     const sideGap = Math.max(24, (pageWidth - contentWidth) / 2);
     const topPadding = 96;
     const bottomPadding = 76;
-    const contentGap = clamp(sideGap * 0.2, 10, 18);
-    const trackWidth = clamp(sideGap * 0.76, 36, 72);
-    const outerX = clamp(sideGap - contentGap, 12, pageWidth / 3);
-    const outerY = topPadding;
-    const outerWidth = Math.max(pageWidth - outerX * 2, 320);
-    const outerHeight = Math.max(pageHeight - topPadding - bottomPadding, 620);
-    const radius = clamp(outerWidth * 0.18, 140, 220);
-    const laneGap = trackWidth / 4;
-    const innerX = outerX + trackWidth;
-    const innerY = outerY + trackWidth;
-    const innerWidth = outerWidth - trackWidth * 2;
-    const innerHeight = outerHeight - trackWidth * 2;
-    const innerRadius = Math.max(radius - trackWidth, 40);
+    const contentGap = clamp(sideGap * 0.24, 10, 18);
+    const trackBand = clamp(sideGap * 0.72, 30, 68);
+    const outerX = clamp(sideGap - contentGap - trackBand / 2, 10, pageWidth / 3);
+    const outerY = topPadding + trackBand / 2;
+    const outerWidth = Math.max(pageWidth - outerX * 2, 300);
+    const outerHeight = Math.max(pageHeight - topPadding - bottomPadding - trackBand, 560);
+    const radius = clamp(outerWidth * 0.19, 138, 210);
+    const laneGap = trackBand / 4;
     const outerRight = outerX + outerWidth;
     const outerLeft = outerX;
     const straightTop = outerY + radius;
     const straightBottom = outerY + outerHeight - radius;
-    const outerPath = buildStadiumPath(outerX, outerY, outerWidth, outerHeight, radius);
-    const innerPath = buildStadiumPath(innerX, innerY, innerWidth, innerHeight, innerRadius);
-    const heroBottom = heroSection ? heroSection.offsetTop + heroSection.offsetHeight : outerY + radius + 140;
-    const ctaTop = ctaSection ? ctaSection.offsetTop : pageHeight - 220;
-    const straightMaskTop = clamp(heroBottom + 22, straightTop + 28, straightBottom - 180);
-    const straightMaskBottom = clamp(ctaTop - 18, straightMaskTop + 120, straightBottom - 26);
-    const straightMaskWidth = trackWidth + laneGap * 0.65;
-    const leftMaskX = outerX - laneGap * 0.24;
-    const rightMaskX = outerRight - straightMaskWidth + laneGap * 0.24;
+    const finishY = straightBottom - Math.max(34, radius * 0.16);
+    const trackPath = buildStadiumPath(outerX, outerY, outerWidth, outerHeight, radius);
+
     const lanePaths = [1, 2, 3].map((index) => {
       const inset = laneGap * index;
       const path = buildStadiumPath(
@@ -1157,9 +1167,9 @@ if (runTrackPage && runTrackSvg) {
     });
 
     const markers = [
-      buildStraightMarker(outerRight - trackWidth / 2, straightTop + (straightBottom - straightTop) * 0.18, trackWidth * 0.9, '100m', 'right'),
-      buildStraightMarker(outerLeft + trackWidth / 2, straightTop + (straightBottom - straightTop) * 0.5, trackWidth * 0.9, '200m', 'left'),
-      buildStraightMarker(outerRight - trackWidth / 2, straightTop + (straightBottom - straightTop) * 0.82, trackWidth * 0.9, '300m', 'right'),
+      buildStraightMarker(outerRight, straightTop + (straightBottom - straightTop) * 0.18, trackBand * 0.92, '100m', 'right'),
+      buildStraightMarker(outerLeft, straightTop + (straightBottom - straightTop) * 0.5, trackBand * 0.92, '200m', 'left'),
+      buildStraightMarker(outerRight, straightTop + (straightBottom - straightTop) * 0.82, trackBand * 0.92, '300m', 'right'),
     ].join('');
 
     runTrackSvg.setAttribute('viewBox', `0 0 ${pageWidth} ${pageHeight}`);
@@ -1167,12 +1177,12 @@ if (runTrackPage && runTrackSvg) {
     runTrackSvg.innerHTML = `
       <defs>
         <linearGradient id="runTrackBandGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#f6deca" stop-opacity="0.84" />
-          <stop offset="50%" stop-color="#edc49c" stop-opacity="0.9" />
-          <stop offset="100%" stop-color="#e4b07f" stop-opacity="0.84" />
+          <stop offset="0%" stop-color="#f8a65b" stop-opacity="0.12" />
+          <stop offset="48%" stop-color="#e97c1f" stop-opacity="0.28" />
+          <stop offset="100%" stop-color="#d66012" stop-opacity="0.18" />
         </linearGradient>
         <filter id="runTrackShadow" x="-12%" y="-6%" width="124%" height="112%">
-          <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#d67b2d" flood-opacity="0.07" />
+          <feDropShadow dx="0" dy="18" stdDeviation="26" flood-color="#d67b2d" flood-opacity="0.1" />
         </filter>
         <filter id="runTrackRunnerShadow" x="-120%" y="-120%" width="240%" height="240%">
           <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#163579" flood-opacity="0.22" />
@@ -1181,47 +1191,35 @@ if (runTrackPage && runTrackSvg) {
           <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#163579" flood-opacity="0.12" />
         </filter>
       </defs>
-      <g data-run-track-artwork>
-        <path
-          d="${outerPath} ${innerPath}"
-          fill="url(#runTrackBandGradient)"
-          fill-rule="evenodd"
-          filter="url(#runTrackShadow)"
-        />
-        <path
-          d="${outerPath}"
-          fill="none"
-          stroke="#fff8f1"
-          stroke-opacity="0.5"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="${innerPath}"
-          fill="none"
-          stroke="#fff8f1"
-          stroke-opacity="0.5"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        ${lanePaths.join('')}
-        ${markers}
-        <g data-run-track-runner-node filter="url(#runTrackRunnerShadow)" opacity="0.94">
-          <circle cx="0" cy="-8.5" r="4.1" fill="#163579" />
-          <path
-            d="M 0 -4 L 0 5 M 0 -1 L 7 -6 M 0 1 L -7 6 M 0 5 L 7 16 M 0 5 L -7 15"
-            fill="none"
-            stroke="#163579"
-            stroke-width="4.4"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </g>
-        <rect x="${leftMaskX}" y="${straightMaskTop - 2}" width="${straightMaskWidth}" height="${straightMaskBottom - straightMaskTop + 4}" fill="#eef4fb" fill-opacity="0.985" />
-        <rect x="${rightMaskX}" y="${straightMaskTop - 2}" width="${straightMaskWidth}" height="${straightMaskBottom - straightMaskTop + 4}" fill="#eef4fb" fill-opacity="0.985" />
-        <g data-run-track-finish-zone></g>
+      <path
+        d="${trackPath}"
+        fill="none"
+        stroke="url(#runTrackBandGradient)"
+        stroke-width="${trackBand}"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        filter="url(#runTrackShadow)"
+      />
+      <path
+        d="${trackPath}"
+        fill="none"
+        stroke="#fffbf6"
+        stroke-opacity="0.18"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      ${lanePaths.join('')}
+      ${markers}
+      ${buildFinishZone(outerRight, finishY, trackBand * 0.94)}
+      <g data-run-track-runner-node filter="url(#runTrackRunnerShadow)" opacity="0.98">
+        <circle cx="0" cy="-18" r="5.3" fill="#f1c39f" />
+        <path d="M -3 -20 H 3" fill="none" stroke="#ff5d73" stroke-width="2.4" stroke-linecap="round" />
+        <path d="M 0 -12 L 4 2" fill="none" stroke="#2f6cf6" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M 2 1 L 8 6 M 2 1 L -3 7" fill="none" stroke="#172c57" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M 1 -4 L 14 -9 M 0 -2 L -12 5" fill="none" stroke="#f1c39f" stroke-width="4.1" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M 7 7 L 17 25 M -1 6 L -12 22" fill="none" stroke="#f1c39f" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M 17 25 L 8 29 M -12 22 L -21 16" fill="none" stroke="#1d355f" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
       </g>
     `;
 
@@ -1231,39 +1229,7 @@ if (runTrackPage && runTrackSvg) {
     if (runTrackMotionPath) {
       const pathLength = runTrackMotionPath.getTotalLength();
       runTrackMotionStart = pathLength * 0.015;
-      runTrackMotionEnd = pathLength * 0.305;
-
-      const finishNode = runTrackSvg.querySelector('[data-run-track-finish-zone]');
-      if (finishNode) {
-        const finishDistance = runTrackMotionEnd;
-        const tangentStep = Math.max(6, pathLength * 0.003);
-        const finishPoint = runTrackMotionPath.getPointAtLength(finishDistance);
-        const aheadPoint = runTrackMotionPath.getPointAtLength(Math.min(pathLength, finishDistance + tangentStep));
-        const behindPoint = runTrackMotionPath.getPointAtLength(Math.max(0, finishDistance - tangentStep));
-        const finishAngle = (Math.atan2(aheadPoint.y - behindPoint.y, aheadPoint.x - behindPoint.x) * 180) / Math.PI;
-        const finishHeight = laneGap * 2.05;
-        const finishWidth = 24;
-        const rows = 2;
-        const cols = 5;
-        const tileWidth = finishWidth / cols;
-        const tileHeight = finishHeight / rows;
-        let finishTiles = '';
-
-        for (let row = 0; row < rows; row += 1) {
-          for (let col = 0; col < cols; col += 1) {
-            const fill = (row + col) % 2 === 0 ? '#ffffff' : '#163579';
-            finishTiles += `<rect x="${-finishWidth / 2 + col * tileWidth}" y="${-finishHeight / 2 + row * tileHeight}" width="${tileWidth}" height="${tileHeight}" fill="${fill}" />`;
-          }
-        }
-
-        finishNode.setAttribute('transform', `translate(${finishPoint.x} ${finishPoint.y}) rotate(${finishAngle + 90})`);
-        finishNode.innerHTML = `
-          <g filter="url(#runTrackFinishShadow)">
-            <rect x="${-finishWidth / 2 - 3}" y="${-finishHeight / 2 - 3}" width="${finishWidth + 6}" height="${finishHeight + 6}" rx="3" fill="#ffffff" fill-opacity="0.26" />
-            ${finishTiles}
-          </g>
-        `;
-      }
+      runTrackMotionEnd = pathLength * 0.96;
     }
   };
 
@@ -1273,10 +1239,9 @@ if (runTrackPage && runTrackSvg) {
     const viewportHeight = window.innerHeight;
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
     const usableHeight = Math.max(pageHeight - viewportHeight, 1);
-    const rawProgress = (scrollTop - pageTop + viewportHeight * 0.12) / usableHeight;
+    const rawProgress = (scrollTop - pageTop + viewportHeight * 0.18) / usableHeight;
     const clamped = clamp(rawProgress, 0, 1);
-    const eased = clamped * clamped * (3 - 2 * clamped);
-    runTrackTargetProgress = eased;
+    runTrackTargetProgress = clamped * 0.86;
   };
 
   const updateRunTrackRunner = () => {
@@ -1285,8 +1250,8 @@ if (runTrackPage && runTrackSvg) {
     }
 
     const delta = runTrackTargetProgress - runTrackCurrentProgress;
-    runTrackCurrentProgress += delta * 0.08;
-    if (Math.abs(delta) < 0.001) {
+    runTrackCurrentProgress += delta * 0.11;
+    if (Math.abs(delta) < 0.0015) {
       runTrackCurrentProgress = runTrackTargetProgress;
     }
 
