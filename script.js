@@ -1046,8 +1046,6 @@ if (runTrackPage && runTrackSvg) {
   let runTrackFrame = null;
   let runTrackMotionStart = 0;
   let runTrackMotionEnd = 0;
-  let runTrackTargetProgress = 0;
-  let runTrackCurrentProgress = 0;
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
@@ -1233,7 +1231,7 @@ if (runTrackPage && runTrackSvg) {
     }
   };
 
-  const setRunTrackTargetProgress = () => {
+  const getRunTrackProgress = () => {
     const pageTop = runTrackPage.offsetTop;
     const pageHeight = runTrackPage.offsetHeight;
     const viewportHeight = window.innerHeight;
@@ -1241,7 +1239,7 @@ if (runTrackPage && runTrackSvg) {
     const usableHeight = Math.max(pageHeight - viewportHeight, 1);
     const rawProgress = (scrollTop - pageTop + viewportHeight * 0.18) / usableHeight;
     const clamped = clamp(rawProgress, 0, 1);
-    runTrackTargetProgress = clamped * 0.86;
+    return clamped * 0.86;
   };
 
   const updateRunTrackRunner = () => {
@@ -1249,14 +1247,8 @@ if (runTrackPage && runTrackSvg) {
       return;
     }
 
-    const delta = runTrackTargetProgress - runTrackCurrentProgress;
-    runTrackCurrentProgress += delta * 0.11;
-    if (Math.abs(delta) < 0.0015) {
-      runTrackCurrentProgress = runTrackTargetProgress;
-    }
-
     const pathLength = runTrackMotionPath.getTotalLength();
-    const progress = clamp(runTrackCurrentProgress, 0, 1);
+    const progress = clamp(getRunTrackProgress(), 0, 1);
     const distance = runTrackMotionStart + (runTrackMotionEnd - runTrackMotionStart) * progress;
     const lookDistance = Math.max(6, pathLength * 0.0025);
     const point = runTrackMotionPath.getPointAtLength(distance);
@@ -1267,22 +1259,12 @@ if (runTrackPage && runTrackSvg) {
 
     runTrackRunner.setAttribute('transform', `translate(${point.x} ${point.y}) rotate(${angle})`);
     runTrackRunner.setAttribute('opacity', String(opacity));
-
-    if (runTrackCurrentProgress !== runTrackTargetProgress) {
-      runTrackFrame = window.requestAnimationFrame(() => {
-        runTrackFrame = null;
-        updateRunTrackRunner();
-      });
-      return;
-    }
   };
 
   const scheduleRunTrackUpdate = () => {
     if (runTrackFrame) {
       return;
     }
-
-    setRunTrackTargetProgress();
 
     runTrackFrame = window.requestAnimationFrame(() => {
       runTrackFrame = null;
@@ -1292,8 +1274,6 @@ if (runTrackPage && runTrackSvg) {
 
   const handleRunTrackResize = () => {
     renderRunTrack();
-    setRunTrackTargetProgress();
-    runTrackCurrentProgress = runTrackTargetProgress;
     scheduleRunTrackUpdate();
   };
 
