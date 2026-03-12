@@ -1038,28 +1038,237 @@ if (yearNode) {
 }
 
 const runTrackPage = document.querySelector('[data-run-track-page]');
-const runTrackRunner = document.querySelector('[data-run-track-runner]');
+const runTrackSvg = document.querySelector('[data-run-track-svg]');
 
-if (runTrackPage && runTrackRunner) {
+if (runTrackPage && runTrackSvg) {
+  let runTrackMotionPath = null;
+  let runTrackRunner = null;
+  let runTrackFrame = null;
+
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+  const buildStadiumPath = (x, y, width, height, radius) => {
+    const safeRadius = clamp(radius, 0, Math.min(width / 2, height / 2));
+    return [
+      `M ${x + width} ${y + safeRadius}`,
+      `V ${y + height - safeRadius}`,
+      `A ${safeRadius} ${safeRadius} 0 0 1 ${x + width - safeRadius} ${y + height}`,
+      `H ${x + safeRadius}`,
+      `A ${safeRadius} ${safeRadius} 0 0 1 ${x} ${y + height - safeRadius}`,
+      `V ${y + safeRadius}`,
+      `A ${safeRadius} ${safeRadius} 0 0 1 ${x + safeRadius} ${y}`,
+      `H ${x + width - safeRadius}`,
+      `A ${safeRadius} ${safeRadius} 0 0 1 ${x + width} ${y + safeRadius}`,
+      'Z',
+    ].join(' ');
+  };
+
+  const buildFinishZone = (centerX, centerY, width) => {
+    const rows = 2;
+    const cols = 6;
+    const tileWidth = width / cols;
+    const tileHeight = 12;
+    const startX = centerX - width / 2;
+    const startY = centerY - tileHeight;
+    let tiles = '';
+
+    for (let row = 0; row < rows; row += 1) {
+      for (let col = 0; col < cols; col += 1) {
+        const fill = (row + col) % 2 === 0 ? '#ffffff' : '#163579';
+        tiles += `<rect x="${startX + col * tileWidth}" y="${startY + row * tileHeight}" width="${tileWidth}" height="${tileHeight}" fill="${fill}" />`;
+      }
+    }
+
+    return `
+      <g filter="url(#runTrackFinishShadow)">
+        <rect x="${startX - 4}" y="${startY - 4}" width="${width + 8}" height="${tileHeight * rows + 8}" rx="8" fill="#ffffff" fill-opacity="0.34" />
+        ${tiles}
+      </g>
+    `;
+  };
+
+  const buildStraightMarker = (centerX, y, band, label, side) => {
+    const halfWidth = band * 0.42;
+    const labelOffset = band * 0.62;
+    const textX = side === 'right' ? centerX - labelOffset : centerX + labelOffset;
+    const textAnchor = side === 'right' ? 'end' : 'start';
+
+    return `
+      <g opacity="0.84">
+        <line
+          x1="${centerX - halfWidth}"
+          y1="${y}"
+          x2="${centerX + halfWidth}"
+          y2="${y}"
+          stroke="#fff9f2"
+          stroke-opacity="0.94"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
+        <text
+          x="${textX}"
+          y="${y + 4}"
+          fill="#bc7029"
+          font-size="11"
+          font-weight="700"
+          letter-spacing="0.12em"
+          text-anchor="${textAnchor}"
+        >${label}</text>
+      </g>
+    `;
+  };
+
+  const renderRunTrack = () => {
+    const pageWidth = runTrackPage.clientWidth;
+    const pageHeight = runTrackPage.offsetHeight;
+    const leadContainer = runTrackPage.querySelector('.container');
+    const contentWidth = leadContainer ? leadContainer.clientWidth : Math.min(pageWidth * 0.92, 1120);
+
+    if (!pageWidth || !pageHeight) {
+      return;
+    }
+
+    const sideGap = Math.max(24, (pageWidth - contentWidth) / 2);
+    const topPadding = 96;
+    const bottomPadding = 76;
+    const contentGap = clamp(sideGap * 0.24, 10, 18);
+    const trackBand = clamp(sideGap * 0.72, 30, 68);
+    const outerX = clamp(sideGap - contentGap - trackBand / 2, 10, pageWidth / 3);
+    const outerY = topPadding + trackBand / 2;
+    const outerWidth = Math.max(pageWidth - outerX * 2, 300);
+    const outerHeight = Math.max(pageHeight - topPadding - bottomPadding - trackBand, 560);
+    const radius = clamp(outerWidth * 0.19, 138, 210);
+    const laneGap = trackBand / 4;
+    const outerRight = outerX + outerWidth;
+    const outerLeft = outerX;
+    const straightTop = outerY + radius;
+    const straightBottom = outerY + outerHeight - radius;
+    const finishY = straightBottom - Math.max(34, radius * 0.16);
+
+    const lanePaths = [1, 2, 3].map((index) => {
+      const inset = laneGap * index;
+      const path = buildStadiumPath(
+        outerX + inset,
+        outerY + inset,
+        outerWidth - inset * 2,
+        outerHeight - inset * 2,
+        Math.max(radius - inset, 24),
+      );
+      const isMotionLane = index === 2;
+      const opacity = isMotionLane ? 0.92 : 0.68;
+      const width = isMotionLane ? 2.4 : 2;
+
+      return `<path d="${path}" fill="none" stroke="#fff8f0" stroke-opacity="${opacity}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${isMotionLane ? ' data-run-track-motion-path="true"' : ''} />`;
+    });
+
+    const markers = [
+      buildStraightMarker(outerRight, straightTop + (straightBottom - straightTop) * 0.18, trackBand * 0.92, '100m', 'right'),
+      buildStraightMarker(outerLeft, straightTop + (straightBottom - straightTop) * 0.5, trackBand * 0.92, '200m', 'left'),
+      buildStraightMarker(outerRight, straightTop + (straightBottom - straightTop) * 0.82, trackBand * 0.92, '300m', 'right'),
+    ].join('');
+
+    runTrackSvg.setAttribute('viewBox', `0 0 ${pageWidth} ${pageHeight}`);
+    runTrackSvg.setAttribute('shape-rendering', 'geometricPrecision');
+    runTrackSvg.innerHTML = `
+      <defs>
+        <linearGradient id="runTrackBandGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#f8a65b" stop-opacity="0.12" />
+          <stop offset="48%" stop-color="#e97c1f" stop-opacity="0.28" />
+          <stop offset="100%" stop-color="#d66012" stop-opacity="0.18" />
+        </linearGradient>
+        <filter id="runTrackShadow" x="-12%" y="-6%" width="124%" height="112%">
+          <feDropShadow dx="0" dy="18" stdDeviation="26" flood-color="#d67b2d" flood-opacity="0.1" />
+        </filter>
+        <filter id="runTrackRunnerShadow" x="-120%" y="-120%" width="240%" height="240%">
+          <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#163579" flood-opacity="0.22" />
+        </filter>
+        <filter id="runTrackFinishShadow" x="-80%" y="-80%" width="220%" height="220%">
+          <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#163579" flood-opacity="0.12" />
+        </filter>
+      </defs>
+      <path
+        d="${buildStadiumPath(outerX, outerY, outerWidth, outerHeight, radius)}"
+        fill="none"
+        stroke="url(#runTrackBandGradient)"
+        stroke-width="${trackBand}"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        filter="url(#runTrackShadow)"
+      />
+      <path
+        d="${buildStadiumPath(outerX, outerY, outerWidth, outerHeight, radius)}"
+        fill="none"
+        stroke="#fffbf6"
+        stroke-opacity="0.18"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      ${lanePaths.join('')}
+      ${markers}
+      ${buildFinishZone(outerRight, finishY, trackBand * 0.94)}
+      <g data-run-track-runner-node filter="url(#runTrackRunnerShadow)" opacity="0.94">
+        <circle cx="0" cy="-19" r="5.5" fill="#163579" />
+        <path
+          d="M 0 -11 L 4 5 L 15 20 M 3 4 L 16 -4 M 1 1 L -13 7 M 6 18 L 18 33 M 5 16 L -9 30 M 18 33 L 9 36 M -9 30 L -18 22"
+          fill="none"
+          stroke="#163579"
+          stroke-width="5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </g>
+    `;
+
+    runTrackMotionPath = runTrackSvg.querySelector('[data-run-track-motion-path="true"]');
+    runTrackRunner = runTrackSvg.querySelector('[data-run-track-runner-node]');
+  };
+
   const updateRunTrackRunner = () => {
+    if (!runTrackMotionPath || !runTrackRunner) {
+      return;
+    }
+
     const pageTop = runTrackPage.offsetTop;
     const pageHeight = runTrackPage.offsetHeight;
     const viewportHeight = window.innerHeight;
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
     const usableHeight = Math.max(pageHeight - viewportHeight, 1);
-    const rawProgress = (scrollTop - pageTop + 140) / usableHeight;
-    const progress = Math.min(Math.max(rawProgress, 0), 1);
-    const minTop = 180;
-    const maxTop = Math.max(pageHeight - 220, minTop);
-    const nextTop = minTop + (maxTop - minTop) * progress;
+    const rawProgress = (scrollTop - pageTop + viewportHeight * 0.18) / usableHeight;
+    const progress = clamp(rawProgress, 0, 1);
+    const pathLength = runTrackMotionPath.getTotalLength();
+    const distance = pathLength * progress;
+    const lookDistance = Math.max(6, pathLength * 0.0025);
+    const point = runTrackMotionPath.getPointAtLength(distance);
+    const aheadPoint = runTrackMotionPath.getPointAtLength(Math.min(pathLength, distance + lookDistance));
+    const behindPoint = runTrackMotionPath.getPointAtLength(Math.max(0, distance - lookDistance));
+    const angle = (Math.atan2(aheadPoint.y - behindPoint.y, aheadPoint.x - behindPoint.x) * 180) / Math.PI;
+    const opacity = progress > 0.01 && progress < 0.995 ? 0.96 : 0.78;
 
-    runTrackRunner.style.top = `${nextTop}px`;
-    runTrackRunner.style.opacity = progress > 0.01 && progress < 0.995 ? '0.95' : '0.82';
+    runTrackRunner.setAttribute('transform', `translate(${point.x} ${point.y}) rotate(${angle})`);
+    runTrackRunner.setAttribute('opacity', String(opacity));
   };
 
-  window.addEventListener('scroll', updateRunTrackRunner, { passive: true });
-  window.addEventListener('resize', updateRunTrackRunner);
-  updateRunTrackRunner();
+  const scheduleRunTrackUpdate = () => {
+    if (runTrackFrame) {
+      return;
+    }
+
+    runTrackFrame = window.requestAnimationFrame(() => {
+      runTrackFrame = null;
+      updateRunTrackRunner();
+    });
+  };
+
+  const handleRunTrackResize = () => {
+    renderRunTrack();
+    scheduleRunTrackUpdate();
+  };
+
+  window.addEventListener('scroll', scheduleRunTrackUpdate, { passive: true });
+  window.addEventListener('resize', handleRunTrackResize);
+  window.addEventListener('load', handleRunTrackResize);
+  handleRunTrackResize();
 }
 
 if (!document.querySelector('.floating-instagram')) {
