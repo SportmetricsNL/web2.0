@@ -1044,6 +1044,8 @@ if (runTrackPage && runTrackSvg) {
   let runTrackMotionPath = null;
   let runTrackRunner = null;
   let runTrackFrame = null;
+  let runTrackMotionStart = 0;
+  let runTrackMotionEnd = 0;
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
@@ -1061,30 +1063,6 @@ if (runTrackPage && runTrackSvg) {
       `A ${safeRadius} ${safeRadius} 0 0 1 ${x + width} ${y + safeRadius}`,
       'Z',
     ].join(' ');
-  };
-
-  const buildFinishZone = (centerX, centerY, width) => {
-    const rows = 2;
-    const cols = 6;
-    const tileWidth = width / cols;
-    const tileHeight = 12;
-    const startX = centerX - width / 2;
-    const startY = centerY - tileHeight;
-    let tiles = '';
-
-    for (let row = 0; row < rows; row += 1) {
-      for (let col = 0; col < cols; col += 1) {
-        const fill = (row + col) % 2 === 0 ? '#ffffff' : '#163579';
-        tiles += `<rect x="${startX + col * tileWidth}" y="${startY + row * tileHeight}" width="${tileWidth}" height="${tileHeight}" fill="${fill}" />`;
-      }
-    }
-
-    return `
-      <g filter="url(#runTrackFinishShadow)">
-        <rect x="${startX - 4}" y="${startY - 4}" width="${width + 8}" height="${tileHeight * rows + 8}" rx="8" fill="#ffffff" fill-opacity="0.34" />
-        ${tiles}
-      </g>
-    `;
   };
 
   const buildStraightMarker = (centerX, y, band, label, side) => {
@@ -1131,19 +1109,25 @@ if (runTrackPage && runTrackSvg) {
     const sideGap = Math.max(24, (pageWidth - contentWidth) / 2);
     const topPadding = 96;
     const bottomPadding = 76;
-    const contentGap = clamp(sideGap * 0.24, 10, 18);
-    const trackBand = clamp(sideGap * 0.72, 30, 68);
-    const outerX = clamp(sideGap - contentGap - trackBand / 2, 10, pageWidth / 3);
-    const outerY = topPadding + trackBand / 2;
-    const outerWidth = Math.max(pageWidth - outerX * 2, 300);
-    const outerHeight = Math.max(pageHeight - topPadding - bottomPadding - trackBand, 560);
-    const radius = clamp(outerWidth * 0.19, 138, 210);
-    const laneGap = trackBand / 4;
+    const contentGap = clamp(sideGap * 0.2, 10, 18);
+    const trackWidth = clamp(sideGap * 0.76, 36, 72);
+    const outerX = clamp(sideGap - contentGap, 12, pageWidth / 3);
+    const outerY = topPadding;
+    const outerWidth = Math.max(pageWidth - outerX * 2, 320);
+    const outerHeight = Math.max(pageHeight - topPadding - bottomPadding, 620);
+    const radius = clamp(outerWidth * 0.18, 140, 220);
+    const laneGap = trackWidth / 4;
+    const innerX = outerX + trackWidth;
+    const innerY = outerY + trackWidth;
+    const innerWidth = outerWidth - trackWidth * 2;
+    const innerHeight = outerHeight - trackWidth * 2;
+    const innerRadius = Math.max(radius - trackWidth, 40);
     const outerRight = outerX + outerWidth;
     const outerLeft = outerX;
     const straightTop = outerY + radius;
     const straightBottom = outerY + outerHeight - radius;
-    const finishY = straightBottom - Math.max(34, radius * 0.16);
+    const outerPath = buildStadiumPath(outerX, outerY, outerWidth, outerHeight, radius);
+    const innerPath = buildStadiumPath(innerX, innerY, innerWidth, innerHeight, innerRadius);
 
     const lanePaths = [1, 2, 3].map((index) => {
       const inset = laneGap * index;
@@ -1162,9 +1146,9 @@ if (runTrackPage && runTrackSvg) {
     });
 
     const markers = [
-      buildStraightMarker(outerRight, straightTop + (straightBottom - straightTop) * 0.18, trackBand * 0.92, '100m', 'right'),
-      buildStraightMarker(outerLeft, straightTop + (straightBottom - straightTop) * 0.5, trackBand * 0.92, '200m', 'left'),
-      buildStraightMarker(outerRight, straightTop + (straightBottom - straightTop) * 0.82, trackBand * 0.92, '300m', 'right'),
+      buildStraightMarker(outerRight - trackWidth / 2, straightTop + (straightBottom - straightTop) * 0.18, trackWidth * 0.9, '100m', 'right'),
+      buildStraightMarker(outerLeft + trackWidth / 2, straightTop + (straightBottom - straightTop) * 0.5, trackWidth * 0.9, '200m', 'left'),
+      buildStraightMarker(outerRight - trackWidth / 2, straightTop + (straightBottom - straightTop) * 0.82, trackWidth * 0.9, '300m', 'right'),
     ].join('');
 
     runTrackSvg.setAttribute('viewBox', `0 0 ${pageWidth} ${pageHeight}`);
@@ -1172,12 +1156,12 @@ if (runTrackPage && runTrackSvg) {
     runTrackSvg.innerHTML = `
       <defs>
         <linearGradient id="runTrackBandGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#f8a65b" stop-opacity="0.12" />
-          <stop offset="48%" stop-color="#e97c1f" stop-opacity="0.28" />
-          <stop offset="100%" stop-color="#d66012" stop-opacity="0.18" />
+          <stop offset="0%" stop-color="#f7d9be" stop-opacity="0.88" />
+          <stop offset="48%" stop-color="#efbf92" stop-opacity="0.96" />
+          <stop offset="100%" stop-color="#e7ae79" stop-opacity="0.9" />
         </linearGradient>
         <filter id="runTrackShadow" x="-12%" y="-6%" width="124%" height="112%">
-          <feDropShadow dx="0" dy="18" stdDeviation="26" flood-color="#d67b2d" flood-opacity="0.1" />
+          <feDropShadow dx="0" dy="18" stdDeviation="26" flood-color="#d67b2d" flood-opacity="0.09" />
         </filter>
         <filter id="runTrackRunnerShadow" x="-120%" y="-120%" width="240%" height="240%">
           <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#163579" flood-opacity="0.22" />
@@ -1187,33 +1171,39 @@ if (runTrackPage && runTrackSvg) {
         </filter>
       </defs>
       <path
-        d="${buildStadiumPath(outerX, outerY, outerWidth, outerHeight, radius)}"
-        fill="none"
-        stroke="url(#runTrackBandGradient)"
-        stroke-width="${trackBand}"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        d="${outerPath} ${innerPath}"
+        fill="url(#runTrackBandGradient)"
+        fill-rule="evenodd"
         filter="url(#runTrackShadow)"
       />
       <path
-        d="${buildStadiumPath(outerX, outerY, outerWidth, outerHeight, radius)}"
+        d="${outerPath}"
         fill="none"
-        stroke="#fffbf6"
-        stroke-opacity="0.18"
-        stroke-width="1.5"
+        stroke="#fff8f1"
+        stroke-opacity="0.52"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="${innerPath}"
+        fill="none"
+        stroke="#fff8f1"
+        stroke-opacity="0.52"
+        stroke-width="1.8"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
       ${lanePaths.join('')}
       ${markers}
-      ${buildFinishZone(outerRight, finishY, trackBand * 0.94)}
+      <g data-run-track-finish-zone></g>
       <g data-run-track-runner-node filter="url(#runTrackRunnerShadow)" opacity="0.94">
-        <circle cx="0" cy="-19" r="5.5" fill="#163579" />
+        <circle cx="0" cy="-10" r="4.6" fill="#163579" />
         <path
-          d="M 0 -11 L 4 5 L 15 20 M 3 4 L 16 -4 M 1 1 L -13 7 M 6 18 L 18 33 M 5 16 L -9 30 M 18 33 L 9 36 M -9 30 L -18 22"
+          d="M 0 -5 L 3 6 L 12 15 M 2 1 L 12 -5 M 1 3 L -9 12 M 3 6 L 12 27 M 3 6 L -8 24"
           fill="none"
           stroke="#163579"
-          stroke-width="5"
+          stroke-width="4.8"
           stroke-linecap="round"
           stroke-linejoin="round"
         />
@@ -1222,6 +1212,44 @@ if (runTrackPage && runTrackSvg) {
 
     runTrackMotionPath = runTrackSvg.querySelector('[data-run-track-motion-path="true"]');
     runTrackRunner = runTrackSvg.querySelector('[data-run-track-runner-node]');
+
+    if (runTrackMotionPath) {
+      const pathLength = runTrackMotionPath.getTotalLength();
+      runTrackMotionStart = pathLength * 0.015;
+      runTrackMotionEnd = pathLength * 0.23;
+
+      const finishNode = runTrackSvg.querySelector('[data-run-track-finish-zone]');
+      if (finishNode) {
+        const finishDistance = runTrackMotionEnd;
+        const tangentStep = Math.max(6, pathLength * 0.003);
+        const finishPoint = runTrackMotionPath.getPointAtLength(finishDistance);
+        const aheadPoint = runTrackMotionPath.getPointAtLength(Math.min(pathLength, finishDistance + tangentStep));
+        const behindPoint = runTrackMotionPath.getPointAtLength(Math.max(0, finishDistance - tangentStep));
+        const finishAngle = (Math.atan2(aheadPoint.y - behindPoint.y, aheadPoint.x - behindPoint.x) * 180) / Math.PI;
+        const finishHeight = trackWidth + 6;
+        const finishWidth = 18;
+        const rows = 2;
+        const cols = 4;
+        const tileWidth = finishWidth / cols;
+        const tileHeight = finishHeight / rows;
+        let finishTiles = '';
+
+        for (let row = 0; row < rows; row += 1) {
+          for (let col = 0; col < cols; col += 1) {
+            const fill = (row + col) % 2 === 0 ? '#ffffff' : '#163579';
+            finishTiles += `<rect x="${-finishWidth / 2 + col * tileWidth}" y="${-finishHeight / 2 + row * tileHeight}" width="${tileWidth}" height="${tileHeight}" fill="${fill}" />`;
+          }
+        }
+
+        finishNode.setAttribute('transform', `translate(${finishPoint.x} ${finishPoint.y}) rotate(${finishAngle + 90})`);
+        finishNode.innerHTML = `
+          <g filter="url(#runTrackFinishShadow)">
+            <rect x="${-finishWidth / 2 - 4}" y="${-finishHeight / 2 - 4}" width="${finishWidth + 8}" height="${finishHeight + 8}" rx="8" fill="#ffffff" fill-opacity="0.34" />
+            ${finishTiles}
+          </g>
+        `;
+      }
+    }
   };
 
   const updateRunTrackRunner = () => {
@@ -1237,7 +1265,7 @@ if (runTrackPage && runTrackSvg) {
     const rawProgress = (scrollTop - pageTop + viewportHeight * 0.18) / usableHeight;
     const progress = clamp(rawProgress, 0, 1);
     const pathLength = runTrackMotionPath.getTotalLength();
-    const distance = pathLength * progress;
+    const distance = runTrackMotionStart + (runTrackMotionEnd - runTrackMotionStart) * progress;
     const lookDistance = Math.max(6, pathLength * 0.0025);
     const point = runTrackMotionPath.getPointAtLength(distance);
     const aheadPoint = runTrackMotionPath.getPointAtLength(Math.min(pathLength, distance + lookDistance));
