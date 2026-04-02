@@ -13,6 +13,13 @@ const LITERATURE_CONTEXT_MAX_CHARS = Number(process.env.LITERATURE_CONTEXT_MAX_C
 const MAX_OUTPUT_TOKENS = Number(process.env.GEMINI_MAX_OUTPUT_TOKENS || 2800);
 const CONTINUATION_TOKENS = Number(process.env.GEMINI_CONTINUATION_TOKENS || 1400);
 const MAX_CONTINUATION_PASSES = Number(process.env.GEMINI_MAX_CONTINUATION_PASSES || 3);
+const REPORT_SECTION_HEADINGS = new Set([
+  'Hoofdinzicht',
+  'Wat behouden',
+  'Grootste limiter',
+  'Trainingsfocus',
+  'Voorbeeld eerste week',
+]);
 
 let knowledgeCache = {
   loadedAt: 0,
@@ -513,6 +520,73 @@ const looksIncomplete = (text) => {
   return !/[.!?…]["')\]]?$/.test(trimmed);
 };
 
+const normalizeLine = (value) => String(value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+
+const stripRepeatedContinuationLead = (base, continuation) => {
+  if (!base || !continuation) {
+    return continuation || '';
+  }
+
+  const baseNormalized = normalizeLine(base);
+  const remainingLines = continuation.split('\n');
+
+  while (remainingLines.length) {
+    const candidate = remainingLines[0].trim();
+    if (!candidate) {
+      remainingLines.shift();
+      continue;
+    }
+
+    const normalizedCandidate = normalizeLine(candidate);
+    const isKnownHeading = REPORT_SECTION_HEADINGS.has(candidate);
+
+    if ((normalizedCandidate.length >= 10 && baseNormalized.includes(normalizedCandidate)) || (isKnownHeading && base.includes(candidate))) {
+      remainingLines.shift();
+      continue;
+    }
+
+    break;
+  }
+
+  return remainingLines.join('\n').trim();
+};
+
+const cleanupAnswerText = (text) => {
+  const lines = String(text || '').split('\n');
+  const seenHeadings = new Set();
+  const cleaned = [];
+  let previousNormalized = '';
+
+  lines.forEach((line) => {
+    const trimmed = line.trim();
+    const normalized = normalizeLine(trimmed);
+
+    if (!trimmed) {
+      if (cleaned.length && cleaned[cleaned.length - 1] !== '') {
+        cleaned.push('');
+      }
+      previousNormalized = '';
+      return;
+    }
+
+    if (REPORT_SECTION_HEADINGS.has(trimmed)) {
+      if (seenHeadings.has(trimmed)) {
+        return;
+      }
+      seenHeadings.add(trimmed);
+    }
+
+    if (normalized.length >= 14 && normalized === previousNormalized) {
+      return;
+    }
+
+    cleaned.push(line);
+    previousNormalized = normalized;
+  });
+
+  return cleaned.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+};
+
 const buildSystemPrompt = ({ hasReport, isFirstTurn }) =>
   [
     'ROL',
@@ -568,6 +642,8 @@ const buildSystemPrompt = ({ hasReport, isFirstTurn }) =>
     '  3. Grootste limiter',
     '  4. Trainingsfocus',
     '  5. Voorbeeld eerste week',
+    '- Houd rapportanalyses compact: maximaal 1-3 zinnen per kopje.',
+    '- Gebruik elk kopje maximaal 1 keer.',
     '- Focus op vertaalslag van data naar actie. Herhaal niet onnodig alle rapportcijfers.',
     '- Maak de analyse persoonlijk en doelgericht: dezelfde test betekent iets anders voor 10 km, marathon, wielrennen of algemene fitheid.',
     '',
@@ -691,7 +767,8 @@ module.exports = async (req, res) => {
         systemPrompt,
         '',
         'Je vorige antwoord is afgekapt.',
-        'Ga alleen verder met het ontbrekende slot en herhaal geen vorige zinnen.',
+        'Ga alleen verder met het ontbrekende slot en herhaal geen vorige zinnen of kopjes.',
+        'Begin direct met het ontbrekende stuk, niet opnieuw met "Hoofdinzicht", "Wat behouden", "Grootste limiter", "Trainingsfocus" of "Voorbeeld eerste week" als die al genoemd zijn.',
         'Maak de laatste lopende zin eerst netjes af, en werk daarna de resterende punten af.',
         '',
         `Laatste deel van eerder antwoord:\n${answer.slice(-2200)}`,
@@ -702,7 +779,8 @@ module.exports = async (req, res) => {
         break;
       }
 
-      answer = `${answer}\n${continuation.answer}`.trim();
+      const cleanedContinuation = stripRepeatedContinuationLead(answer, continuation.answer);
+      answer = cleanedContinuation ? `${answer}\n${cleanedContinuation}`.trim() : answer;
       finishReason = continuation.finishReason;
     }
 
@@ -710,11 +788,13 @@ module.exports = async (req, res) => {
       return res.status(502).json({ error: 'No answer from Gemini' });
     }
 
-    answer = answer
+    answer = cleanupAnswerText(
+      answer
       .replace(/\n{0,2}Bronnen gebruikt:[\s\S]*$/gi, '\n')
       .replace(/^\s*-\s*(Rapport|Literatuur):.*$/gim, '')
       .replace(/\n{3,}/g, '\n\n')
-      .trim();
+      .trim(),
+    );
 
     return res.status(200).json({ answer: sanitizeText(answer, 18000) });
   } catch (error) {
