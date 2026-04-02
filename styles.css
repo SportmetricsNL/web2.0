@@ -290,6 +290,46 @@ h3 {
   opacity: 0.86;
 }
 
+.home-page-main .section {
+  padding: 50px 0;
+}
+
+.home-page-main .section-title-row p {
+  color: #344f76;
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+.home-hero-side {
+  background: linear-gradient(180deg, #eef4ff 0%, #e3edff 100%);
+  border: 1px solid #d4e1f7;
+  box-shadow: 0 14px 28px rgba(20, 52, 130, 0.09);
+  color: #1e3f69;
+  gap: 12px;
+}
+
+.home-hero-side h2 {
+  margin-bottom: 4px;
+  color: #163a63;
+}
+
+.home-hero-side p {
+  margin: 0;
+  color: #35527b;
+}
+
+.home-hero-side strong {
+  color: #163a63;
+}
+
+.home-hero-summary {
+  margin-top: 6px;
+  padding-top: 12px;
+  border-top: 1px solid #cfdbf4;
+  color: #274970;
+  font-weight: 700;
+ }
+
 .offer-subnav {
   padding: 0 0 18px;
 }
