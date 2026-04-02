@@ -266,6 +266,38 @@ h3 {
   box-shadow: var(--shadow);
 }
 
+.concepts-page-main .section {
+  padding: 48px 0;
+}
+
+.concepts-hero-layout {
+  align-items: start;
+}
+
+.concepts-hero-side {
+  align-self: start;
+  padding: 22px 24px;
+  gap: 10px;
+  background: linear-gradient(180deg, #2f66e8 0%, #214fca 100%);
+}
+
+.concepts-hero-side h2 {
+  margin-bottom: 2px;
+}
+
+.concepts-hero-side ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+}
+
+.concepts-hero-side li {
+  line-height: 1.55;
+}
+
+.concepts-hero-side li + li {
+  margin-top: 8px;
+}
+
 .metric-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -805,6 +837,12 @@ h3 {
   margin: 0;
 }
 
+.concepts-page-main .section-title-row p,
+.concepts-guide-card > p {
+  color: #415a7b;
+  line-height: 1.65;
+}
+
 .grid {
   display: grid;
   gap: 14px;
@@ -1072,6 +1110,10 @@ h3 {
   box-shadow: 0 10px 20px rgba(20, 52, 130, 0.06);
 }
 
+.concepts-page-main .concept-accordion details {
+  box-shadow: 0 8px 18px rgba(20, 52, 130, 0.05);
+}
+
 .concept-accordion details + details {
   margin-top: 10px;
 }
@@ -1094,6 +1136,11 @@ h3 {
 .concept-summary {
   margin-top: 10px;
   color: #37527d;
+}
+
+.concepts-page-main .concept-summary {
+  line-height: 1.6;
+  color: #496280;
 }
 
 .concept-actions {
