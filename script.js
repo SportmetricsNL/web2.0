@@ -468,6 +468,27 @@ if (
   updateCpModel();
 }
 
+const formatPace = (secondsPerKm) => {
+  const totalSeconds = Math.max(0, Math.round(secondsPerKm));
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = String(totalSeconds % 60).padStart(2, '0');
+  return `${minutes}:${seconds} /km`;
+};
+
+const formatPaceDelta = (deltaSeconds) => {
+  const rounded = Math.round(deltaSeconds);
+  return `${rounded >= 0 ? '+' : ''}${rounded} s/km`;
+};
+
+const describePaceDelta = (deltaSeconds) => {
+  const rounded = Math.abs(Math.round(deltaSeconds));
+  if (!rounded) {
+    return 'gelijk aan je anker';
+  }
+
+  return deltaSeconds > 0 ? `${rounded} s/km sneller` : `${rounded} s/km rustiger`;
+};
+
 const vt1ThresholdSlider = document.querySelector('[data-vt1-threshold-slider]');
 const vt1PowerSlider = document.querySelector('[data-vt1-power-slider]');
 const vt1DurationSlider = document.querySelector('[data-vt1-duration-slider]');
@@ -628,6 +649,173 @@ if (
   updateVt1Model();
 }
 
+const vt1RunThresholdSlider = document.querySelector('[data-vt1-run-threshold-slider]');
+const vt1RunPaceSlider = document.querySelector('[data-vt1-run-pace-slider]');
+const vt1RunDurationSlider = document.querySelector('[data-vt1-run-duration-slider]');
+
+const vt1RunThresholdValue = document.querySelector('[data-vt1-run-threshold-value]');
+const vt1RunPaceValue = document.querySelector('[data-vt1-run-pace-value]');
+const vt1RunDurationValue = document.querySelector('[data-vt1-run-duration-value]');
+
+const vt1RunDeltaFill = document.querySelector('[data-vt1-run-delta-fill]');
+const vt1RunDeltaValue = document.querySelector('[data-vt1-run-delta-value]');
+const vt1RunDriftFill = document.querySelector('[data-vt1-run-drift-fill]');
+const vt1RunDriftValue = document.querySelector('[data-vt1-run-drift-value]');
+const vt1RunQualityFill = document.querySelector('[data-vt1-run-quality-fill]');
+const vt1RunQualityValue = document.querySelector('[data-vt1-run-quality-value]');
+const vt1RunRecoveryFill = document.querySelector('[data-vt1-run-recovery-fill]');
+const vt1RunRecoveryValue = document.querySelector('[data-vt1-run-recovery-value]');
+const vt1RunTteFill = document.querySelector('[data-vt1-run-tte-fill]');
+const vt1RunTteValue = document.querySelector('[data-vt1-run-tte-value]');
+
+const vt1RunZoneStatus = document.querySelector('[data-vt1-run-zone-status]');
+const vt1RunCaseText = document.querySelector('[data-vt1-run-case-text]');
+const vt1RunBands = document.querySelectorAll('[data-vt1-run-band]');
+const vt1RunBlocks = document.querySelectorAll('[data-vt1-run-block]');
+const vt1RunStripStatus = document.querySelector('[data-vt1-run-strip-status]');
+
+if (
+  vt1RunThresholdSlider &&
+  vt1RunPaceSlider &&
+  vt1RunDurationSlider &&
+  vt1RunThresholdValue &&
+  vt1RunPaceValue &&
+  vt1RunDurationValue &&
+  vt1RunDeltaFill &&
+  vt1RunDeltaValue &&
+  vt1RunDriftFill &&
+  vt1RunDriftValue &&
+  vt1RunQualityFill &&
+  vt1RunQualityValue &&
+  vt1RunRecoveryFill &&
+  vt1RunRecoveryValue &&
+  vt1RunTteFill &&
+  vt1RunTteValue
+) {
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+  const setVt1RunBand = (band) => {
+    vt1RunBands.forEach((node) => {
+      node.classList.toggle('active', node.dataset.vt1RunBand === band);
+    });
+  };
+
+  const setVt1RunStrip = (effortDelta) => {
+    if (!vt1RunBlocks.length) {
+      return;
+    }
+
+    const overloadBlocks = clamp(Math.round((effortDelta + 18) / 6), 0, vt1RunBlocks.length);
+    vt1RunBlocks.forEach((node, index) => {
+      node.classList.toggle('work', index < overloadBlocks);
+    });
+
+    if (!vt1RunStripStatus) {
+      return;
+    }
+
+    if (effortDelta <= -12) {
+      vt1RunStripStatus.textContent = 'Rustiger dan VT1: lage kosten en veel stapelbaarheid.';
+      return;
+    }
+
+    if (effortDelta <= 8) {
+      vt1RunStripStatus.textContent = 'Rond VT1: duurzaam duurtempo met lage-matige kosten.';
+      return;
+    }
+
+    if (effortDelta <= 20) {
+      vt1RunStripStatus.textContent = 'Sneller dan VT1: drift en herstel nemen voelbaar toe.';
+      return;
+    }
+
+    vt1RunStripStatus.textContent = 'Duidelijk sneller dan VT1: dit schuift richting intensief duurwerk.';
+  };
+
+  const updateVt1RunModel = () => {
+    const vt1PaceSec = Number(vt1RunThresholdSlider.value);
+    const paceSec = Number(vt1RunPaceSlider.value);
+    const durationMin = Number(vt1RunDurationSlider.value);
+    const effortDelta = vt1PaceSec - paceSec;
+
+    const drift = clamp(
+      14 + Math.max(0, effortDelta) * 1.9 + Math.max(0, -effortDelta) * 0.35 + durationMin * 0.3,
+      4,
+      100,
+    );
+    const quality = clamp(
+      95 - Math.max(0, effortDelta) * 1.45 - Math.max(0, durationMin - 60) * 0.35 - Math.max(0, -effortDelta) * 0.08,
+      8,
+      100,
+    );
+    const recoveryCost = clamp(10 + Math.max(0, effortDelta) * 1.7 + durationMin * 0.24, 4, 100);
+    const sustainableMinutes = effortDelta > 0 ? clamp(135 / (effortDelta / 7 + 1), 18, 150) : 150;
+
+    vt1RunThresholdValue.textContent = formatPace(vt1PaceSec);
+    vt1RunPaceValue.textContent = formatPace(paceSec);
+    vt1RunDurationValue.textContent = `${Math.round(durationMin)} min`;
+
+    vt1RunDeltaValue.textContent = formatPaceDelta(effortDelta);
+    vt1RunDriftValue.textContent = `${Math.round(drift)}%`;
+    vt1RunQualityValue.textContent = `${Math.round(quality)}%`;
+    vt1RunRecoveryValue.textContent = `${Math.round(recoveryCost)}%`;
+    vt1RunTteValue.textContent = effortDelta > 0 ? `${Math.round(sustainableMinutes)} min` : 'lang volhoudbaar';
+
+    vt1RunDeltaFill.style.width = `${clamp((Math.abs(effortDelta) / 40) * 100, effortDelta === 0 ? 2 : 8, 100)}%`;
+    vt1RunDriftFill.style.width = `${drift}%`;
+    vt1RunQualityFill.style.width = `${quality}%`;
+    vt1RunRecoveryFill.style.width = `${recoveryCost}%`;
+    vt1RunTteFill.style.width = `${clamp((sustainableMinutes / 150) * 100, 8, 100)}%`;
+
+    let band = 'rond';
+    let zoneText = 'Rond VT1: duurzaam duurtempo met beheersbare kosten en goede stapelbaarheid.';
+
+    if (effortDelta <= -12) {
+      band = 'onder';
+      zoneText = 'Rustiger dan VT1: veilige duurprikkel, goed voor herstel en extra volume.';
+    } else if (effortDelta <= 8) {
+      band = 'rond';
+      zoneText = 'Rond VT1: duurzaam duurtempo met beheersbare kosten en goede stapelbaarheid.';
+    } else if (effortDelta <= 20) {
+      band = 'boven';
+      zoneText = 'Sneller dan VT1: meer tempo-prikkel, maar drift en herstel lopen voelbaar op.';
+    } else {
+      band = 'ver';
+      zoneText = 'Duidelijk sneller dan VT1: dit schuift richting intensief duurwerk en is beperkt stapelbaar.';
+    }
+
+    if (vt1RunZoneStatus) {
+      vt1RunZoneStatus.textContent = zoneText;
+    }
+
+    if (vt1RunCaseText) {
+      const relation = describePaceDelta(effortDelta);
+      if (effortDelta > 0) {
+        vt1RunCaseText.textContent = `VT1-tempo = ${formatPace(vt1PaceSec)}, gekozen duurtempo = ${formatPace(
+          paceSec,
+        )} (${relation}), duur = ${Math.round(
+          durationMin,
+        )} min. Dit ligt boven VT1 en vraagt meer herstel; gebruik dit gericht en niet als standaard stapelbare duur.`;
+      } else {
+        vt1RunCaseText.textContent = `VT1-tempo = ${formatPace(vt1PaceSec)}, gekozen duurtempo = ${formatPace(
+          paceSec,
+        )} (${relation}), duur = ${Math.round(
+          durationMin,
+        )} min. Dit ligt op of net onder VT1 en is doorgaans goed stapelbaar met beperkte herstelkosten.`;
+      }
+    }
+
+    setVt1RunBand(band);
+    setVt1RunStrip(effortDelta);
+  };
+
+  [vt1RunThresholdSlider, vt1RunPaceSlider, vt1RunDurationSlider].forEach((slider) => {
+    slider.addEventListener('input', updateVt1RunModel);
+  });
+
+  updateVt1RunModel();
+}
+
 const vt2ThresholdSlider = document.querySelector('[data-vt2-threshold-slider]');
 const vt2PowerSlider = document.querySelector('[data-vt2-power-slider]');
 const vt2WorkSlider = document.querySelector('[data-vt2-work-slider]');
@@ -756,6 +944,147 @@ if (
   });
 
   updateVt2Model();
+}
+
+const vt2RunThresholdSlider = document.querySelector('[data-vt2-run-threshold-slider]');
+const vt2RunPaceSlider = document.querySelector('[data-vt2-run-pace-slider]');
+const vt2RunWorkSlider = document.querySelector('[data-vt2-run-work-slider]');
+const vt2RunRestSlider = document.querySelector('[data-vt2-run-rest-slider]');
+
+const vt2RunThresholdValue = document.querySelector('[data-vt2-run-threshold-value]');
+const vt2RunPaceValue = document.querySelector('[data-vt2-run-pace-value]');
+const vt2RunWorkValue = document.querySelector('[data-vt2-run-work-value]');
+const vt2RunRestValue = document.querySelector('[data-vt2-run-rest-value]');
+
+const vt2RunDeltaFill = document.querySelector('[data-vt2-run-delta-fill]');
+const vt2RunDeltaValue = document.querySelector('[data-vt2-run-delta-value]');
+const vt2RunPressureFill = document.querySelector('[data-vt2-run-pressure-fill]');
+const vt2RunPressureValue = document.querySelector('[data-vt2-run-pressure-value]');
+const vt2RunRepeatFill = document.querySelector('[data-vt2-run-repeat-fill]');
+const vt2RunRepeatValue = document.querySelector('[data-vt2-run-repeat-value]');
+const vt2RunDoseFill = document.querySelector('[data-vt2-run-dose-fill]');
+const vt2RunDoseValue = document.querySelector('[data-vt2-run-dose-value]');
+
+const vt2RunZoneStatus = document.querySelector('[data-vt2-run-zone-status]');
+const vt2RunCaseText = document.querySelector('[data-vt2-run-case-text]');
+const vt2RunBands = document.querySelectorAll('[data-vt2-run-band]');
+const vt2RunBlocks = document.querySelectorAll('[data-vt2-run-block]');
+const vt2RunStripStatus = document.querySelector('[data-vt2-run-strip-status]');
+
+if (
+  vt2RunThresholdSlider &&
+  vt2RunPaceSlider &&
+  vt2RunWorkSlider &&
+  vt2RunRestSlider &&
+  vt2RunThresholdValue &&
+  vt2RunPaceValue &&
+  vt2RunWorkValue &&
+  vt2RunRestValue &&
+  vt2RunDeltaFill &&
+  vt2RunDeltaValue &&
+  vt2RunPressureFill &&
+  vt2RunPressureValue &&
+  vt2RunRepeatFill &&
+  vt2RunRepeatValue &&
+  vt2RunDoseFill &&
+  vt2RunDoseValue
+) {
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+  const setVt2RunBand = (band) => {
+    vt2RunBands.forEach((node) => {
+      node.classList.toggle('active', node.dataset.vt2RunBand === band);
+    });
+  };
+
+  const setVt2RunBlocks = (repeats) => {
+    if (!vt2RunBlocks.length) {
+      return;
+    }
+
+    vt2RunBlocks.forEach((node, index) => {
+      node.classList.toggle('work', index < repeats);
+    });
+  };
+
+  const updateVt2RunModel = () => {
+    const vt2PaceSec = Number(vt2RunThresholdSlider.value);
+    const paceSec = Number(vt2RunPaceSlider.value);
+    const workSec = Number(vt2RunWorkSlider.value);
+    const restSec = Number(vt2RunRestSlider.value);
+
+    const effortDelta = vt2PaceSec - paceSec;
+    const pressure = clamp(
+      34 + Math.max(0, effortDelta) * 2.2 + Math.max(0, -effortDelta) * 0.25 + workSec * 0.07,
+      5,
+      100,
+    );
+    const repeatability = clamp(
+      96 - Math.max(0, effortDelta) * 1.4 - workSec * 0.06 + restSec * 0.095 - Math.max(0, -effortDelta) * 0.12,
+      5,
+      100,
+    );
+    const repeats = clamp(Math.round(repeatability / 15), 2, 8);
+
+    vt2RunThresholdValue.textContent = formatPace(vt2PaceSec);
+    vt2RunPaceValue.textContent = formatPace(paceSec);
+    vt2RunWorkValue.textContent = `${Math.round(workSec)} s`;
+    vt2RunRestValue.textContent = `${Math.round(restSec)} s`;
+
+    vt2RunDeltaValue.textContent = formatPaceDelta(effortDelta);
+    vt2RunPressureValue.textContent = `${Math.round(pressure)}%`;
+    vt2RunRepeatValue.textContent = `${Math.round(repeatability)}%`;
+    vt2RunDoseValue.textContent = `${repeats}x`;
+
+    vt2RunDeltaFill.style.width = `${clamp((Math.abs(effortDelta) / 45) * 100, effortDelta === 0 ? 2 : 8, 100)}%`;
+    vt2RunPressureFill.style.width = `${pressure}%`;
+    vt2RunRepeatFill.style.width = `${repeatability}%`;
+    vt2RunDoseFill.style.width = `${clamp((repeats / 8) * 100, 8, 100)}%`;
+
+    let band = 'rond';
+    let status = 'Rond VT2: thresholdtempo met bewaakte herstelkwaliteit en goede rep-kwaliteit.';
+
+    if (effortDelta <= -10) {
+      band = 'onder';
+      status = 'Rustiger dan VT2: vooral tempo-prikkel, relatief goed herhaalbaar.';
+    } else if (effortDelta <= 8) {
+      band = 'rond';
+      status = 'Rond VT2: thresholdtempo met bewaakte herstelkwaliteit en goede rep-kwaliteit.';
+    } else if (effortDelta <= 20) {
+      band = 'boven';
+      status = 'Sneller dan VT2: sterke prikkel, maar techniek en herstel moeten strak bewaakt worden.';
+    } else {
+      band = 'ver';
+      status = 'Duidelijk sneller dan VT2: zeer zwaar werk, lage herhaalbaarheid en hoge herstelkosten.';
+    }
+
+    if (vt2RunZoneStatus) {
+      vt2RunZoneStatus.textContent = status;
+    }
+
+    if (vt2RunStripStatus) {
+      vt2RunStripStatus.textContent = `Aanbevolen setgrootte: ${repeats} kwalitatieve herhalingen bij dit tempo.`;
+    }
+
+    if (vt2RunCaseText) {
+      const relation = describePaceDelta(effortDelta);
+      const totalWorkMin = Math.round((repeats * workSec) / 60);
+      vt2RunCaseText.textContent = `VT2-tempo = ${formatPace(vt2PaceSec)}, intervaltempo = ${formatPace(
+        paceSec,
+      )} (${relation}), werk/herstel = ${Math.round(workSec)}/${Math.round(
+        restSec,
+      )} s. Verwachte set: ${repeats} herhalingen, totale werktijd circa ${totalWorkMin} min.`;
+    }
+
+    setVt2RunBand(band);
+    setVt2RunBlocks(repeats);
+  };
+
+  [vt2RunThresholdSlider, vt2RunPaceSlider, vt2RunWorkSlider, vt2RunRestSlider].forEach((slider) => {
+    slider.addEventListener('input', updateVt2RunModel);
+  });
+
+  updateVt2RunModel();
 }
 
 const aiForm = document.querySelector('[data-ai-form]');

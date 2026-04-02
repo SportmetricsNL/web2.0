@@ -80,83 +80,189 @@
               VT2-blokken.
             </p>
 
-            <div class="cp-model-box" style="margin-top: 14px">
-              <div class="cp-control">
-                <label for="vt2-threshold-slider">Jouw VT2 (W) <span class="cp-value-pill" data-vt2-threshold-value>300 W</span></label>
-                <input id="vt2-threshold-slider" type="range" min="180" max="430" step="1" value="300" data-vt2-threshold-slider />
-                <div class="cp-band-row">
-                  <span class="cp-band" data-vt2-band="onder">Onder VT2</span>
-                  <span class="cp-band" data-vt2-band="rond">Rond VT2</span>
-                  <span class="cp-band" data-vt2-band="boven">Boven VT2</span>
-                  <span class="cp-band" data-vt2-band="ver">Ver boven VT2</span>
-                </div>
-              </div>
-
-              <div class="cp-control">
-                <label for="vt2-power-slider">Intervalvermogen (W) <span class="cp-value-pill" data-vt2-power-value>325 W</span></label>
-                <input id="vt2-power-slider" type="range" min="160" max="520" step="1" value="325" data-vt2-power-slider />
-              </div>
-
-              <div class="cp-control">
-                <label for="vt2-work-slider">Werkduur per herhaling (s) <span class="cp-value-pill" data-vt2-work-value>360 s</span></label>
-                <input id="vt2-work-slider" type="range" min="60" max="900" step="10" value="360" data-vt2-work-slider />
-              </div>
-
-              <div class="cp-control">
-                <label for="vt2-rest-slider">Herstel per herhaling (s) <span class="cp-value-pill" data-vt2-rest-value>240 s</span></label>
-                <input id="vt2-rest-slider" type="range" min="30" max="900" step="10" value="240" data-vt2-rest-slider />
-              </div>
-
-              <div class="progress-rows cp-progress-rows">
-                <div class="progress-row cp-progress-row">
-                  <span>Delta t.o.v. VT2</span>
-                  <div class="progress-track">
-                    <div class="progress-fill vt2-delta" data-vt2-delta-fill></div>
+            <div class="sport-model-stack">
+              <section class="sport-model-card">
+                <div class="sport-model-header">
+                  <span class="badge badge-bike">Fietsen</span>
+                  <div>
+                    <h3>Fietsmodel: intervalwattage rond VT2</h3>
+                    <p class="sport-model-copy">
+                      Gebruik wattage om te zien hoe kwaliteit, metabole druk en herhaalbaarheid verschuiven rond je
+                      VT2-anker.
+                    </p>
                   </div>
-                  <strong data-vt2-delta-value>+25 W</strong>
                 </div>
-                <div class="progress-row cp-progress-row">
-                  <span>Metabole druk</span>
-                  <div class="progress-track">
-                    <div class="progress-fill vt2-pressure" data-vt2-pressure-fill></div>
-                  </div>
-                  <strong data-vt2-pressure-value>68%</strong>
-                </div>
-                <div class="progress-row cp-progress-row">
-                  <span>Herhaalbaarheid</span>
-                  <div class="progress-track">
-                    <div class="progress-fill vt2-repeat" data-vt2-repeat-fill></div>
-                  </div>
-                  <strong data-vt2-repeat-value>72%</strong>
-                </div>
-                <div class="progress-row cp-progress-row">
-                  <span>Aanbevolen herhalingen</span>
-                  <div class="progress-track">
-                    <div class="progress-fill vt2-dose" data-vt2-dose-fill></div>
-                  </div>
-                  <strong data-vt2-dose-value>5x</strong>
-                </div>
-              </div>
 
-              <article class="soft-panel" style="margin-top: 12px">
-                <p data-vt2-zone-status>Rond VT2: geschikt voor thresholdblokken met bewaakte herstelkwaliteit.</p>
-              </article>
+                <div class="cp-model-box">
+                  <div class="cp-control">
+                    <label for="vt2-threshold-slider">Jouw VT2 (W) <span class="cp-value-pill" data-vt2-threshold-value>300 W</span></label>
+                    <input id="vt2-threshold-slider" type="range" min="180" max="430" step="1" value="300" data-vt2-threshold-slider />
+                    <div class="cp-band-row">
+                      <span class="cp-band" data-vt2-band="onder">Onder VT2</span>
+                      <span class="cp-band" data-vt2-band="rond">Rond VT2</span>
+                      <span class="cp-band" data-vt2-band="boven">Boven VT2</span>
+                      <span class="cp-band" data-vt2-band="ver">Ver boven VT2</span>
+                    </div>
+                  </div>
+
+                  <div class="cp-control">
+                    <label for="vt2-power-slider">Intervalvermogen (W) <span class="cp-value-pill" data-vt2-power-value>325 W</span></label>
+                    <input id="vt2-power-slider" type="range" min="160" max="520" step="1" value="325" data-vt2-power-slider />
+                  </div>
+
+                  <div class="cp-control">
+                    <label for="vt2-work-slider">Werkduur per herhaling (s) <span class="cp-value-pill" data-vt2-work-value>360 s</span></label>
+                    <input id="vt2-work-slider" type="range" min="60" max="900" step="10" value="360" data-vt2-work-slider />
+                  </div>
+
+                  <div class="cp-control">
+                    <label for="vt2-rest-slider">Herstel per herhaling (s) <span class="cp-value-pill" data-vt2-rest-value>240 s</span></label>
+                    <input id="vt2-rest-slider" type="range" min="30" max="900" step="10" value="240" data-vt2-rest-slider />
+                  </div>
+
+                  <div class="progress-rows cp-progress-rows">
+                    <div class="progress-row cp-progress-row">
+                      <span>Delta t.o.v. VT2</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt2-delta" data-vt2-delta-fill></div>
+                      </div>
+                      <strong data-vt2-delta-value>+25 W</strong>
+                    </div>
+                    <div class="progress-row cp-progress-row">
+                      <span>Metabole druk</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt2-pressure" data-vt2-pressure-fill></div>
+                      </div>
+                      <strong data-vt2-pressure-value>68%</strong>
+                    </div>
+                    <div class="progress-row cp-progress-row">
+                      <span>Herhaalbaarheid</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt2-repeat" data-vt2-repeat-fill></div>
+                      </div>
+                      <strong data-vt2-repeat-value>72%</strong>
+                    </div>
+                    <div class="progress-row cp-progress-row">
+                      <span>Aanbevolen herhalingen</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt2-dose" data-vt2-dose-fill></div>
+                      </div>
+                      <strong data-vt2-dose-value>5x</strong>
+                    </div>
+                  </div>
+
+                  <article class="soft-panel" style="margin-top: 12px">
+                    <p data-vt2-zone-status>Rond VT2: geschikt voor thresholdblokken met bewaakte herstelkwaliteit.</p>
+                  </article>
+                </div>
+
+                <article class="soft-panel cp-strip-panel" style="margin-top: 14px">
+                  <p class="cp-strip-legend" data-vt2-strip-status>Aanbevolen werkherhalingen op basis van huidige instelling.</p>
+                  <div class="cp-strip vt2-strip">
+                    <div class="cp-strip-block" data-vt2-block></div>
+                    <div class="cp-strip-block" data-vt2-block></div>
+                    <div class="cp-strip-block" data-vt2-block></div>
+                    <div class="cp-strip-block" data-vt2-block></div>
+                    <div class="cp-strip-block" data-vt2-block></div>
+                    <div class="cp-strip-block" data-vt2-block></div>
+                    <div class="cp-strip-block" data-vt2-block></div>
+                    <div class="cp-strip-block" data-vt2-block></div>
+                    <div class="cp-strip-cp-line">VT2</div>
+                  </div>
+                </article>
+              </section>
+
+              <section class="sport-model-card">
+                <div class="sport-model-header">
+                  <span class="badge badge-run">Hardlopen</span>
+                  <div>
+                    <h3>Hardloopmodel: intervaltempo rond VT2</h3>
+                    <p class="sport-model-copy">
+                      Voor lopers vertalen we hetzelfde anker naar tempo, werkduur en herstel zodat threshold- en
+                      race-paceblokken specifieker doseerbaar worden.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="cp-model-box">
+                  <div class="cp-control">
+                    <label for="vt2-run-threshold-slider">Jouw VT2-tempo <span class="cp-value-pill" data-vt2-run-threshold-value>4:30 /km</span></label>
+                    <input id="vt2-run-threshold-slider" type="range" min="190" max="360" step="1" value="270" data-vt2-run-threshold-slider />
+                    <div class="cp-band-row">
+                      <span class="cp-band" data-vt2-run-band="onder">Rustiger</span>
+                      <span class="cp-band" data-vt2-run-band="rond">Rond VT2</span>
+                      <span class="cp-band" data-vt2-run-band="boven">Sneller</span>
+                      <span class="cp-band" data-vt2-run-band="ver">Duidelijk sneller</span>
+                    </div>
+                  </div>
+
+                  <div class="cp-control">
+                    <label for="vt2-run-pace-slider">Intervaltempo <span class="cp-value-pill" data-vt2-run-pace-value>4:20 /km</span></label>
+                    <input id="vt2-run-pace-slider" type="range" min="170" max="390" step="1" value="260" data-vt2-run-pace-slider />
+                  </div>
+
+                  <div class="cp-control">
+                    <label for="vt2-run-work-slider">Werkduur per herhaling (s) <span class="cp-value-pill" data-vt2-run-work-value>240 s</span></label>
+                    <input id="vt2-run-work-slider" type="range" min="60" max="600" step="10" value="240" data-vt2-run-work-slider />
+                  </div>
+
+                  <div class="cp-control">
+                    <label for="vt2-run-rest-slider">Herstel per herhaling (s) <span class="cp-value-pill" data-vt2-run-rest-value>120 s</span></label>
+                    <input id="vt2-run-rest-slider" type="range" min="30" max="420" step="10" value="120" data-vt2-run-rest-slider />
+                  </div>
+
+                  <div class="progress-rows cp-progress-rows">
+                    <div class="progress-row cp-progress-row">
+                      <span>Tempo delta t.o.v. VT2</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt2-delta" data-vt2-run-delta-fill></div>
+                      </div>
+                      <strong data-vt2-run-delta-value>+10 s/km</strong>
+                    </div>
+                    <div class="progress-row cp-progress-row">
+                      <span>Metabole druk</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt2-pressure" data-vt2-run-pressure-fill></div>
+                      </div>
+                      <strong data-vt2-run-pressure-value>66%</strong>
+                    </div>
+                    <div class="progress-row cp-progress-row">
+                      <span>Herhaalbaarheid</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt2-repeat" data-vt2-run-repeat-fill></div>
+                      </div>
+                      <strong data-vt2-run-repeat-value>74%</strong>
+                    </div>
+                    <div class="progress-row cp-progress-row">
+                      <span>Aanbevolen herhalingen</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt2-dose" data-vt2-run-dose-fill></div>
+                      </div>
+                      <strong data-vt2-run-dose-value>5x</strong>
+                    </div>
+                  </div>
+
+                  <article class="soft-panel" style="margin-top: 12px">
+                    <p data-vt2-run-zone-status>Rond VT2: thresholdtempo met bewaakte herstelkwaliteit en goede rep-kwaliteit.</p>
+                  </article>
+                </div>
+
+                <article class="soft-panel cp-strip-panel" style="margin-top: 14px">
+                  <p class="cp-strip-legend" data-vt2-run-strip-status>Aanbevolen setgrootte op basis van huidige tempo en herstel.</p>
+                  <div class="cp-strip vt2-strip">
+                    <div class="cp-strip-block" data-vt2-run-block></div>
+                    <div class="cp-strip-block" data-vt2-run-block></div>
+                    <div class="cp-strip-block" data-vt2-run-block></div>
+                    <div class="cp-strip-block" data-vt2-run-block></div>
+                    <div class="cp-strip-block" data-vt2-run-block></div>
+                    <div class="cp-strip-block" data-vt2-run-block></div>
+                    <div class="cp-strip-block" data-vt2-run-block></div>
+                    <div class="cp-strip-block" data-vt2-run-block></div>
+                    <div class="cp-strip-cp-line">VT2</div>
+                  </div>
+                </article>
+              </section>
             </div>
-
-            <article class="soft-panel cp-strip-panel" style="margin-top: 14px">
-              <p class="cp-strip-legend" data-vt2-strip-status>Aanbevolen werkherhalingen op basis van huidige instelling.</p>
-              <div class="cp-strip vt2-strip">
-                <div class="cp-strip-block" data-vt2-block></div>
-                <div class="cp-strip-block" data-vt2-block></div>
-                <div class="cp-strip-block" data-vt2-block></div>
-                <div class="cp-strip-block" data-vt2-block></div>
-                <div class="cp-strip-block" data-vt2-block></div>
-                <div class="cp-strip-block" data-vt2-block></div>
-                <div class="cp-strip-block" data-vt2-block></div>
-                <div class="cp-strip-block" data-vt2-block></div>
-                <div class="cp-strip-cp-line">VT2</div>
-              </div>
-            </article>
           </article>
         </div>
       </section>
@@ -180,7 +286,7 @@
               </article>
               <article class="soft-panel">
                 <h3>Trainingsvertaling</h3>
-                <p>VT2 wordt gekoppeld aan intervalzones, blokduur en herstelstrategie.</p>
+                <p>VT2 wordt gekoppeld aan intervalzones, tempo's, blokduur en herstelstrategie.</p>
               </article>
             </div>
           </article>
@@ -201,10 +307,10 @@
                 </ul>
               </article>
               <article class="soft-panel">
-                <h3>Vermogen (P)</h3>
+                <h3>Externe belasting</h3>
                 <ul>
-                  <li>P rond VT2 = thresholdprikkel.</li>
-                  <li>P boven VT2 = zwaardere druk en snellere vermoeidheid.</li>
+                  <li>Fietsen: intervalwattage stuurt de thresholdprikkel.</li>
+                  <li>Hardlopen: intervaltempo bepaalt hoe dicht je op race pace of erboven zit.</li>
                   <li>Dosering bepaalt kwaliteit van herhalingen.</li>
                 </ul>
               </article>
@@ -234,10 +340,23 @@
       <section class="section">
         <div class="container">
           <article class="card">
-            <h2>Casus: klimblok van 6 minuten</h2>
-            <p data-vt2-case-text>
-              VT2 = 300 W, intervalvermogen = 325 W, werk/herstel = 360/240 s. Richt je op 5 kwalitatieve herhalingen.
-            </p>
+            <h2>Casus: thresholdblok rond VT2</h2>
+            <div class="sport-case-grid">
+              <article class="soft-panel">
+                <span class="badge badge-bike">Fietsen</span>
+                <p class="sport-case-copy" data-vt2-case-text>
+                  VT2 = 300 W, intervalvermogen = 325 W, werk/herstel = 360/240 s. Richt je op 5 kwalitatieve
+                  herhalingen.
+                </p>
+              </article>
+              <article class="soft-panel">
+                <span class="badge badge-run">Hardlopen</span>
+                <p class="sport-case-copy" data-vt2-run-case-text>
+                  VT2-tempo = 4:30 /km, intervaltempo = 4:20 /km, werk/herstel = 240/120 s. Richt je op 5
+                  kwalitatieve herhalingen.
+                </p>
+              </article>
+            </div>
             <article class="soft-panel" style="margin-top: 12px">
               <p>Doel: hoog genoeg prikkelen, maar met voldoende kwaliteit om adaptatie te stapelen.</p>
             </article>
@@ -260,7 +379,7 @@
               <a class="button button-secondary button-sm" href="kernbegrippen.html">Terug naar overzicht</a>
             </div>
             <div class="summary-cta">
-              <p>Wil je dit vertalen naar jouw eigen zones en wattages? Bekijk welke test bij je doel past.</p>
+              <p>Wil je dit vertalen naar jouw eigen zones, tempo's en wattages? Bekijk welke test bij je doel past.</p>
               <a class="button button-primary button-sm" href="aanbod.html">Bekijk aanbod</a>
             </div>
           </article>

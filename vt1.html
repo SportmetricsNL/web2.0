@@ -53,7 +53,7 @@
             <div class="grid three" style="margin-top: 16px">
               <article class="card">
                 <h3 class="vo2-grid-title">Eerste overgang</h3>
-                <p>VE stijgt relatief sneller dan VO2 en vermogen.</p>
+                <p>VE stijgt relatief sneller dan VO2 en de externe belasting.</p>
               </article>
               <article class="card">
                 <h3 class="vo2-grid-title">Zone-2 anker</h3>
@@ -77,85 +77,192 @@
             <h2>VT1-model (constante duurbelasting)</h2>
             <p>Gebruik de sliders om te zien hoe belasting en herstelkosten verschuiven rond je VT1-anker.</p>
 
-            <div class="cp-model-box" style="margin-top: 14px">
-              <div class="cp-control">
-                <label for="vt1-threshold-slider">Jouw VT1 (W) <span class="cp-value-pill" data-vt1-threshold-value>230 W</span></label>
-                <input id="vt1-threshold-slider" type="range" min="140" max="340" step="1" value="230" data-vt1-threshold-slider />
-                <div class="cp-band-row">
-                  <span class="cp-band" data-vt1-band="onder">Onder VT1</span>
-                  <span class="cp-band" data-vt1-band="rond">Rond VT1</span>
-                  <span class="cp-band" data-vt1-band="boven">Boven VT1</span>
-                  <span class="cp-band" data-vt1-band="ver">Ver boven VT1</span>
+            <div class="sport-model-stack">
+              <section class="sport-model-card">
+                <div class="sport-model-header">
+                  <span class="badge badge-bike">Fietsen</span>
+                  <div>
+                    <h3>Fietsmodel: wattage rond VT1</h3>
+                    <p class="sport-model-copy">
+                      Gebruik wattage om te zien hoe belasting en herstelkosten verschuiven rond je VT1-anker.
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-              <div class="cp-control">
-                <label for="vt1-power-slider">Gekozen duurvermogen (W) <span class="cp-value-pill" data-vt1-power-value>220 W</span></label>
-                <input id="vt1-power-slider" type="range" min="100" max="420" step="1" value="220" data-vt1-power-slider />
-              </div>
+                <div class="cp-model-box">
+                  <div class="cp-control">
+                    <label for="vt1-threshold-slider">Jouw VT1 (W) <span class="cp-value-pill" data-vt1-threshold-value>230 W</span></label>
+                    <input id="vt1-threshold-slider" type="range" min="140" max="340" step="1" value="230" data-vt1-threshold-slider />
+                    <div class="cp-band-row">
+                      <span class="cp-band" data-vt1-band="onder">Onder VT1</span>
+                      <span class="cp-band" data-vt1-band="rond">Rond VT1</span>
+                      <span class="cp-band" data-vt1-band="boven">Boven VT1</span>
+                      <span class="cp-band" data-vt1-band="ver">Ver boven VT1</span>
+                    </div>
+                  </div>
 
-              <div class="cp-control">
-                <label for="vt1-duration-slider">Duur blok (min) <span class="cp-value-pill" data-vt1-duration-value>120 min</span></label>
-                <input id="vt1-duration-slider" type="range" min="20" max="300" step="5" value="120" data-vt1-duration-slider />
-              </div>
+                  <div class="cp-control">
+                    <label for="vt1-power-slider">Gekozen duurvermogen (W) <span class="cp-value-pill" data-vt1-power-value>220 W</span></label>
+                    <input id="vt1-power-slider" type="range" min="100" max="420" step="1" value="220" data-vt1-power-slider />
+                  </div>
 
-              <div class="progress-rows cp-progress-rows">
-                <div class="progress-row cp-progress-row">
-                  <span>Delta t.o.v. VT1</span>
-                  <div class="progress-track">
-                    <div class="progress-fill vt1-delta" data-vt1-delta-fill></div>
+                  <div class="cp-control">
+                    <label for="vt1-duration-slider">Duur blok (min) <span class="cp-value-pill" data-vt1-duration-value>120 min</span></label>
+                    <input id="vt1-duration-slider" type="range" min="20" max="300" step="5" value="120" data-vt1-duration-slider />
                   </div>
-                  <strong data-vt1-delta-value>-10 W</strong>
-                </div>
-                <div class="progress-row cp-progress-row">
-                  <span>Verwachte ventilatoire drift</span>
-                  <div class="progress-track">
-                    <div class="progress-fill vt1-drift" data-vt1-drift-fill></div>
-                  </div>
-                  <strong data-vt1-drift-value>42%</strong>
-                </div>
-                <div class="progress-row cp-progress-row">
-                  <span>Duurkwaliteit</span>
-                  <div class="progress-track">
-                    <div class="progress-fill vt1-quality" data-vt1-quality-fill></div>
-                  </div>
-                  <strong data-vt1-quality-value>82%</strong>
-                </div>
-                <div class="progress-row cp-progress-row">
-                  <span>Herstelkosten</span>
-                  <div class="progress-track">
-                    <div class="progress-fill vt1-recovery" data-vt1-recovery-fill></div>
-                  </div>
-                  <strong data-vt1-recovery-value>38%</strong>
-                </div>
-                <div class="progress-row cp-progress-row">
-                  <span>Duurzaam volhoudbaar (indicatie)</span>
-                  <div class="progress-track">
-                    <div class="progress-fill vt1-tte" data-vt1-tte-fill></div>
-                  </div>
-                  <strong data-vt1-tte-value>lang volhoudbaar</strong>
-                </div>
-              </div>
 
-              <article class="soft-panel" style="margin-top: 12px">
-                <p data-vt1-zone-status>Rond VT1: dit ligt in een goed zone-2 bereik voor stapelbare duurtraining.</p>
-              </article>
+                  <div class="progress-rows cp-progress-rows">
+                    <div class="progress-row cp-progress-row">
+                      <span>Delta t.o.v. VT1</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt1-delta" data-vt1-delta-fill></div>
+                      </div>
+                      <strong data-vt1-delta-value>-10 W</strong>
+                    </div>
+                    <div class="progress-row cp-progress-row">
+                      <span>Verwachte ventilatoire drift</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt1-drift" data-vt1-drift-fill></div>
+                      </div>
+                      <strong data-vt1-drift-value>42%</strong>
+                    </div>
+                    <div class="progress-row cp-progress-row">
+                      <span>Duurkwaliteit</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt1-quality" data-vt1-quality-fill></div>
+                      </div>
+                      <strong data-vt1-quality-value>82%</strong>
+                    </div>
+                    <div class="progress-row cp-progress-row">
+                      <span>Herstelkosten</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt1-recovery" data-vt1-recovery-fill></div>
+                      </div>
+                      <strong data-vt1-recovery-value>38%</strong>
+                    </div>
+                    <div class="progress-row cp-progress-row">
+                      <span>Duurzaam volhoudbaar (indicatie)</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt1-tte" data-vt1-tte-fill></div>
+                      </div>
+                      <strong data-vt1-tte-value>lang volhoudbaar</strong>
+                    </div>
+                  </div>
+
+                  <article class="soft-panel" style="margin-top: 12px">
+                    <p data-vt1-zone-status>Rond VT1: dit ligt in een goed zone-2 bereik voor stapelbare duurtraining.</p>
+                  </article>
+                </div>
+
+                <article class="soft-panel cp-strip-panel" style="margin-top: 14px">
+                  <p class="cp-strip-legend" data-vt1-strip-status>Rond VT1: stabiele duurprikkel met lage-matige kosten.</p>
+                  <div class="cp-strip vt1-strip">
+                    <div class="cp-strip-block" data-vt1-block></div>
+                    <div class="cp-strip-block" data-vt1-block></div>
+                    <div class="cp-strip-block" data-vt1-block></div>
+                    <div class="cp-strip-block" data-vt1-block></div>
+                    <div class="cp-strip-block" data-vt1-block></div>
+                    <div class="cp-strip-block" data-vt1-block></div>
+                    <div class="cp-strip-block" data-vt1-block></div>
+                    <div class="cp-strip-block" data-vt1-block></div>
+                    <div class="cp-strip-cp-line">VT1</div>
+                  </div>
+                </article>
+              </section>
+
+              <section class="sport-model-card">
+                <div class="sport-model-header">
+                  <span class="badge badge-run">Hardlopen</span>
+                  <div>
+                    <h3>Hardloopmodel: tempo rond VT1</h3>
+                    <p class="sport-model-copy">
+                      Zelfde fysiologie, maar vertaald naar tempo en tijd per blok zodat lopers hetzelfde VT1-anker
+                      praktisch kunnen gebruiken.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="cp-model-box">
+                  <div class="cp-control">
+                    <label for="vt1-run-threshold-slider">Jouw VT1-tempo <span class="cp-value-pill" data-vt1-run-threshold-value>5:30 /km</span></label>
+                    <input id="vt1-run-threshold-slider" type="range" min="240" max="420" step="1" value="330" data-vt1-run-threshold-slider />
+                    <div class="cp-band-row">
+                      <span class="cp-band" data-vt1-run-band="onder">Rustiger</span>
+                      <span class="cp-band" data-vt1-run-band="rond">Rond VT1</span>
+                      <span class="cp-band" data-vt1-run-band="boven">Sneller</span>
+                      <span class="cp-band" data-vt1-run-band="ver">Duidelijk sneller</span>
+                    </div>
+                  </div>
+
+                  <div class="cp-control">
+                    <label for="vt1-run-pace-slider">Gekozen duurtempo <span class="cp-value-pill" data-vt1-run-pace-value>5:45 /km</span></label>
+                    <input id="vt1-run-pace-slider" type="range" min="220" max="480" step="1" value="345" data-vt1-run-pace-slider />
+                  </div>
+
+                  <div class="cp-control">
+                    <label for="vt1-run-duration-slider">Duur blok (min) <span class="cp-value-pill" data-vt1-run-duration-value>55 min</span></label>
+                    <input id="vt1-run-duration-slider" type="range" min="20" max="180" step="5" value="55" data-vt1-run-duration-slider />
+                  </div>
+
+                  <div class="progress-rows cp-progress-rows">
+                    <div class="progress-row cp-progress-row">
+                      <span>Tempo delta t.o.v. VT1</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt1-delta" data-vt1-run-delta-fill></div>
+                      </div>
+                      <strong data-vt1-run-delta-value>-15 s/km</strong>
+                    </div>
+                    <div class="progress-row cp-progress-row">
+                      <span>Verwachte ventilatoire drift</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt1-drift" data-vt1-run-drift-fill></div>
+                      </div>
+                      <strong data-vt1-run-drift-value>28%</strong>
+                    </div>
+                    <div class="progress-row cp-progress-row">
+                      <span>Duurkwaliteit</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt1-quality" data-vt1-run-quality-fill></div>
+                      </div>
+                      <strong data-vt1-run-quality-value>86%</strong>
+                    </div>
+                    <div class="progress-row cp-progress-row">
+                      <span>Herstelkosten</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt1-recovery" data-vt1-run-recovery-fill></div>
+                      </div>
+                      <strong data-vt1-run-recovery-value>26%</strong>
+                    </div>
+                    <div class="progress-row cp-progress-row">
+                      <span>Duurzaam volhoudbaar (indicatie)</span>
+                      <div class="progress-track">
+                        <div class="progress-fill vt1-tte" data-vt1-run-tte-fill></div>
+                      </div>
+                      <strong data-vt1-run-tte-value>lang volhoudbaar</strong>
+                    </div>
+                  </div>
+
+                  <article class="soft-panel" style="margin-top: 12px">
+                    <p data-vt1-run-zone-status>Rond VT1: duurzaam duurtempo met beheersbare kosten en goede stapelbaarheid.</p>
+                  </article>
+                </div>
+
+                <article class="soft-panel cp-strip-panel" style="margin-top: 14px">
+                  <p class="cp-strip-legend" data-vt1-run-strip-status>Rond VT1: duurzaam duurtempo met lage-matige kosten.</p>
+                  <div class="cp-strip vt1-strip">
+                    <div class="cp-strip-block" data-vt1-run-block></div>
+                    <div class="cp-strip-block" data-vt1-run-block></div>
+                    <div class="cp-strip-block" data-vt1-run-block></div>
+                    <div class="cp-strip-block" data-vt1-run-block></div>
+                    <div class="cp-strip-block" data-vt1-run-block></div>
+                    <div class="cp-strip-block" data-vt1-run-block></div>
+                    <div class="cp-strip-block" data-vt1-run-block></div>
+                    <div class="cp-strip-block" data-vt1-run-block></div>
+                    <div class="cp-strip-cp-line">VT1</div>
+                  </div>
+                </article>
+              </section>
             </div>
-
-            <article class="soft-panel cp-strip-panel" style="margin-top: 14px">
-              <p class="cp-strip-legend" data-vt1-strip-status>Rond VT1: stabiele duurprikkel met lage-matige kosten.</p>
-              <div class="cp-strip vt1-strip">
-                <div class="cp-strip-block" data-vt1-block></div>
-                <div class="cp-strip-block" data-vt1-block></div>
-                <div class="cp-strip-block" data-vt1-block></div>
-                <div class="cp-strip-block" data-vt1-block></div>
-                <div class="cp-strip-block" data-vt1-block></div>
-                <div class="cp-strip-block" data-vt1-block></div>
-                <div class="cp-strip-block" data-vt1-block></div>
-                <div class="cp-strip-block" data-vt1-block></div>
-                <div class="cp-strip-cp-line">VT1</div>
-              </div>
-            </article>
           </article>
         </div>
       </section>
@@ -175,11 +282,11 @@
               </article>
               <article class="soft-panel">
                 <h3>Protocol</h3>
-                <p>Stapsgewijze opbouw op de trainer om de overgang helder en reproduceerbaar zichtbaar te maken.</p>
+                <p>Stapsgewijze opbouw in fietsspecifieke of loopspecifieke setting om de overgang helder zichtbaar te maken.</p>
               </article>
               <article class="soft-panel">
                 <h3>Vertaling</h3>
-                <p>We koppelen VT1 direct aan wattage-zones die je in je trainingsweek kunt gebruiken.</p>
+                <p>We koppelen VT1 direct aan wattage- of tempozones die je in je trainingsweek kunt gebruiken.</p>
               </article>
             </div>
           </article>
@@ -200,17 +307,17 @@
                 </ul>
               </article>
               <article class="soft-panel">
-                <h3>Vermogen (P)</h3>
+                <h3>Externe belasting</h3>
                 <ul>
-                  <li>Gekozen wattage tijdens duurblok.</li>
-                  <li>P rond VT1 = vaak stabiele duurprikkel.</li>
-                  <li>P boven VT1 = hogere drift en kosten.</li>
+                  <li>Fietsen: gekozen wattage tijdens duurblok.</li>
+                  <li>Hardlopen: gekozen tempo tijdens duurblok.</li>
+                  <li>Rond VT1 = vaak stabiele duurprikkel.</li>
                 </ul>
               </article>
               <article class="soft-panel">
                 <h3>Drift</h3>
                 <ul>
-                  <li>Toenemende interne belasting bij gelijk vermogen.</li>
+                  <li>Toenemende interne belasting bij gelijk vermogen of tempo.</li>
                   <li>Versnelt vaak boven VT1, zeker bij lange duur.</li>
                 </ul>
               </article>
@@ -233,11 +340,23 @@
       <section class="section">
         <div class="container">
           <article class="card">
-            <h2>Casus: lange duur van 2 uur</h2>
-            <p data-vt1-case-text>
-              VT1 = 230 W, gekozen vermogen = 220 W, duur = 120 min. Dit ligt rond VT1 en is goed stapelbaar met
-              gecontroleerde drift.
-            </p>
+            <h2>Casus: duurprikkel rond VT1</h2>
+            <div class="sport-case-grid">
+              <article class="soft-panel">
+                <span class="badge badge-bike">Fietsen</span>
+                <p class="sport-case-copy" data-vt1-case-text>
+                  VT1 = 230 W, gekozen vermogen = 220 W, duur = 120 min. Dit ligt rond VT1 en is goed stapelbaar met
+                  gecontroleerde drift.
+                </p>
+              </article>
+              <article class="soft-panel">
+                <span class="badge badge-run">Hardlopen</span>
+                <p class="sport-case-copy" data-vt1-run-case-text>
+                  VT1-tempo = 5:30 /km, gekozen duurtempo = 5:45 /km, duur = 55 min. Dit ligt net onder VT1 en is
+                  goed stapelbaar met gecontroleerde drift.
+                </p>
+              </article>
+            </div>
             <article class="soft-panel" style="margin-top: 12px">
               <p>Doel: zoveel mogelijk kwalitatieve duurminuten maken zonder onnodig hoge herstelkosten.</p>
             </article>
@@ -260,7 +379,7 @@
               <a class="button button-secondary button-sm" href="kernbegrippen.html">Terug naar overzicht</a>
             </div>
             <div class="summary-cta">
-              <p>Wil je dit vertalen naar jouw eigen zones en wattages? Bekijk welke test bij je doel past.</p>
+              <p>Wil je dit vertalen naar jouw eigen zones, tempo's en wattages? Bekijk welke test bij je doel past.</p>
               <a class="button button-primary button-sm" href="aanbod.html">Bekijk aanbod</a>
             </div>
           </article>
