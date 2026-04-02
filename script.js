@@ -489,6 +489,15 @@ const describePaceDelta = (deltaSeconds) => {
   return deltaSeconds > 0 ? `${rounded} s/km sneller` : `${rounded} s/km rustiger`;
 };
 
+const formatRepDistance = (paceSec, workSec) => {
+  if (!paceSec || !workSec) {
+    return '0 m';
+  }
+
+  const meters = Math.max(0, Math.round(((workSec / paceSec) * 1000) / 10) * 10);
+  return `${meters} m`;
+};
+
 const vt1ThresholdSlider = document.querySelector('[data-vt1-threshold-slider]');
 const vt1PowerSlider = document.querySelector('[data-vt1-power-slider]');
 const vt1DurationSlider = document.querySelector('[data-vt1-duration-slider]');
@@ -955,6 +964,7 @@ const vt2RunThresholdValue = document.querySelector('[data-vt2-run-threshold-val
 const vt2RunPaceValue = document.querySelector('[data-vt2-run-pace-value]');
 const vt2RunWorkValue = document.querySelector('[data-vt2-run-work-value]');
 const vt2RunRestValue = document.querySelector('[data-vt2-run-rest-value]');
+const vt2RunWorkDistance = document.querySelector('[data-vt2-run-work-distance]');
 
 const vt2RunDeltaFill = document.querySelector('[data-vt2-run-delta-fill]');
 const vt2RunDeltaValue = document.querySelector('[data-vt2-run-delta-value]');
@@ -1014,6 +1024,7 @@ if (
     const restSec = Number(vt2RunRestSlider.value);
 
     const effortDelta = vt2PaceSec - paceSec;
+    const repDistance = formatRepDistance(paceSec, workSec);
     const pressure = clamp(
       34 + Math.max(0, effortDelta) * 2.2 + Math.max(0, -effortDelta) * 0.25 + workSec * 0.07,
       5,
@@ -1030,6 +1041,10 @@ if (
     vt2RunPaceValue.textContent = formatPace(paceSec);
     vt2RunWorkValue.textContent = `${Math.round(workSec)} s`;
     vt2RunRestValue.textContent = `${Math.round(restSec)} s`;
+
+    if (vt2RunWorkDistance) {
+      vt2RunWorkDistance.textContent = `≈ ${repDistance} per herhaling bij dit tempo.`;
+    }
 
     vt2RunDeltaValue.textContent = formatPaceDelta(effortDelta);
     vt2RunPressureValue.textContent = `${Math.round(pressure)}%`;
@@ -1073,7 +1088,7 @@ if (
         paceSec,
       )} (${relation}), werk/herstel = ${Math.round(workSec)}/${Math.round(
         restSec,
-      )} s. Verwachte set: ${repeats} herhalingen, totale werktijd circa ${totalWorkMin} min.`;
+      )} s, ongeveer ${repDistance} per herhaling. Verwachte set: ${repeats} herhalingen, totale werktijd circa ${totalWorkMin} min.`;
     }
 
     setVt2RunBand(band);
