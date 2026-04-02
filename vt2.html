@@ -47,8 +47,8 @@
             <span class="eyebrow">VT2</span>
             <h1>VT2: jouw grens naar echt zwaar werk</h1>
             <p class="vo2-lead">
-              VT2 is de tweede ventilatoire overgang: vanaf hier kom je in non-steady-state gedrag met snel oplopende
-              ademdruk en hogere herstelkosten. Belangrijk anker voor threshold, klimmen en race-pacing.
+              VT2 is de tweede ventilatoire overgang: vanaf hier loopt de metabole druk snel op en houd je de
+              inspanning minder lang stabiel vol. Belangrijk anker voor threshold, klimmen en race-pacing.
             </p>
             <div class="grid three" style="margin-top: 16px">
               <article class="card">
@@ -57,7 +57,7 @@
               </article>
               <article class="card">
                 <h3 class="vo2-grid-title">Non-steady domein</h3>
-                <p>Boven VT2 stijgt interne stress snel.</p>
+                <p>Boven VT2 loopt de metabole druk snel op.</p>
               </article>
               <article class="card">
                 <h3 class="vo2-grid-title">Pacing-anker</h3>
@@ -75,10 +75,7 @@
         <div class="container">
           <article class="card">
             <h2>VT2-model (intervaldosering)</h2>
-            <p>
-              Gebruik de sliders om te zien hoe de balans verschuift tussen kwaliteit, druk en herhaalbaarheid van je
-              VT2-blokken.
-            </p>
+            <p>Jij kiest tempo of vermogen, intervalduur en herstel. Het model laat zien hoe zwaar en herhaalbaar de sessie wordt.</p>
 
             <div class="sport-model-stack">
               <section class="sport-model-card">
@@ -86,10 +83,7 @@
                   <span class="badge badge-bike">Fietsen</span>
                   <div>
                     <h3>Fietsmodel: intervalwattage rond VT2</h3>
-                    <p class="sport-model-copy">
-                      Gebruik wattage om te zien hoe kwaliteit, metabole druk en herhaalbaarheid verschuiven rond je
-                      VT2-anker.
-                    </p>
+                    <p class="sport-model-copy">Vul VT2, intervalwattage, intervalduur en herstel in.</p>
                   </div>
                 </div>
 
@@ -103,6 +97,7 @@
                       <span class="cp-band" data-vt2-band="boven">Boven VT2</span>
                       <span class="cp-band" data-vt2-band="ver">Ver boven VT2</span>
                     </div>
+                    <p class="small-note">De blauwe badge laat automatisch zien waar je gekozen vermogen valt.</p>
                   </div>
 
                   <div class="cp-control">
@@ -111,12 +106,12 @@
                   </div>
 
                   <div class="cp-control">
-                    <label for="vt2-work-slider">Werkduur per herhaling (s) <span class="cp-value-pill" data-vt2-work-value>360 s</span></label>
+                    <label for="vt2-work-slider">Intervalduur (s) <span class="cp-value-pill" data-vt2-work-value>360 s</span></label>
                     <input id="vt2-work-slider" type="range" min="60" max="900" step="10" value="360" data-vt2-work-slider />
                   </div>
 
                   <div class="cp-control">
-                    <label for="vt2-rest-slider">Herstel per herhaling (s) <span class="cp-value-pill" data-vt2-rest-value>240 s</span></label>
+                    <label for="vt2-rest-slider">Herstel tussen intervallen (s) <span class="cp-value-pill" data-vt2-rest-value>240 s</span></label>
                     <input id="vt2-rest-slider" type="range" min="30" max="900" step="10" value="240" data-vt2-rest-slider />
                   </div>
 
@@ -177,10 +172,7 @@
                   <span class="badge badge-run">Hardlopen</span>
                   <div>
                     <h3>Hardloopmodel: intervaltempo rond VT2</h3>
-                    <p class="sport-model-copy">
-                      Voor lopers vertalen we hetzelfde anker naar tempo, werkduur en herstel zodat threshold- en
-                      race-paceblokken specifieker doseerbaar worden.
-                    </p>
+                    <p class="sport-model-copy">Vul VT2-tempo, intervaltempo, intervalduur en herstel in.</p>
                   </div>
                 </div>
 
@@ -194,6 +186,7 @@
                       <span class="cp-band" data-vt2-run-band="boven">Sneller</span>
                       <span class="cp-band" data-vt2-run-band="ver">Duidelijk sneller</span>
                     </div>
+                    <p class="small-note">De blauwe badge laat automatisch zien waar je gekozen tempo valt.</p>
                   </div>
 
                   <div class="cp-control">
@@ -202,12 +195,12 @@
                   </div>
 
                   <div class="cp-control">
-                    <label for="vt2-run-work-slider">Werkduur per herhaling (s) <span class="cp-value-pill" data-vt2-run-work-value>240 s</span></label>
+                    <label for="vt2-run-work-slider">Intervalduur (s) <span class="cp-value-pill" data-vt2-run-work-value>240 s</span></label>
                     <input id="vt2-run-work-slider" type="range" min="60" max="600" step="10" value="240" data-vt2-run-work-slider />
                   </div>
 
                   <div class="cp-control">
-                    <label for="vt2-run-rest-slider">Herstel per herhaling (s) <span class="cp-value-pill" data-vt2-run-rest-value>120 s</span></label>
+                    <label for="vt2-run-rest-slider">Herstel tussen intervallen (s) <span class="cp-value-pill" data-vt2-run-rest-value>120 s</span></label>
                     <input id="vt2-run-rest-slider" type="range" min="30" max="420" step="10" value="120" data-vt2-run-rest-slider />
                   </div>
 
@@ -302,7 +295,7 @@
                 <h3>VT2</h3>
                 <ul>
                   <li>Tweede ventilatoire overgang.</li>
-                  <li>Shift naar non-steady-state gedrag.</li>
+                  <li>Boven VT2 houd je de inspanning minder stabiel vol.</li>
                   <li>Sterk anker voor threshold en racewerk.</li>
                 </ul>
               </article>
