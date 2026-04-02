@@ -1098,7 +1098,6 @@ if (aiForm && aiInput && aiMessages) {
   const aiHistory = [];
   let uploadedReportName = '';
   let uploadedReportBase64 = '';
-  let includeUploadedReportOnNextQuestion = false;
 
   const escapeHtml = (value) =>
     String(value || '')
@@ -1239,7 +1238,7 @@ if (aiForm && aiInput && aiMessages) {
     return 'De live AI-koppeling is tijdelijk niet bereikbaar. Probeer het zo opnieuw. Als dit blijft gebeuren, ververs de pagina en test nogmaals.';
   };
 
-  const callBackendAi = async (question, includeReport) => {
+  const callBackendAi = async (question) => {
     const response = await fetch('/api/chat', {
       method: 'POST',
       headers: {
@@ -1248,7 +1247,7 @@ if (aiForm && aiInput && aiMessages) {
       body: JSON.stringify({
         question,
         reportName: uploadedReportName,
-        reportPdfBase64: includeReport ? uploadedReportBase64 : '',
+        reportPdfBase64: uploadedReportBase64,
         history: aiHistory.slice(-6),
       }),
     });
@@ -1279,10 +1278,9 @@ if (aiForm && aiInput && aiMessages) {
     appendMessage('user', question);
     aiInput.value = '';
 
-    const thinkingText =
-      uploadedReportBase64 && includeUploadedReportOnNextQuestion
-        ? 'Even denken... ik combineer je rapport met trainingsliteratuur.'
-        : 'Even denken... ik gebruik de sportliteratuur om je vraag praktisch te beantwoorden.';
+    const thinkingText = uploadedReportBase64
+      ? 'Even denken... ik combineer je rapport met trainingsliteratuur.'
+      : 'Even denken... ik gebruik de sportliteratuur om je vraag praktisch te beantwoorden.';
 
     const pendingNode = appendMessage('assistant', thinkingText);
     pendingNode.classList.add('is-thinking');
@@ -1290,13 +1288,9 @@ if (aiForm && aiInput && aiMessages) {
 
     const run = async () => {
       let answer = '';
-      const includeReport = includeUploadedReportOnNextQuestion && !!uploadedReportBase64;
 
       try {
-        answer = await callBackendAi(question, includeReport);
-        if (answer && includeReport) {
-          includeUploadedReportOnNextQuestion = false;
-        }
+        answer = await callBackendAi(question);
       } catch (error) {
         console.error(error);
       }
@@ -1329,7 +1323,6 @@ if (aiForm && aiInput && aiMessages) {
       if (!file) {
         uploadedReportName = '';
         uploadedReportBase64 = '';
-        includeUploadedReportOnNextQuestion = false;
         aiUploadStatus.textContent = 'Nog geen rapport geüpload.';
         return;
       }
@@ -1337,7 +1330,6 @@ if (aiForm && aiInput && aiMessages) {
       if (file.size > 3 * 1024 * 1024) {
         uploadedReportName = '';
         uploadedReportBase64 = '';
-        includeUploadedReportOnNextQuestion = false;
         aiUpload.value = '';
         aiUploadStatus.textContent = 'Bestand is te groot (max 3 MB). Upload een kleinere PDF.';
         return;
@@ -1349,12 +1341,10 @@ if (aiForm && aiInput && aiMessages) {
       try {
         const buffer = await file.arrayBuffer();
         uploadedReportBase64 = arrayBufferToBase64(buffer);
-        includeUploadedReportOnNextQuestion = true;
-        aiUploadStatus.textContent = `Rapport ontvangen: ${file.name}. Stel nu je vraag; ik lees het eerst en vraag daarna naar doel, afstand en trainingsomvang.`;
+        aiUploadStatus.textContent = `Rapport ontvangen: ${file.name}. Dit rapport blijft actief voor vervolgvragen totdat je een nieuw rapport uploadt.`;
       } catch (error) {
         console.error(error);
         uploadedReportBase64 = '';
-        includeUploadedReportOnNextQuestion = false;
         aiUploadStatus.textContent = 'Rapport uploaden mislukt. Probeer opnieuw.';
       }
     });
