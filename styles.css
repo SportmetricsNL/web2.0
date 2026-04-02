@@ -1129,6 +1129,229 @@ h3 {
   color: #fff;
 }
 
+.zones-hero-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.8fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.zones-hero-main,
+.zones-summary-box,
+.zones-section-shell,
+.zones-cta-shell {
+  background: var(--surface);
+  border: 1px solid #d7e3f5;
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+}
+
+.zones-hero-main {
+  padding: clamp(26px, 4vw, 42px);
+}
+
+.zones-lead {
+  margin: 0;
+  max-width: 67ch;
+  color: #34486c;
+}
+
+.zones-summary-box {
+  padding: 24px;
+  background: linear-gradient(180deg, #fbfdff 0%, #f3f7fd 100%);
+}
+
+.zones-summary-box h2 {
+  margin-bottom: 12px;
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+}
+
+.zones-summary-list {
+  margin: 0;
+  padding-left: 18px;
+  color: #31486d;
+}
+
+.zones-summary-list li + li {
+  margin-top: 8px;
+}
+
+.zones-hero-note {
+  margin: 18px 0 0;
+  text-align: center;
+  color: #48607f;
+  font-weight: 600;
+}
+
+.zones-section-shell,
+.zones-cta-shell {
+  padding: clamp(24px, 3.6vw, 36px);
+}
+
+.zones-title-row {
+  align-items: start;
+}
+
+.zones-title-row p {
+  max-width: 64ch;
+  color: #41597a;
+}
+
+.zones-image-shell {
+  margin-top: 18px;
+  padding: clamp(18px, 3vw, 26px);
+  border-radius: 26px;
+  background: linear-gradient(180deg, #f8fbff 0%, #eef4fc 100%);
+  border: 1px solid #d7e3f5;
+}
+
+.zones-image-shell img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 24px;
+}
+
+.zones-mini-grid,
+.zones-domain-grid,
+.zones-proof-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.zones-mini-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 18px;
+}
+
+.zones-mini-card,
+.zones-domain-card,
+.zones-proof-card {
+  background: #f7faff;
+  border: 1px solid #d8e4f6;
+  border-radius: 20px;
+  padding: 18px 18px 16px;
+}
+
+.zones-mini-card h3,
+.zones-domain-card h3,
+.zones-proof-card h3 {
+  margin-bottom: 8px;
+}
+
+.zones-mini-card p,
+.zones-domain-card p,
+.zones-proof-card p {
+  margin: 0;
+  color: #425a7b;
+}
+
+.zones-support-text,
+.zones-focus-note {
+  margin: 18px 0 0;
+  color: #41597a;
+}
+
+.zones-domain-grid,
+.zones-proof-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 18px;
+}
+
+.zones-accordion {
+  margin-top: 18px;
+  display: grid;
+  gap: 12px;
+}
+
+.zones-accordion details {
+  background: #f8fbff;
+  border: 1px solid #d6e2f4;
+  border-radius: 20px;
+  padding: 16px 18px;
+}
+
+.zones-accordion summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.zones-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.zones-accordion summary span {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: #1f3f6c;
+}
+
+.zones-accordion summary small {
+  color: #5d7392;
+  font-size: 0.94rem;
+  font-weight: 700;
+}
+
+.zones-zone-body {
+  margin-top: 14px;
+}
+
+.zones-field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.zones-field {
+  background: #ffffff;
+  border: 1px solid #dde7f7;
+  border-radius: 16px;
+  padding: 14px;
+  display: grid;
+  gap: 6px;
+}
+
+.zones-field strong {
+  color: #22426d;
+  font-size: 0.92rem;
+}
+
+.zones-field span {
+  color: #48607e;
+}
+
+.zones-nuance-box {
+  margin-top: 16px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: #eef5ff;
+  border: 1px solid #cfe0f8;
+  color: #2f4e78;
+  font-weight: 600;
+}
+
+.zones-cta-shell {
+  text-align: center;
+}
+
+.zones-cta-shell p {
+  max-width: 66ch;
+  margin-left: auto;
+  margin-right: auto;
+  color: #405879;
+}
+
+.zones-cta-support {
+  margin-top: 14px;
+  font-weight: 700;
+  color: #2a4d77;
+}
+
 .slider-wrap {
   margin-top: 14px;
   border: 1px dashed #a6c8ea;
@@ -2066,6 +2289,7 @@ textarea {
 
 @media (max-width: 980px) {
   .hero-layout,
+  .zones-hero-layout,
   .offer-hero-layout,
   .location-grid,
   .offer-overview-grid,
@@ -2079,6 +2303,13 @@ textarea {
   .grid.four,
   .cp-vars-grid,
   .coach-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .zones-mini-grid,
+  .zones-domain-grid,
+  .zones-proof-grid,
+  .zones-field-grid {
     grid-template-columns: 1fr;
   }
 
