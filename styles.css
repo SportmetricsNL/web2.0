@@ -2082,6 +2082,10 @@ textarea {
     grid-template-columns: 1fr;
   }
 
+  .home-hero-side {
+    display: none;
+  }
+
   .main-nav {
     position: absolute;
     top: calc(100% + 10px);
