@@ -384,6 +384,21 @@ const isReportAnalysisIntent = (question) =>
     question || '',
   );
 
+const isSpecificTrainingRequest = (question) =>
+  /(voorbeeldweek|eerste trainingsweek|weekplan|weekschema|schema|concreet|specifieker|werk.*uit|uitwerken|sessie|sessies|dagindeling|dagen)/i.test(
+    question || '',
+  );
+
+const hasAssistantReportOverview = (history) =>
+  Array.isArray(history) &&
+  history.some(
+    (item) =>
+      item &&
+      item.role === 'assistant' &&
+      typeof item.text === 'string' &&
+      /(hoofdinzicht|wat behouden|grootste limiter|trainingsfocus|voorbeeld eerste week)/i.test(item.text),
+  );
+
 const getGoalContextSignals = (text) => {
   const source = text || '';
 
@@ -443,7 +458,7 @@ const buildGoalClarificationAnswer = (missingQuestions) => {
     'Ik heb je rapport gelezen. Voor ik het goed vertaal naar training wil ik eerst je context scherp hebben, zodat ik niet te generiek adviseer.';
   const questions = missingQuestions.map((question, index) => `${index + 1}. ${question}`).join('\n');
   const close =
-    'Stuur je antwoorden gerust in 1 bericht. Daarna geef ik je gericht:\n1. hoofdinzicht\n2. wat je wilt behouden\n3. grootste limiter\n4. trainingsfocus\n5. een eerste voorbeeldweek.';
+    'Stuur je antwoorden gerust in 1 bericht. Daarna geef ik je eerst kort:\n1. hoofdinzicht\n2. wat je wilt behouden\n3. grootste limiter\n4. trainingsfocus\n\nAls je wilt, maak ik het daarna concreet in een eerste voorbeeldweek.';
 
   return `${intro}\n\n${questions}\n\n${close}`;
 };
@@ -587,7 +602,7 @@ const cleanupAnswerText = (text) => {
   return cleaned.join('\n').replace(/\n{3,}/g, '\n\n').trim();
 };
 
-const buildSystemPrompt = ({ hasReport, isFirstTurn }) =>
+const buildSystemPrompt = ({ hasReport, isFirstTurn, shouldStartHighLevel, allowSpecificFollowUp }) =>
   [
     'ROL',
     'Je bent de SportMetrics AI-coach: expert sportfysioloog voor wielrennen en hardlopen.',
@@ -646,6 +661,10 @@ const buildSystemPrompt = ({ hasReport, isFirstTurn }) =>
     '- Gebruik elk kopje maximaal 1 keer.',
     '- Focus op vertaalslag van data naar actie. Herhaal niet onnodig alle rapportcijfers.',
     '- Maak de analyse persoonlijk en doelgericht: dezelfde test betekent iets anders voor 10 km, marathon, wielrennen of algemene fitheid.',
+    '- Eerste inhoudelijke rapportreactie na het ophalen van context = hoog-over.',
+    '- Dus: geef dan wel Hoofdinzicht, Wat behouden, Grootste limiter en Trainingsfocus, maar nog GEEN uitgewerkt weekplan of dag-tot-dag schema.',
+    '- Noem in die eerste reactie hoogstens 1 korte richtinggevende trainingszin.',
+    '- Pas bij vervolgvragen of een expliciete vraag om schema/week/sessies word je concreter.',
     '',
     'COACHINGOUTPUT (wat er altijd in zit, maar subtiel)',
     '- Wees praktisch: vertaal inzicht naar "wat ga ik doen".',
@@ -677,6 +696,7 @@ const buildSystemPrompt = ({ hasReport, isFirstTurn }) =>
     'DYNAMISCHE CONTEXT VOOR DEZE BEURT',
     `- Gespreksbeurt: ${isFirstTurn ? 'eerste beurt' : 'vervolgbeurt'}.`,
     `- Rapportstatus: ${hasReport ? 'rapport aanwezig' : 'geen rapport aanwezig'}.`,
+    `- Reactiemodus: ${shouldStartHighLevel ? 'eerste rapportreactie, dus hoog-over houden' : allowSpecificFollowUp ? 'vervolgfase, dus je mag concreter en specifieker worden' : 'normale coachmodus'}.`,
   ].join('\n');
 
 module.exports = async (req, res) => {
@@ -711,15 +731,21 @@ module.exports = async (req, res) => {
   const literatureContext = selectLiteratureContext(knowledgeDocuments, question, reportText);
   const historyText = safeHistory.map((item) => `${item.role}: ${item.text}`).join('\n');
   const userConversationText = getUserConversationText(body.history, question);
+  const explicitSpecificRequest = isSpecificTrainingRequest(question);
+  const hasPriorReportOverview = hasAssistantReportOverview(body.history);
 
   const hasReport = !!reportText;
   const isFirstTurn = safeHistory.length === 0;
-  const systemPrompt = buildSystemPrompt({ hasReport, isFirstTurn });
+  const goalSignals = hasReport && isReportAnalysisIntent(question) ? getGoalContextSignals(userConversationText) : null;
+  const missingQuestions = goalSignals ? getMissingGoalQuestions(goalSignals) : [];
+  const goalContextComplete = !!goalSignals && missingQuestions.length === 0;
+  const shouldStartHighLevel =
+    hasReport && isReportAnalysisIntent(question) && goalContextComplete && !hasPriorReportOverview && !explicitSpecificRequest;
+  const allowSpecificFollowUp =
+    hasReport && isReportAnalysisIntent(question) && goalContextComplete && (hasPriorReportOverview || explicitSpecificRequest);
+  const systemPrompt = buildSystemPrompt({ hasReport, isFirstTurn, shouldStartHighLevel, allowSpecificFollowUp });
 
   if (hasReport && isReportAnalysisIntent(question)) {
-    const goalSignals = getGoalContextSignals(userConversationText);
-    const missingQuestions = getMissingGoalQuestions(goalSignals);
-
     if (missingQuestions.length) {
       return res.status(200).json({ answer: buildGoalClarificationAnswer(missingQuestions) });
     }
