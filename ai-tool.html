@@ -44,9 +44,18 @@
           <article class="ai-chat-wrap ai-chat-full ai-fullpage-chat">
             <h1 class="ai-main-title">🚴‍♂️ Jouw Wieler &amp; Hardloop Expert</h1>
             <p class="ai-main-subtitle">
-              Stel je vraag in gewone taal. De AI analyseert eerst je rapport en onderbouwt antwoorden met
-              trainingsliteratuur.
+              Upload je rapport en stel je vraag in gewone taal. De AI leest eerst je rapport, vraagt daarna naar je
+              doel en trainingscontext, en vertaalt het pas dan naar concreet trainingsadvies.
             </p>
+
+            <div class="soft-panel" style="margin-bottom: 14px">
+              <h3 style="margin-bottom: 8px">Zo werkt deze analyse</h3>
+              <ul>
+                <li>1. Upload je rapport</li>
+                <li>2. De AI vraagt eerst naar doel, afstand/discipline en trainingsomvang</li>
+                <li>3. Daarna krijg je een gerichte analyse met trainingsfocus en een eerste voorbeeldweek</li>
+              </ul>
+            </div>
 
             <details class="ai-upload-expander">
               <summary>📄 Klik hier om een PDF Rapport te uploaden</summary>
@@ -57,34 +66,38 @@
                   Upload een duidelijke PDF zodat de AI concrete waarden (zoals VO2max, VT1, VT2, watt en hartslag)
                   kan analyseren.
                 </p>
+                <p class="small-note">
+                  Na upload vraagt de tool eerst naar je doel, discipline/afstand, trainingsvolume en eventuele
+                  wedstrijddatum.
+                </p>
               </div>
             </details>
 
             <div class="ai-chat-actions ai-chip-row">
-              <button class="button button-secondary button-sm" type="button" data-ai-quick="Analyseer mijn rapport in simpele taal">
-                Analyseer rapport
+              <button class="button button-secondary button-sm" type="button" data-ai-quick="Lees mijn rapport en stel eerst de belangrijkste contextvragen voordat je advies geeft.">
+                Start rapportanalyse
               </button>
-              <button class="button button-secondary button-sm" type="button" data-ai-quick="Leg VO2max uit op basis van mijn rapport">
-                VO2max uitleg
+              <button class="button button-secondary button-sm" type="button" data-ai-quick="Vertaal mijn rapport naar training, maar vraag eerst naar mijn doel, afstand en trainingsvolume.">
+                Vertaal naar training
               </button>
-              <button class="button button-secondary button-sm" type="button" data-ai-quick="Hoe pas ik VT1 en VT2 toe in mijn trainingsweek?">
-                VT1/VT2 toepassen
+              <button class="button button-secondary button-sm" type="button" data-ai-quick="Maak na mijn rapportanalyse een eerste trainingsweek die past bij mijn doel.">
+                Eerste trainingsweek
               </button>
-              <button class="button button-secondary button-sm" type="button" data-ai-quick="Maak een voorbeeldweek voor 6 uur trainen">
-                Voorbeeldweek 6u
+              <button class="button button-secondary button-sm" type="button" data-ai-quick="Leg mijn VT1 en VT2 uit in functie van mijn doel en training.">
+                VT1/VT2 in context
               </button>
             </div>
 
             <div class="ai-chat-feed" data-ai-messages>
               <div class="ai-msg assistant">
-                Hoi! Upload je rapport en stel je vraag. Ik geef eerst een analyse van je rapport en vertaal dat daarna
-                naar praktische trainingskeuzes.
+                Upload je rapport en stel je vraag. Ik lees eerst je rapport, vraag daarna naar je doel, discipline,
+                trainingsomvang en eventueel wedstrijddatum, en vertaal het dan naar praktische trainingskeuzes.
               </div>
             </div>
 
             <form class="ai-chat-form ai-chat-form-inline" data-ai-form>
               <label class="sr-only" for="ai-input">Jouw vraag</label>
-              <textarea id="ai-input" data-ai-input placeholder="Stel je vraag of zeg 'Maak mijn zones'..." required></textarea>
+              <textarea id="ai-input" data-ai-input placeholder="Bijv. 'Vertaal dit rapport naar mijn 10 km-training'..." required></textarea>
               <button class="button button-primary ai-send-btn" type="submit" aria-label="Verstuur vraag">⬆</button>
             </form>
 

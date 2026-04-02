@@ -1272,7 +1272,7 @@ if (aiForm && aiInput && aiMessages) {
     if (reportHeavyQuestion && !uploadedReportBase64) {
       appendMessage(
         'assistant',
-        'Ik kan je vraag ook zonder rapport beantwoorden op basis van sportliteratuur. Upload je rapport als je daarna een persoonlijke analyse wilt.',
+        'Ik kan je vraag ook zonder rapport beantwoorden op basis van sportliteratuur. Upload je rapport als je wilt dat ik het eerst lees en daarna gericht doorvraag op doel en trainingscontext.',
       );
     }
 
@@ -1350,7 +1350,7 @@ if (aiForm && aiInput && aiMessages) {
         const buffer = await file.arrayBuffer();
         uploadedReportBase64 = arrayBufferToBase64(buffer);
         includeUploadedReportOnNextQuestion = true;
-        aiUploadStatus.textContent = `Rapport ontvangen: ${file.name}. Stel nu je vraag.`;
+        aiUploadStatus.textContent = `Rapport ontvangen: ${file.name}. Stel nu je vraag; ik lees het eerst en vraag daarna naar doel, afstand en trainingsomvang.`;
       } catch (error) {
         console.error(error);
         uploadedReportBase64 = '';

@@ -360,6 +360,87 @@ const sanitizeHistory = (history) => {
     }));
 };
 
+const getUserConversationText = (history, question) => {
+  const historyText = Array.isArray(history)
+    ? history
+        .filter((item) => item && item.role === 'user' && typeof item.text === 'string')
+        .map((item) => item.text.trim())
+        .filter(Boolean)
+        .join('\n')
+    : '';
+
+  return sanitizeText(`${historyText}\n${question || ''}`, 6000);
+};
+
+const isReportAnalysisIntent = (question) =>
+  /(rapport|analyse|analyseren|interpreteer|vertaal|training|trainingsweek|schema|advies|zones|vt1|vt2|voorbeeldweek|plan)/i.test(
+    question || '',
+  );
+
+const getGoalContextSignals = (text) => {
+  const source = text || '';
+
+  const hasGoal =
+    /(doel|hoofddoel|ik wil|sneller|verbeter|opbouwen|wedstrijd|race|piek|fitheid|gezondheid|afvallen|vetverbranding|prestatie)/i.test(
+      source,
+    ) ||
+    /\b(5 ?km|10 ?km|halve marathon|halvemarathon|marathon|hyrox|triathlon|tijdrit|granfondo|trail)\b/i.test(source);
+
+  const hasDiscipline =
+    /(hardlopen|lopen|run|wielrennen|fiets|fietsen|cycling|triathlon|duathlon|hyrox|trail|marathon|10 ?km|5 ?km)/i.test(
+      source,
+    );
+
+  const hasVolume =
+    /(\b\d+([.,]\d+)?\s*(uur|u)\b)|(\b\d+\s*(sessies?|trainingen|keer)\s*per\s*week\b)|(\b\d+\s*x\s*per\s*week\b)/i.test(
+      source,
+    );
+
+  const hasTimeline =
+    /(\b\d+\s*(weken|maanden)\b)|(\bover\s+\d+\s*(weken|maanden)\b)|(\bwedstrijd\b)|(\bdoelmoment\b)|(\bin\s+(januari|februari|maart|april|mei|juni|juli|augustus|september|oktober|november|december)\b)|(\b\d{1,2}[-/ ]\d{1,2}([-/ ]\d{2,4})?\b)/i.test(
+      source,
+    );
+
+  return {
+    hasGoal,
+    hasDiscipline,
+    hasVolume,
+    hasTimeline,
+  };
+};
+
+const getMissingGoalQuestions = (signals) => {
+  const missing = [];
+
+  if (!signals.hasGoal) {
+    missing.push('Wat is je hoofddoel met deze training of test?');
+  }
+
+  if (!signals.hasDiscipline) {
+    missing.push('Voor welke discipline of afstand train je precies?');
+  }
+
+  if (!signals.hasVolume) {
+    missing.push('Hoeveel uur of sessies train je nu ongeveer per week?');
+  }
+
+  if (!signals.hasTimeline) {
+    missing.push('Heb je een wedstrijd of doelmoment, en wanneer is dat?');
+  }
+
+  return missing;
+};
+
+const buildGoalClarificationAnswer = (missingQuestions) => {
+  const intro =
+    'Ik heb je rapport gelezen. Voor ik het goed vertaal naar training wil ik eerst je context scherp hebben, zodat ik niet te generiek adviseer.';
+  const questions = missingQuestions.map((question, index) => `${index + 1}. ${question}`).join('\n');
+  const close =
+    'Stuur je antwoorden gerust in 1 bericht. Daarna geef ik je gericht:\n1. hoofdinzicht\n2. wat je wilt behouden\n3. grootste limiter\n4. trainingsfocus\n5. een eerste voorbeeldweek.';
+
+  return `${intro}\n\n${questions}\n\n${close}`;
+};
+
 const getReportText = async (body) => {
   if (typeof body.reportText === 'string' && body.reportText.trim()) {
     return sanitizeText(body.reportText, REPORT_MAX_CHARS);
@@ -474,6 +555,22 @@ const buildSystemPrompt = ({ hasReport, isFirstTurn }) =>
     '   - Leg 2-4 regels uit waarom dit past.',
     '   - Vraag max 2 extra dingen (bijv. uren/week, doel, beschikbare dagen) als nodig.',
     '',
+    'RAPPORT-ANALYSEFLOW (VERPLICHT ALS ER EEN RAPPORT IS)',
+    '- Werk in 2 fases:',
+    '  Fase 1: context ophalen.',
+    '  Fase 2: pas daarna interpreteren en trainen adviseren.',
+    '- Als doel, discipline/afstand, trainingsvolume of tijdlijn nog ontbreken en de gebruiker vraagt om analyse/advies:',
+    '  geef dan nog GEEN inhoudelijke trainingsanalyse.',
+    '  Vraag eerst kort naar die ontbrekende context.',
+    '- Als de context er wel is, geef de rapportanalyse in deze volgorde:',
+    '  1. Hoofdinzicht',
+    '  2. Wat behouden',
+    '  3. Grootste limiter',
+    '  4. Trainingsfocus',
+    '  5. Voorbeeld eerste week',
+    '- Focus op vertaalslag van data naar actie. Herhaal niet onnodig alle rapportcijfers.',
+    '- Maak de analyse persoonlijk en doelgericht: dezelfde test betekent iets anders voor 10 km, marathon, wielrennen of algemene fitheid.',
+    '',
     'COACHINGOUTPUT (wat er altijd in zit, maar subtiel)',
     '- Wees praktisch: vertaal inzicht naar "wat ga ik doen".',
     '- Geef waar mogelijk voorbeeldsessies (duur + intensiteit + doel).',
@@ -537,10 +634,20 @@ module.exports = async (req, res) => {
   const reportHighlights = extractReportHighlights(reportText);
   const literatureContext = selectLiteratureContext(knowledgeDocuments, question, reportText);
   const historyText = safeHistory.map((item) => `${item.role}: ${item.text}`).join('\n');
+  const userConversationText = getUserConversationText(body.history, question);
 
   const hasReport = !!reportText;
   const isFirstTurn = safeHistory.length === 0;
   const systemPrompt = buildSystemPrompt({ hasReport, isFirstTurn });
+
+  if (hasReport && isReportAnalysisIntent(question)) {
+    const goalSignals = getGoalContextSignals(userConversationText);
+    const missingQuestions = getMissingGoalQuestions(goalSignals);
+
+    if (missingQuestions.length) {
+      return res.status(200).json({ answer: buildGoalClarificationAnswer(missingQuestions) });
+    }
+  }
 
   const reportContext = reportText
     ? `=== RAPPORT (bestand: ${reportName || 'onbekend'}) ===\n${reportText}`
