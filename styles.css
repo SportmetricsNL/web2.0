@@ -331,13 +331,11 @@ h3 {
 }
 
 .home-hero-shell {
-  padding: clamp(28px, 4vw, 54px);
-  border-radius: 36px;
-  border: 1px solid #dbe6f5;
-  background:
-    radial-gradient(circle at left top, rgba(51, 102, 228, 0.12), transparent 36%),
-    linear-gradient(180deg, #fdfefe 0%, #f1f5fb 100%);
-  box-shadow: 0 20px 48px rgba(20, 52, 130, 0.08);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
 }
 
 .home-hero-layout {
