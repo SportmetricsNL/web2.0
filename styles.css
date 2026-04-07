@@ -353,12 +353,17 @@ h3 {
 
 .home-hero-main h1 {
   max-width: none;
-  font-size: clamp(2.8rem, 6vw, 4.4rem);
+  font-size: clamp(2.55rem, 5.4vw, 4.05rem);
   letter-spacing: -0.04em;
+  line-height: 1.03;
+}
+
+.home-hero-title-line {
+  display: block;
 }
 
 .home-hero-main .hero-overline {
-  max-width: 56ch;
+  max-width: 34ch;
 }
 
 .home-hero-main p {
@@ -476,6 +481,12 @@ h3 {
   transform: translateY(-1px);
   border-color: #c9d8f2;
   box-shadow: 0 10px 20px rgba(20, 52, 130, 0.08);
+}
+
+@media (min-width: 981px) {
+  .home-hero-title-line {
+    white-space: nowrap;
+  }
 }
 
 .offer-subnav {
