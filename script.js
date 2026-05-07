@@ -1702,6 +1702,25 @@ if (!document.querySelector('.floating-instagram')) {
 
 const bookingForm = document.querySelector('[data-booking-form]');
 if (bookingForm) {
+  const sportSelect = bookingForm.querySelector('[data-sport-select]');
+  const sportSections = Array.from(bookingForm.querySelectorAll('[data-sport-section]'));
+
+  const updateSportSections = () => {
+    const selectedSport = sportSelect?.value || '';
+
+    sportSections.forEach((section) => {
+      const isActive = section.dataset.sportSection === selectedSport;
+      section.hidden = !isActive;
+      section.querySelectorAll('input, select, textarea').forEach((field) => {
+        field.disabled = !isActive;
+        field.required = isActive && field.hasAttribute('data-required-when-active');
+      });
+    });
+  };
+
+  sportSelect?.addEventListener('change', updateSportSections);
+  updateSportSections();
+
   bookingForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const status = bookingForm.querySelector('[data-form-status]');
@@ -1710,5 +1729,6 @@ if (bookingForm) {
         'Dank! Je aanvraag is ontvangen en doorgestuurd via info@sportmetrics.nl. We nemen binnen 24 uur contact met je op.';
     }
     bookingForm.reset();
+    updateSportSections();
   });
 }

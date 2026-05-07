@@ -75,6 +75,14 @@
 
           <article id="booking-form" class="card">
             <form class="form-grid" data-booking-form>
+              <div class="form-field full">
+                <label for="sport">Ik kom voor</label>
+                <select id="sport" name="sport" required data-sport-select>
+                  <option value="">Kies hardlopen of wielrennen</option>
+                  <option value="run">Hardlopen</option>
+                  <option value="bike">Wielrennen</option>
+                </select>
+              </div>
               <div class="form-field">
                 <label for="name">Naam</label>
                 <input id="name" name="name" type="text" required />
@@ -107,39 +115,68 @@
               </div>
               <div class="form-field">
                 <label for="goal">Doel</label>
-                <select id="goal" name="goal" required>
-                  <option value="">Kies je doel</option>
-                  <option>Conditie verbeteren</option>
-                  <option>Tijdrit / wedstrijd</option>
-                  <option>Opbouw / herstel</option>
-                </select>
+                <input id="goal" name="goal" type="text" placeholder="Bijv. 10 km sneller, halve triathlon, Amstel Gold" required />
               </div>
               <div class="form-field">
-                <label for="test">Voorkeur test</label>
-                <select id="test" name="test">
-                  <option>Step-test</option>
-                  <option>Ramp-test</option>
-                  <option>VT1 duurgrens</option>
-                  <option>Critical Power pakket</option>
-                </select>
+                <label for="event-date">Eventuele wedstrijddatum</label>
+                <input id="event-date" name="event_date" type="date" />
               </div>
-              <div class="form-field">
-                <label for="bike-goal">Fiets doel</label>
-                <input id="bike-goal" name="bike_goal" type="text" placeholder="Bijv. gran fondo uitrijden, tijdrit verbeteren" required />
-              </div>
-              <div class="form-field">
-                <label for="level-hours">Fiets niveau schatting (uur per week)</label>
-                <input id="level-hours" name="level_hours" type="number" min="0" max="40" step="0.5" required />
-              </div>
-              <div class="form-field">
-                <label for="axle">As fiets (through axle of quick release)</label>
-                <select id="axle" name="axle" required>
-                  <option value="">Kies type</option>
-                  <option>Through axle</option>
-                  <option>Quick release</option>
-                  <option>Weet ik niet</option>
-                </select>
-              </div>
+              <fieldset class="form-section full" data-sport-section="run" hidden>
+                <legend>Extra vragen voor hardlopers</legend>
+                <div class="form-grid form-grid-inner">
+                  <div class="form-field">
+                    <label for="run-paces">Huidige geschatte tempo's / pace</label>
+                    <textarea id="run-paces" name="run_paces" placeholder="Bijv. rustige duur 5:30/km, 10 km tempo 4:15/km" data-required-when-active></textarea>
+                  </div>
+                  <div class="form-field">
+                    <label for="run-hr-zones">Huidige geschatte hartslagzones</label>
+                    <textarea id="run-hr-zones" name="run_hr_zones" placeholder="Bijv. duur rond 145 bpm, drempel rond 170 bpm" data-required-when-active></textarea>
+                  </div>
+                  <div class="form-field">
+                    <label for="run-km-week">Kilometers per week</label>
+                    <input id="run-km-week" name="run_km_week" type="number" min="0" max="250" step="1" data-required-when-active />
+                  </div>
+                  <div class="form-field">
+                    <label for="run-test">Voorkeur hardlooptest</label>
+                    <select id="run-test" name="run_test">
+                      <option>Trainingsprofiel Test</option>
+                      <option>Prestatieprofiel Test</option>
+                      <option>Twijfel nog</option>
+                    </select>
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset class="form-section full" data-sport-section="bike" hidden>
+                <legend>Extra vragen voor wielrenners</legend>
+                <div class="form-grid form-grid-inner">
+                  <div class="form-field">
+                    <label for="bike-goal">Fietsdoel</label>
+                    <input id="bike-goal" name="bike_goal" type="text" placeholder="Bijv. Amstel Gold, tijdrit, triathlonfietsdeel" data-required-when-active />
+                  </div>
+                  <div class="form-field">
+                    <label for="level-hours">Fiets niveau schatting (uur per week)</label>
+                    <input id="level-hours" name="level_hours" type="number" min="0" max="40" step="0.5" data-required-when-active />
+                  </div>
+                  <div class="form-field">
+                    <label for="axle">As fiets (through axle of quick release)</label>
+                    <select id="axle" name="axle" data-required-when-active>
+                      <option value="">Kies type</option>
+                      <option>Through axle</option>
+                      <option>Quick release</option>
+                      <option>Weet ik niet</option>
+                    </select>
+                  </div>
+                  <div class="form-field">
+                    <label for="bike-test">Voorkeur fietstest</label>
+                    <select id="bike-test" name="bike_test">
+                      <option>Trainingsprofiel Test</option>
+                      <option>Prestatieprofiel Test</option>
+                      <option>Critical Power pakket</option>
+                      <option>Twijfel nog</option>
+                    </select>
+                  </div>
+                </div>
+              </fieldset>
               <div class="form-field">
                 <label for="location">Locatie</label>
                 <select id="location" name="location">
@@ -160,6 +197,19 @@
                 <p class="form-hint" data-form-status>We reageren binnen 24 uur met een concreet voorstel.</p>
               </div>
             </form>
+          </article>
+          <article class="soft-panel test-prep-panel">
+            <h3>Voorbereiding hardlooptest</h3>
+            <p>
+              Doe de dag voor de test geen zware training. Eet goed, slaap voldoende en zorg dat je op de testdag genoeg
+              energie hebt om tot het gaatje te gaan.
+            </p>
+            <p>
+              De totale afspraak duurt circa 1 uur. De test zelf duurt ongeveer 20-30 minuten. We verhogen elke 2
+              minuten stapgewijs de pace, of elke minuut bij het prestatieprofiel. In totaal ren je meestal tussen 3,5
+              en 5 kilometer. De uitleg van de test krijg je ter plekke.
+            </p>
+            <p class="small-note">Mocht je vragen hebben, stuur gerust een bericht.</p>
           </article>
         </div>
       </section>
