@@ -1721,14 +1721,55 @@ if (bookingForm) {
   sportSelect?.addEventListener('change', updateSportSections);
   updateSportSections();
 
-  bookingForm.addEventListener('submit', (event) => {
+  bookingForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     const status = bookingForm.querySelector('[data-form-status]');
+    const submitButton = bookingForm.querySelector('button[type="submit"]');
+    const formData = new FormData(bookingForm);
+    const payload = Object.fromEntries(formData.entries());
+
+    payload.source = window.location.href;
+
     if (status) {
-      status.textContent =
-        'Dank! Je aanvraag is ontvangen en doorgestuurd via info@sportmetrics.nl. We nemen binnen 24 uur contact met je op.';
+      status.textContent = 'Je aanvraag wordt verstuurd...';
     }
-    bookingForm.reset();
-    updateSportSections();
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Versturen...';
+    }
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Je aanvraag kon niet worden verstuurd.');
+      }
+
+      if (status) {
+        status.textContent =
+          'Dank! Je aanvraag is ontvangen. Je krijgt ook een bevestiging per e-mail.';
+      }
+      bookingForm.reset();
+      updateSportSections();
+    } catch (error) {
+      if (status) {
+        status.textContent =
+          error.message ||
+          'Je aanvraag kon niet automatisch worden verstuurd. Stuur ons direct een WhatsApp-bericht of mail naar info@sportmetrics.nl.';
+      }
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Verstuur aanvraag';
+      }
+    }
   });
 }
