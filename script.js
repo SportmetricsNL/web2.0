@@ -1727,8 +1727,17 @@ if (bookingForm) {
     const submitButton = bookingForm.querySelector('button[type="submit"]');
     const formData = new FormData(bookingForm);
     const payload = Object.fromEntries(formData.entries());
+    const isLocalPreview = ['localhost', '127.0.0.1'].includes(window.location.hostname);
 
     payload.source = window.location.href;
+
+    if (isLocalPreview) {
+      if (status) {
+        status.textContent =
+          'Deze lokale preview kan geen e-mail versturen. Test het formulier op de live website: sportmetrics.nl/contact.html.';
+      }
+      return;
+    }
 
     if (status) {
       status.textContent = 'Je aanvraag wordt verstuurd...';
