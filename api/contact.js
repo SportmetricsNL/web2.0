@@ -210,19 +210,39 @@ module.exports = async (req, res) => {
     const internalEmail = buildInternalEmail(fields, submission);
     const confirmationEmail = buildConfirmationEmail(fields, submission);
 
-    await sendEmail({
-      to: [CONTACT_TO_EMAIL],
-      replyTo: submission.email,
-      ...internalEmail,
-    });
+    try {
+      await sendEmail({
+        to: [CONTACT_TO_EMAIL],
+        replyTo: submission.email,
+        ...internalEmail,
+      });
+    } catch (error) {
+      console.error('Contactformulier interne mail mislukt:', error);
+      json(res, 500, {
+        error:
+          'De mailservice is nog niet goed ingesteld. Stuur ons direct een WhatsApp-bericht of mail naar info@sportmetrics.nl.',
+      });
+      return;
+    }
 
-    await sendEmail({
-      to: [submission.email],
-      replyTo: CONTACT_TO_EMAIL,
-      ...confirmationEmail,
-    });
+    try {
+      await sendEmail({
+        to: [submission.email],
+        replyTo: CONTACT_TO_EMAIL,
+        ...confirmationEmail,
+      });
+    } catch (error) {
+      console.error('Contactformulier bevestigingsmail mislukt:', error);
+      json(res, 200, {
+        ok: true,
+        confirmationSent: false,
+        message:
+          'Dank! Je aanvraag is ontvangen. De automatische bevestigingsmail kon mogelijk niet worden verstuurd.',
+      });
+      return;
+    }
 
-    json(res, 200, { ok: true });
+    json(res, 200, { ok: true, confirmationSent: true });
   } catch (error) {
     console.error('Contactformulier fout:', error);
     json(res, 500, {

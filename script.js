@@ -1764,6 +1764,7 @@ if (bookingForm) {
 
       if (status) {
         status.textContent =
+          result.message ||
           'Dank! Je aanvraag is ontvangen. Je krijgt ook een bevestiging per e-mail.';
       }
       bookingForm.reset();
